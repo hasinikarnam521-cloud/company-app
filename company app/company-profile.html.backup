@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Company Profile — VentrixCarros</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --deep-navy: #050a30;
+      --navy: #070d3f;
+      --electric-blue: #2c83f8;
+      --royal-blue: #274cdc;
+      --vivid-blue: #1c19b8;
+      --white: #ffffff;
+      --light-blue: #e0e4f5;
+
+      --ink: var(--deep-navy);
+      --muted: #5b6b85;
+      --line: var(--light-blue);
+      --bg: #f7f9ff;
+      --surface: var(--white);
+
+      --radius: 24px;
+      --shadow: 0 24px 70px rgba(5, 10, 48, 0.10);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 600px at 50% -20%, rgba(44, 131, 248, 0.08), transparent 70%),
+        var(--bg);
+      line-height: 1.65;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1200px, 100% - 40px);
+      margin-inline: auto;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      background: var(--white);
+      border-right: 1px solid var(--line);
+      padding: 20px 16px;
+      overflow-y: auto;
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+      padding: 10px 12px;
+      margin-bottom: 18px;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: var(--white);
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      box-shadow: 0 10px 28px rgba(44, 131, 248, 0.30);
+      font-size: 18px;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      transition: 0.2s ease;
+      cursor: pointer;
+    }
+
+    .nav-item:hover {
+      background: rgba(44, 131, 248, 0.06);
+      color: var(--electric-blue);
+    }
+
+    .nav-item.active {
+      background: linear-gradient(135deg, rgba(44, 131, 248, 0.12), rgba(39, 76, 220, 0.12));
+      color: var(--royal-blue);
+      font-weight: 600;
+    }
+
+    .nav-icon {
+      width: 22px;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .nav-section {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .nav-section-title {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      padding: 6px 12px;
+      margin-bottom: 6px;
+    }
+
+    /* Main content */
+    .main-content {
+      min-width: 0;
+    }
+
+    /* Top header */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: rgba(247, 249, 255, 0.85);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 0;
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--white);
+      color: var(--deep-navy);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: 0.2s ease;
+      text-decoration: none;
+    }
+
+    .back-btn:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+      transform: translateX(-2px);
+    }
+
+    .page-title {
+      font-family: "Sora", sans-serif;
+      font-size: 20px;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+    }
+
+    .search-wrap {
+      flex: 1;
+      max-width: 420px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 11px 16px 11px 38px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--deep-navy);
+      background: var(--white);
+      transition: 0.2s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 0 4px rgba(44, 131, 248, 0.12);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: var(--white);
+      display: grid;
+      place-items: center;
+      font-size: 17px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+      transform: translateY(-2px);
+    }
+
+    .avatar-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      color: var(--white);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(44, 131, 248, 0.25);
+    }
+
+    /* Page content */
+    .page-wrap {
+      padding: 28px 0 60px;
+    }
+
+    .page-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .page-title-large {
+      font-family: "Sora", sans-serif;
+      font-size: 26px;
+      letter-spacing: -1px;
+      color: var(--deep-navy);
+    }
+
+    .page-sub {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .actions-right {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      border-radius: 999px;
+      padding: 11px 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.25s ease;
+      font-family: inherit;
+      font-size: 13px;
+    }
+
+    .btn-primary {
+      color: var(--white);
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      box-shadow: 0 14px 40px rgba(44, 131, 248, 0.30);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 55px rgba(39, 76, 220, 0.35);
+    }
+
+    .btn-outline {
+      background: var(--white);
+      border: 1px solid var(--line);
+      color: var(--deep-navy);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+      transform: translateY(-2px);
+    }
+
+    /* Sections */
+    .section-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .panel-title {
+      font-family: "Sora", sans-serif;
+      font-size: 18px;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+    }
+
+    .panel-sub {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Forms */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--deep-navy);
+      margin-bottom: 8px;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--deep-navy);
+      background: var(--white);
+      transition: 0.2s ease;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 0 4px rgba(44, 131, 248, 0.12);
+    }
+
+    .form-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    /* Branding */
+    .branding-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .logo-preview {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      color: var(--white);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 20px;
+      box-shadow: 0 10px 28px rgba(44, 131, 248, 0.30);
+    }
+
+    .brand-colors {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .color-swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+    }
+
+    /* Team table */
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .table th,
+    .table td {
+      text-align: left;
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .table th {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      font-weight: 600;
+    }
+
+    .member-name {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .member-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      color: var(--white);
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .status-pill {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .status-active {
+      background: rgba(5, 150, 105, 0.10);
+      color: #059669;
+      border: 1px solid rgba(5, 150, 105, 0.25);
+    }
+
+    .status-pending {
+      background: rgba(245, 158, 11, 0.10);
+      color: #d97706;
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+
+    /* AI suggestion */
+    .ai-suggest {
+      display: flex;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid rgba(44, 131, 248, 0.25);
+      border-radius: 14px;
+      background: rgba(44, 131, 248, 0.04);
+      margin-top: 14px;
+    }
+
+    .ai-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      color: var(--white);
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      box-shadow: 0 8px 20px rgba(44, 131, 248, 0.25);
+      flex: 0 0 38px;
+    }
+
+    .ai-text strong {
+      display: block;
+      font-size: 13px;
+      color: var(--deep-navy);
+      margin-bottom: 4px;
+    }
+
+    .ai-text span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Animations */
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: revealUp 0.65s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    }
+
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .delay-1 {
+      animation-delay: 0.06s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.12s;
+    }
+
+    .delay-3 {
+      animation-delay: 0.18s;
+    }
+
+    /* Responsive */
+    @media (max-width: 1000px) {
+      body {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .section-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .nav-list {
+        grid-template-columns: 1fr;
+      }
+
+      .search-wrap {
+        order: 3;
+        max-width: 100%;
+        margin: 10px 0 0;
+        width: 100%;
+      }
+
+      .topbar-inner {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark">V</div>
+      <span>VENTRIXCARROS</span>
+    </div>
+
+    <nav class="nav-list">
+      <div class="nav-item">
+        <span class="nav-icon">🏠</span>
+        Dashboard
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">🤖</span>
+        AI Recruitment
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">💼</span>
+        Jobs
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">👥</span>
+        Candidates
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">📋</span>
+        Applications
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">⭐</span>
+        Shortlisted
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">🎤</span>
+        Interviews
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">💬</span>
+        Messages
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">📊</span>
+        Analytics
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Account</div>
+        <div class="nav-item">
+          <span class="nav-icon">💳</span>
+          Subscription
+        </div>
+        <div class="nav-item active">
+          <span class="nav-icon">🏢</span>
+          Company Profile
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon">⚙️</span>
+          Settings
+        </div>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <div class="main-content">
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="topbar-left">
+          <a href="dashboard.html" class="back-btn">
+            ← Back
+          </a>
+          <div class="page-title">Company Profile</div>
+        </div>
+
+        <div class="search-wrap">
+          <span class="search-icon">🔎</span>
+          <input
+            class="search-input"
+            type="text"
+            placeholder="Search settings, profile..."
+          />
+        </div>
+
+        <div class="nav-right">
+          <button class="icon-btn" title="Notifications">🔔</button>
+          <div class="avatar-btn" title="Profile">VC</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page content -->
+    <main class="page-wrap">
+      <div class="container">
+        <!-- Page head -->
+        <div class="page-head reveal-up">
+          <div>
+            <h1 class="page-title-large">Company Profile</h1>
+            <p class="page-sub">
+              Manage your company information, branding, and team members.
+            </p>
+          </div>
+
+          <div class="actions-right">
+            <button class="btn btn-outline">👁️ Preview public profile</button>
+            <button class="btn btn-primary">💾 Save changes</button>
+          </div>
+        </div>
+
+        <div class="section-grid">
+          <!-- Left: Company info + branding -->
+          <div>
+            <!-- Company info -->
+            <section class="panel reveal-up delay-1">
+              <div class="panel-head">
+                <div>
+                  <div class="panel-title">Company information</div>
+                  <div class="panel-sub">Basic details about your organization</div>
+                </div>
+              </div>
+
+              <form>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label class="form-label" for="companyName">Company name</label>
+                    <input
+                      class="form-input"
+                      type="text"
+                      id="companyName"
+                      value="VentrixCarros Pvt. Ltd."
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="website">Website</label>
+                    <input
+                      class="form-input"
+                      type="url"
+                      id="website"
+                      placeholder="https://yourcompany.com"
+                      value="https://ventrixcarros.com"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label class="form-label" for="companySize">Company size</label>
+                    <select class="form-select" id="companySize">
+                      <option>1–10 employees</option>
+                      <option selected>11–50 employees</option>
+                      <option>51–200 employees</option>
+                      <option>201–500 employees</option>
+                      <option>500+ employees</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="industry">Industry</label>
+                    <select class="form-select" id="industry">
+                      <option>Technology</option>
+                      <option selected>Software / SaaS</option>
+                      <option>Healthcare</option>
+                      <option>Finance</option>
+                      <option>E‑commerce</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label class="form-label" for="location">Headquarters location</label>
+                    <input
+                      class="form-input"
+                      type="text"
+                      id="location"
+                      placeholder="City, Country"
+                      value="Bengaluru, India"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="founded">Founded year</label>
+                    <input
+                      class="form-input"
+                      type="number"
+                      id="founded"
+                      value="2024"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="description">Company description</label>
+                  <textarea
+                    class="form-textarea"
+                    id="description"
+                    placeholder="Briefly describe your company, mission, and culture..."
+                  >VentrixCarros is an AI-powered hiring platform helping companies screen candidates faster and make data-driven hiring decisions.</textarea>
+                </div>
+              </form>
+            </section>
+
+            <!-- Branding -->
+            <section class="panel reveal-up delay-2" style="margin-top: 18px;">
+              <div class="panel-head">
+                <div>
+                  <div class="panel-title">Branding</div>
+                  <div class="panel-sub">Logo and brand colors</div>
+                </div>
+                <button class="btn btn-outline btn-sm">Reset to default</button>
+              </div>
+
+              <div class="branding-row">
+                <div class="logo-preview">V</div>
+                <div style="flex:1;">
+                  <div style="font-weight:600; font-size:13px; color:var(--deep-navy); margin-bottom:6px;">
+                    Company logo
+                  </div>
+                  <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    <button class="btn btn-outline btn-sm">Upload logo</button>
+                    <button class="btn btn-outline btn-sm">Remove</button>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div style="font-weight:600; font-size:13px; color:var(--deep-navy); margin-bottom:6px;">
+                  Brand colors
+                </div>
+                <div class="brand-colors">
+                  <div class="color-swatch" style="background:#2c83f8;"></div>
+                  <div class="color-swatch" style="background:#274cdc;"></div>
+                  <div class="color-swatch" style="background:#1c19b8;"></div>
+                  <div class="color-swatch" style="background:#050a30;"></div>
+                </div>
+                <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+                  <button class="btn btn-outline btn-sm">Edit colors</button>
+                  <button class="btn btn-outline btn-sm">Use default theme</button>
+                </div>
+              </div>
+
+              <!-- AI suggestion -->
+              <div class="ai-suggest">
+                <div class="ai-icon">🧠</div>
+                <div class="ai-text">
+                  <strong>AI recommendation</strong>
+                  <span>
+                    Add a short “About us” paragraph and upload a logo to make your
+                    company profile more attractive to candidates.
+                  </span>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- Right: Team members -->
+          <div>
+            <!-- Team -->
+            <section class="panel reveal-up delay-2">
+              <div class="panel-head">
+                <div>
+                  <div class="panel-title">Team members</div>
+                  <div class="panel-sub">People with access to this account</div>
+                </div>
+                <button class="btn btn-primary btn-sm">➕ Invite member</button>
+              </div>
+
+              <div class="table-wrap">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Member</th>
+                      <th>Role</th>
+                      <th>Status</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div class="member-name">
+                          <div class="member-avatar">A</div>
+                          <div>
+                            <div style="font-weight:600; font-size:13px; color:var(--deep-navy);">
+                              Amit Verma
+                            </div>
+                            <div style="font-size:11px; color:var(--muted);">
+                              amit@ventrixcarros.com
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>Admin</td>
+                      <td><span class="status-pill status-active">Active</span></td>
+                      <td>
+                        <button class="btn btn-outline btn-sm">Edit</button>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <div class="member-name">
+                          <div class="member-avatar">N</div>
+                          <div>
+                            <div style="font-weight:600; font-size:13px; color:var(--deep-navy);">
+                              Neha Singh
+                            </div>
+                            <div style="font-size:11px; color:var(--muted);">
+                              neha@ventrixcarros.com
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>Recruiter</td>
+                      <td><span class="status-pill status-active">Active</span></td>
+                      <td>
+                        <button class="btn btn-outline btn-sm">Edit</button>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <div class="member-name">
+                          <div class="member-avatar">R</div>
+                          <div>
+                            <div style="font-weight:600; font-size:13px; color:var(--deep-navy);">
+                              Rahul Joshi
+                            </div>
+                            <div style="font-size:11px; color:var(--muted);">
+                              rahul@ventrixcarros.com
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>Recruiter</td>
+                      <td><span class="status-pill status-pending">Pending</span></td>
+                      <td>
+                        <button class="btn btn-outline btn-sm">Resend</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="panel-sub" style="margin-top:10px;">
+                Admins can manage billing, settings, and team members. Recruiters can
+                manage jobs, candidates, and interviews.
+              </div>
+            </section>
+
+            <!-- Security / access -->
+            <section class="panel reveal-up delay-3" style="margin-top: 18px;">
+              <div class="panel-head">
+                <div>
+                  <div class="panel-title">Security & access</div>
+                  <div class="panel-sub">Control how people access this account</div>
+                </div>
+              </div>
+
+              <div style="display:grid; gap:12px;">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+                  <div>
+                    <div style="font-weight:600; font-size:13px; color:var(--deep-navy);">
+                      Two-factor authentication
+                    </div>
+                    <div style="font-size:12px; color:var(--muted);">
+                      Require 2FA for all admins
+                    </div>
+                  </div>
+                  <button class="btn btn-outline btn-sm">Configure</button>
+                </div>
+
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+                  <div>
+                    <div style="font-weight:600; font-size:13px; color:var(--deep-navy);">
+                      Session timeout
+                    </div>
+                    <div style="font-size:12px; color:var(--muted);">
+                      Auto logout after inactivity
+                    </div>
+                  </div>
+                  <button class="btn btn-outline btn-sm">Edit</button>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Highlight active nav item
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+
+    // Demo: wire save / preview buttons
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const text = e.target.textContent.trim();
+        if (text.includes('Save') || text.includes('Preview') || text.includes('Invite')) {
+          console.log('Action:', text);
+          alert(`Action: ${text}\n\n(Connect to your backend to implement.)`);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

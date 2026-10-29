@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analytics — VentrixCarros</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --deep-navy: #050a30;
+      --electric-blue: #2c83f8;
+      --royal-blue: #274cdc;
+      --white: #ffffff;
+      --light-blue: #e0e4f5;
+      --muted: #5b6b85;
+      --bg: #f7f9ff;
+      --green: #059669;
+      --orange: #d97706;
+      --red: #dc2626;
+      --line: var(--light-blue);
+      --radius: 24px;
+      --shadow: 0 24px 70px rgba(5, 10, 48, 0.10);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--deep-navy);
+      font-family: "Inter", sans-serif;
+      line-height: 1.65;
+      background:
+        radial-gradient(
+          900px 600px at 50% -20%,
+          rgba(44, 131, 248, 0.08),
+          transparent 70%
+        ),
+        var(--bg);
+      display: grid;
+      grid-template-columns: 260px 1fr;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    select {
+      font: inherit;
+    }
+
+    .container {
+      width: min(1200px, 100% - 40px);
+      margin-inline: auto;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 20px 16px;
+      overflow-y: auto;
+      background: var(--white);
+      border-right: 1px solid var(--line);
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      margin-bottom: 18px;
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+    }
+
+    .sidebar-brand img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+}
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      color: var(--white);
+      font-weight: 700;
+      background: linear-gradient(
+        135deg,
+        var(--electric-blue),
+        var(--royal-blue)
+      );
+      box-shadow: 0 10px 28px rgba(44, 131, 248, 0.3);
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+      transition: 0.2s ease;
+    }
+
+    .nav-item:hover {
+      color: var(--electric-blue);
+      background: rgba(44, 131, 248, 0.06);
+    }
+
+    .nav-item.active {
+      color: var(--royal-blue);
+      font-weight: 600;
+      background: linear-gradient(
+        135deg,
+        rgba(44, 131, 248, 0.12),
+        rgba(39, 76, 220, 0.12)
+      );
+    }
+
+    .nav-icon {
+      width: 22px;
+      text-align: center;
+    }
+
+    .nav-section {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .nav-section-title {
+      padding: 6px 12px;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+    }
+
+    /* Topbar */
+    .main-content {
+      min-width: 0;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      padding: 14px 0;
+      backdrop-filter: blur(18px);
+      background: rgba(247, 249, 255, 0.86);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .back-btn,
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.25s ease;
+    }
+
+    .back-btn {
+      padding: 9px 14px;
+      color: var(--deep-navy);
+      background: var(--white);
+      border: 1px solid var(--line);
+      font-size: 13px;
+    }
+
+    .back-btn:hover {
+      color: var(--electric-blue);
+      border-color: var(--electric-blue);
+      transform: translateX(-2px);
+    }
+
+    .page-title {
+      font-family: "Sora", sans-serif;
+      font-size: 20px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-btn,
+    .avatar-btn {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+    }
+
+    .icon-btn {
+      color: var(--muted);
+      background: var(--white);
+      border: 1px solid var(--line);
+      cursor: pointer;
+      font-size: 17px;
+    }
+
+    .icon-btn:hover {
+      color: var(--electric-blue);
+      border-color: var(--electric-blue);
+    }
+
+    .avatar-btn {
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 700;
+      background: linear-gradient(
+        135deg,
+        var(--electric-blue),
+        var(--royal-blue)
+      );
+    }
+    .profile-wrap {
+  position: relative;
+}
+
+.profile-panel {
+  position: fixed;
+  top: 82px;
+  right: 30px;
+  width: 280px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 20px 55px rgba(5,10,48,.18);
+  overflow: hidden;
+  z-index: 100;
+  display: none;
+}
+
+.profile-panel.show {
+  display: block;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px;
+}
+
+.profile-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg,var(--electric-blue),var(--royal-blue));
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.profile-header strong {
+  display: block;
+  color: var(--deep-navy);
+  font-size: 13px;
+}
+
+.profile-header span {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.profile-divider {
+  height: 1px;
+  background: var(--line);
+}
+
+.profile-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 13px 18px;
+  color: var(--deep-navy);
+  font-size: 12px;
+  font-weight: 500;
+  transition: background .2s ease, color .2s ease;
+}
+
+.profile-item span {
+  width: 22px;
+  text-align: center;
+  font-size: 15px;
+}
+
+.profile-item:hover {
+  background: rgba(44,131,248,.06);
+  color: var(--electric-blue);
+}
+
+.profile-logout {
+  border-top: 1px solid var(--line);
+  color: #dc2626;
+}
+
+.profile-logout:hover {
+  background: rgba(220,38,38,.05);
+  color: #dc2626;
+}
+
+.notification-panel {
+  position: fixed;
+  top: 82px;
+  right: 30px;
+  width: 360px;
+  max-width: calc(100vw - 30px);
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 20px 55px rgba(5,10,48,0.18);
+  overflow: hidden;
+  z-index: 100;
+  display: none;
+}
+
+.notification-panel.show {
+  display: block;
+}
+
+.notification-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.notification-header strong {
+  color: var(--deep-navy);
+  font-family: "Sora", sans-serif;
+  font-size: 15px;
+}
+
+.notification-header button {
+  border: none;
+  background: transparent;
+  color: var(--electric-blue);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.notification-item {
+  display: flex;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  transition: background .2s ease;
+}
+
+.notification-item:hover {
+  background: rgba(44,131,248,.04);
+}
+
+.notification-item.unread {
+  background: rgba(44,131,248,.06);
+}
+
+.notification-icon {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: rgba(44,131,248,.10);
+}
+
+.notification-item strong {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--deep-navy);
+  font-size: 12px;
+}
+
+.notification-item span {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.notification-item small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.notification-empty {
+  display: none;
+  padding: 28px 18px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 12px;
+}
+
+    /* Buttons */
+    .btn {
+      padding: 11px 18px;
+      border: none;
+      font-size: 13px;
+    }
+
+    .btn-primary {
+      color: var(--white);
+      background: linear-gradient(
+        135deg,
+        var(--electric-blue),
+        var(--royal-blue)
+      );
+      box-shadow: 0 14px 40px rgba(44, 131, 248, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+    }
+
+    .btn-outline {
+      color: var(--deep-navy);
+      background: var(--white);
+      border: 1px solid var(--line);
+    }
+
+    .btn-outline:hover {
+      color: var(--electric-blue);
+      border-color: var(--electric-blue);
+      transform: translateY(-2px);
+    }
+
+    .btn-sm {
+      padding: 7px 12px;
+      font-size: 12px;
+    }
+
+    /* Page */
+    .page-wrap {
+      padding: 28px 0 60px;
+    }
+
+    .page-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .page-heading {
+      margin-bottom: 3px;
+      font-family: "Sora", sans-serif;
+      font-size: 27px;
+      letter-spacing: -1px;
+    }
+
+    .page-sub {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .head-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-select {
+      padding: 10px 14px;
+      color: var(--deep-navy);
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      outline: none;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .filter-select:focus {
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 0 4px rgba(44, 131, 248, 0.12);
+    }
+
+    /* KPI */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .kpi-card,
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .kpi-card {
+      padding: 18px;
+      transition: 0.25s ease;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .kpi-label {
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+    }
+
+    .kpi-value {
+      margin-bottom: 4px;
+      font-family: "Sora", sans-serif;
+      font-size: 28px;
+    }
+
+    .kpi-note {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .note-up {
+      color: var(--green);
+    }
+
+    .note-down {
+      color: var(--red);
+    }
+
+    .note-warning {
+      color: var(--orange);
+    }
+
+    /* Panels */
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .panel {
+      padding: 20px;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .panel-title {
+      font-family: "Sora", sans-serif;
+      font-size: 18px;
+    }
+
+    .panel-sub {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .ai-badge {
+      padding: 5px 10px;
+      color: var(--royal-blue);
+      background: rgba(44, 131, 248, 0.08);
+      border: 1px solid rgba(44, 131, 248, 0.25);
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    /* Bar chart */
+    .bar-chart {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+      align-items: end;
+      height: 220px;
+      padding-top: 10px;
+    }
+
+    .bar-column {
+      display: grid;
+      grid-template-rows: 1fr auto;
+      gap: 8px;
+      height: 100%;
+      text-align: center;
+    }
+
+    .bar-area {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .bar {
+      width: 34px;
+      border-radius: 10px 10px 4px 4px;
+      background: linear-gradient(
+        180deg,
+        var(--electric-blue),
+        var(--royal-blue)
+      );
+      animation: growBar 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+      transform-origin: bottom;
+    }
+
+    @keyframes growBar {
+      from {
+        transform: scaleY(0);
+      }
+
+      to {
+        transform: scaleY(1);
+      }
+    }
+
+    .bar-label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .bar-value {
+      color: var(--deep-navy);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* Donut */
+    .donut-wrap {
+      display: grid;
+      place-items: center;
+      gap: 14px;
+    }
+
+    .donut {
+      width: 170px;
+      height: 170px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at center, var(--white) 57%, transparent 58%),
+        conic-gradient(
+          var(--electric-blue) 0 48%,
+          var(--royal-blue) 48% 72%,
+          #7c3aed 72% 86%,
+          var(--light-blue) 86% 100%
+        );
+    }
+
+    .donut-center {
+      text-align: center;
+    }
+
+    .donut-center strong {
+      display: block;
+      font-family: "Sora", sans-serif;
+      font-size: 24px;
+    }
+
+    .donut-center span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .legend {
+      display: grid;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .legend-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .legend-value {
+      color: var(--deep-navy);
+      font-weight: 700;
+    }
+
+    /* Source rows */
+    .source-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .source-row {
+      display: grid;
+      grid-template-columns: 110px 1fr 48px;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .progress-track {
+      height: 9px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: var(--light-blue);
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(
+        90deg,
+        var(--electric-blue),
+        var(--royal-blue)
+      );
+    }
+
+    .source-value {
+      color: var(--deep-navy);
+      font-weight: 700;
+      text-align: right;
+    }
+
+    /* Role table */
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .table th,
+    .table td {
+      padding: 11px 10px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .table th {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .role-name {
+      font-weight: 700;
+    }
+
+    .pill {
+      display: inline-flex;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .pill-good {
+      color: var(--green);
+      background: rgba(5, 150, 105, 0.1);
+      border: 1px solid rgba(5, 150, 105, 0.25);
+    }
+
+    .pill-medium {
+      color: var(--orange);
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+
+    .pill-low {
+      color: var(--red);
+      background: rgba(220, 38, 38, 0.1);
+      border: 1px solid rgba(220, 38, 38, 0.25);
+    }
+
+    /* AI insight */
+    .insight-card {
+      display: flex;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid rgba(44, 131, 248, 0.25);
+      border-radius: 16px;
+      background: rgba(44, 131, 248, 0.04);
+    }
+
+    .insight-icon {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 40px;
+      border-radius: 12px;
+      color: var(--white);
+      background: linear-gradient(
+        135deg,
+        var(--electric-blue),
+        var(--royal-blue)
+      );
+    }
+
+    .insight-copy strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 13px;
+    }
+
+    .insight-copy span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* Animation */
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: revealUp 0.65s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    }
+
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .delay-1 {
+      animation-delay: 0.06s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.12s;
+    }
+
+    .delay-3 {
+      animation-delay: 0.18s;
+    }
+
+    @media (max-width: 1000px) {
+      body {
+        display: block;
+      }
+
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .kpi-grid,
+      .analytics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .bar-chart {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .nav-list {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar-inner {
+        flex-wrap: wrap;
+      }
+
+      .kpi-grid,
+      .analytics-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .bar-chart {
+        grid-template-columns: repeat(2, 1fr);
+        height: auto;
+      }
+
+      .bar-column {
+        height: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <img src="./ventrix-logo-mark.png" alt="VentrixCarros Logo">
+      <span>VENTRIXCARROS</span>
+    </div>
+
+    <nav class="nav-list">
+      <a href="dashboard.html" class="nav-item active">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+    <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+    <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+    <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+  </svg>
+</span>
+        Dashboard
+      </a>
+      <a href="ai-recruitment.html" class="nav-item">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="8" r="3"></circle>
+    <path d="M5 21v-2a7 7 0 0 1 14 0v2"></path>
+    <path d="M19 5l1 1"></path>
+    <path d="M20 4l-1 1"></path>
+  </svg>
+</span>
+        AI Recruitment
+      </a>
+      <a href="jobs.html" class="nav-item">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="7" width="18" height="13" rx="2"></rect>
+    <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+    <path d="M3 12h18"></path>
+    <path d="M10 12v2h4v-2"></path>
+  </svg>
+</span>
+        Jobs
+      </a>
+      <a href="candidates.html" class="nav-item">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="9" cy="8" r="3"></circle>
+    <path d="M3 20v-2a6 6 0 0 1 12 0v2"></path>
+    <circle cx="17" cy="9" r="2.5"></circle>
+    <path d="M16 15a5 5 0 0 1 5 5"></path>
+  </svg>
+</span>
+        Candidates
+      </a>
+      <a href="applications.html" class="nav-item">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="5" y="3" width="14" height="18" rx="2"></rect>
+    <path d="M9 3v3h6V3"></path>
+    <path d="M8 12l2 2 4-4"></path>
+  </svg>
+</span>
+        Applications
+      </a>
+      <a href="shortlisted.html" class="nav-item">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="8" r="3"></circle>
+    <path d="M5 21v-2a7 7 0 0 1 14 0v2"></path>
+    <path d="M19 3l.6 1.2L21 4.4l-1 1 .2 1.4-1.2-.7-1.2.7.2-1.4-1-1 1.4-.2L19 3z"></path>
+  </svg>
+</span>
+        Shortlisted
+      </a>
+      <a href="interviews.html" class="nav-item">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="8" y="3" width="8" height="12" rx="4"></rect>
+    <path d="M5 11a7 7 0 0 0 14 0"></path>
+    <path d="M12 18v3"></path>
+    <path d="M9 21h6"></path>
+  </svg>
+</span>
+        Interviews
+      </a>
+      <a href="messages.html" class="nav-item">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 11.5a7.5 7.5 0 0 1-8 7.5 8.5 8.5 0 0 1-3-.5L4 20l1.5-4A7.5 7.5 0 1 1 20 11.5z"></path>
+  </svg>
+</span>
+        Messages
+      </a>
+      <a href="analytics.html" class="nav-item">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 19V5"></path>
+    <path d="M4 19h17"></path>
+    <path d="M7 15l4-4 3 2 5-6"></path>
+    <path d="M16 7h3v3"></path>
+  </svg>
+</span>
+        Analytics
+      </a>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Account</div>
+        <a href="subscription.html" class="nav-item">
+          <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+    <path d="M3 10h18"></path>
+    <path d="M7 15h4"></path>
+  </svg>
+</span>
+          Subscription
+        </a>
+        <a href="company-profile.html" class="nav-item">
+          <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"></path>
+    <path d="M2 21h20"></path>
+    <path d="M8 7h2"></path>
+    <path d="M8 11h2"></path>
+    <path d="M8 15h2"></path>
+    <path d="M16 9h2"></path>
+    <path d="M16 13h2"></path>
+    <path d="M16 17h2"></path>
+  </svg>
+</span>
+          Company Profile
+        </a>
+        <a href="settings.html" class="nav-item">
+          <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="3"></circle>
+    <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.8 1.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V20h-2.6v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1-1.8-1.8.1-.1A1.7 1.7 0 0 0 8 15a1.7 1.7 0 0 0-1.6-1H6v-2.6h.4A1.7 1.7 0 0 0 8 10a1.7 1.7 0 0 0-.3-1.9l-.1-.1 1.8-1.8.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.6V5H15v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1 1.8 1.8-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.4V14h-.4a1.7 1.7 0 0 0-1.6 1z"></path>
+  </svg>
+</span>
+          Settings
+        </a>
+        <a href="index.html" class="nav-item">
+          <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 5H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4"></path>
+    <path d="M14 8l4 4-4 4"></path>
+    <path d="M9 12h9"></path>
+  </svg>
+</span>
+          Logout
+        </a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="topbar-left">
+          <a href="dashboard.html" class="back-btn">← Back</a>
+          <div class="page-title">Analytics</div>
+        </div>
+
+        <div class="nav-right">
+  <button class="icon-btn" id="notificationButton" title="Notifications">🔔</button>
+
+  <div class="profile-wrap">
+    <button class="avatar-btn" id="profileButton" title="Profile">VC</button>
+
+    <div class="profile-panel" id="profilePanel">
+      <div class="profile-header">
+        <div class="profile-avatar">VC</div>
+        <div>
+          <strong>VentrixCarros</strong>
+          <span>Company Account</span>
+        </div>
+      </div>
+
+      <div class="profile-divider"></div>
+
+      <a href="company-profile.html" class="profile-item">
+        <span>🏢</span> Company Profile
+      </a>
+
+      <a href="settings.html" class="profile-item">
+        <span>⚙️</span> Settings
+      </a>
+
+      <a href="index.html" class="profile-item profile-logout">
+        <span>↪</span> Logout
+      </a>
+    </div>
+  </div>
+</div>
+      </div>
+    </header>
+
+    <div class="notification-panel" id="notificationPanel"><div class="notification-header"><strong>Notifications</strong></div><div class="notification-empty" style="display:block">No notifications available yet</div></div>
+
+    <main class="page-wrap">
+      <div class="container">
+        <section class="page-head reveal-up">
+          <div>
+            <h1 class="page-heading">Hiring analytics</h1>
+            <p class="page-sub">
+              Understand application trends, pipeline performance, and AI impact.
+            </p>
+          </div>
+
+          <div class="head-actions">
+            <select id="periodFilter" class="filter-select">
+              <option value="7">Last 7 days</option>
+              <option value="30" selected>Last 30 days</option>
+              <option value="90">Last 90 days</option>
+            </select>
+
+            <button id="exportButton" class="btn btn-outline">
+              ⬇ Export report
+            </button>
+
+            <a href="dashboard.html" class="btn btn-primary">
+              Open dashboard
+            </a>
+          </div>
+        </section>
+
+        <section class="kpi-grid">
+          <div class="kpi-card reveal-up delay-1"><div class="kpi-label">Total applications</div><div class="kpi-value" id="totalApplications">0</div><div class="kpi-note">In the selected period</div></div>
+          <div class="kpi-card reveal-up delay-2"><div class="kpi-label">Shortlist rate</div><div class="kpi-value" id="shortlistRate">0%</div><div class="kpi-note">Applications shortlisted</div></div>
+          <div class="kpi-card reveal-up delay-3"><div class="kpi-label">Interview rate</div><div class="kpi-value" id="interviewRate">0%</div><div class="kpi-note">Applications with an interview</div></div>
+          <div class="kpi-card reveal-up delay-3"><div class="kpi-label">Hired</div><div class="kpi-value" id="hiredCount">0</div><div class="kpi-note">Applications marked hired</div></div>
+        </section>
+
+        <section class="analytics-grid">
+          <div class="panel reveal-up delay-2">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">Applications over time</h2>
+                <p class="panel-sub">
+                  Application volume within the selected period
+                </p>
+              </div>
+
+              <span class="ai-badge">● Live data</span>
+            </div>
+
+            <div class="bar-chart" id="applicationChart" aria-live="polite"></div>
+          </div>
+
+          <div class="panel reveal-up delay-3">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">Pipeline mix</h2>
+                <p class="panel-sub">Current candidate distribution</p>
+              </div>
+            </div>
+
+            <div class="donut-wrap">
+              <div class="donut" id="pipelineDonut"><div class="donut-center"><strong id="pipelineTotal">0</strong><span>Applications</span></div></div>
+              <div class="legend" id="pipelineLegend"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="analytics-grid">
+          <div class="panel reveal-up delay-2">
+            <div class="panel-head"><div><h2 class="panel-title">AI score coverage</h2><p class="panel-sub">Based on scores stored with applications</p></div></div>
+            <div class="source-list" id="scoreCoverage"></div>
+          </div>
+          <div class="panel reveal-up delay-3">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">AI insight</h2>
+                <p class="panel-sub">Recommended optimization</p>
+              </div>
+
+              <span class="ai-badge">Data insights</span>
+            </div>
+
+            <div class="insight-card" id="insightOne"><div class="insight-icon">📊</div><div class="insight-copy"><strong id="insightOneTitle">Loading analytics</strong><span id="insightOneText">Insights will be based on your application data.</span></div></div>
+            <div class="insight-card" id="insightTwo" style="margin-top:12px;"><div class="insight-icon">⚡</div><div class="insight-copy"><strong id="insightTwoTitle">Loading analytics</strong><span id="insightTwoText">Insights will be based on your application data.</span></div></div>
+
+              <div class="insight-copy">
+                <strong>AI screening is saving time</strong>
+                <span>
+                  AI-ranked candidates are 2.4x more likely to reach the
+                  interview stage than manually reviewed applications.
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel reveal-up delay-3">
+          <div class="panel-head">
+            <div>
+              <h2 class="panel-title">Role performance</h2>
+              <p class="panel-sub">
+                Application and conversion performance by job role
+              </p>
+            </div>
+
+            <span class="ai-badge" id="rolePeriodLabel">Selected period</span>
+          </div>
+
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Role</th>
+                  <th>Applications</th>
+                  <th>Shortlisted</th>
+                  <th>Interviews</th>
+                  <th>Conversion</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+
+              <tbody id="roleTableBody"><tr><td colspan="6">Loading role performance...</td></tr></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const API_BASE_URL = "http://localhost:5000/api";
+    const token = localStorage.getItem("ventrixcarrosToken");
+    const periodFilter = document.getElementById("periodFilter");
+    let allApplications = [], allShortlists = [], allInterviews = [];
+    const colors = ["#2c83f8", "#274cdc", "#7c3aed", "#059669", "#d97706", "#dc2626"];
+    function logout() { localStorage.removeItem("ventrixcarrosToken"); localStorage.removeItem("ventrixcarrosUser"); window.location.href = "login.html"; }
+    function escapeHTML(value) { return String(value ?? "").replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[character]); }
+    async function readJSON(response) { return response.json().catch(() => ({})); }
+    function appDate(app) { const value = app.created_at || app.createdAt; return value ? new Date(value) : null; }
+    function selectedApplications() {
+      const days = Number(periodFilter.value) || 30, cutoff = Date.now() - days * 86400000;
+      return allApplications.filter((app) => { const date = appDate(app); return !date || Number.isNaN(date.getTime()) || date.getTime() >= cutoff; });
+    }
+    function getJobTitle(app) { const job = app.job || app.Job || {}; return job.title || "Untitled job"; }
+    function getCandidate(app) { return app.candidate || app.Candidate || {}; }
+    function shortlistSet() { return new Set(allShortlists.map((entry) => `${Number(entry.candidate_id || (entry.candidate || entry.Candidate || {}).id)}:${Number(entry.job_id || (entry.job || entry.Job || {}).id)}`)); }
+    function isShortlisted(app, set) { return app.status === "shortlisted" || set.has(`${Number(app.candidate_id)}:${Number(app.job_id)}`); }
+    function periodApplications() { return selectedApplications(); }
+    function renderKPIs(apps, shorts, interviews) {
+      const appIds = new Set(apps.map((app) => Number(app.id)));
+      const shortlisted = apps.filter((app) => isShortlisted(app, shorts)).length;
+      const interviewedIds = new Set(interviews.filter((item) => appIds.has(Number(item.application_id))).map((item) => Number(item.application_id)));
+      const hired = apps.filter((app) => app.status === "hired").length;
+      document.getElementById("totalApplications").textContent = apps.length;
+      document.getElementById("shortlistRate").textContent = apps.length ? `${(shortlisted / apps.length * 100).toFixed(1)}%` : "0%";
+      document.getElementById("interviewRate").textContent = apps.length ? `${(interviewedIds.size / apps.length * 100).toFixed(1)}%` : "0%";
+      document.getElementById("hiredCount").textContent = hired;
+    }
+    function renderChart(apps) {
+      const chart = document.getElementById("applicationChart"), days = Number(periodFilter.value) || 30, bins = 6;
+      const interval = days / bins, counts = Array(bins).fill(0), now = Date.now();
+      apps.forEach((app) => { const date = appDate(app); if (!date || Number.isNaN(date.getTime())) return; const age = (now - date.getTime()) / 86400000; const index = bins - 1 - Math.floor(age / interval); if (index >= 0 && index < bins) counts[index]++; });
+      const max = Math.max(...counts, 1);
+      chart.innerHTML = counts.map((count, index) => { const height = count ? Math.max(8, count / max * 100) : 3; const daysPerBin = interval; const label = days <= 7 ? `Day ${index + 1}` : `Period ${index + 1}`; return `<div class="bar-column"><div class="bar-area"><div class="bar" title="${count} applications" style="height:${height}%;animation-delay:${index * 0.05}s"></div></div><div><div class="bar-value">${count}</div><div class="bar-label">${label}</div></div></div>`; }).join("");
+    }
+    function renderPipeline(apps, interviews) {
+      const statuses = ["submitted", "reviewing", "shortlisted", "interview", "hired", "closed"];
+      const labels = { submitted: "New", reviewing: "Reviewing", shortlisted: "Shortlisted", interview: "Interview", hired: "Hired", closed: "Closed" };
+      const shorts = shortlistSet(), appIdInterview = new Set(interviews.map((item) => Number(item.application_id)));
+      const counts = { submitted: 0, reviewing: 0, shortlisted: 0, interview: 0, hired: 0, closed: 0 };
+      apps.forEach((app) => { if (app.status === "hired") counts.hired++; else if (app.status === "rejected" || app.status === "withdrawn") counts.closed++; else if (appIdInterview.has(Number(app.id))) counts.interview++; else if (isShortlisted(app, shorts)) counts.shortlisted++; else if (app.status === "reviewing") counts.reviewing++; else counts.submitted++; });
+      const total = apps.length; document.getElementById("pipelineTotal").textContent = total;
+      let cursor = 0; const segments = statuses.map((key, index) => { const start = total ? cursor / total * 100 : cursor; cursor += counts[key]; const end = total ? cursor / total * 100 : cursor; return `${colors[index]} ${start}% ${end}%`; });
+      document.getElementById("pipelineDonut").style.background = `radial-gradient(circle at center, var(--white) 57%, transparent 58%), conic-gradient(${total ? segments.join(",") : "var(--light-blue) 0 100%"})`;
+      document.getElementById("pipelineLegend").innerHTML = statuses.map((key, index) => `<div class="legend-item"><div class="legend-left"><span class="legend-dot" style="background:${colors[index]}"></span>${labels[key]}</div><span class="legend-value">${counts[key]}</span></div>`).join("");
+    }
+    function renderScoreCoverage(apps) {
+      const scored = apps.filter((app) => app.ai_score !== null && app.ai_score !== undefined && app.ai_score !== "").length;
+      const missing = apps.length - scored, scoredPercent = apps.length ? scored / apps.length * 100 : 0, missingPercent = apps.length ? missing / apps.length * 100 : 0;
+      const rows = [["With AI score", scored, scoredPercent, colors[0]], ["Without score", missing, missingPercent, "#dbe3f3"]];
+      document.getElementById("scoreCoverage").innerHTML = rows.map(([label, count, percent, color]) => `<div class="source-row"><span>${label}</span><div class="progress-track"><div class="progress-fill" style="width:${percent}%;background:${color}"></div></div><span class="source-value">${count}</span></div>`).join("");
+    }
+    function renderInsights(apps, shorts, interviews) {
+      const newCount = apps.filter((app) => app.status === "submitted").length;
+      const scoredCount = apps.filter((app) => app.ai_score !== null && app.ai_score !== undefined && app.ai_score !== "").length;
+      document.getElementById("insightOneTitle").textContent = newCount ? `${newCount} application${newCount === 1 ? "" : "s"} waiting for review` : "No new applications waiting";
+      document.getElementById("insightOneText").textContent = newCount ? "Review these applications from the Applications page." : "There are no submitted applications in this period.";
+      document.getElementById("insightTwoTitle").textContent = apps.length ? `${scoredCount} of ${apps.length} applications have an AI score` : "No application data for this period";
+      document.getElementById("insightTwoText").textContent = apps.length && scoredCount < apps.length ? "AI scores are only shown when they have been saved on an application." : "These summaries are calculated from records stored in your backend.";
+    }
+    function renderRoleTable(apps, shorts, interviews) {
+      const rows = new Map(), shortlistKeys = shortlistSet(), interviewAppIds = new Set(interviews.map((item) => Number(item.application_id)));
+      apps.forEach((app) => { const title = getJobTitle(app); if (!rows.has(title)) rows.set(title, { total: 0, shortlisted: 0, interviews: 0 }); const row = rows.get(title); row.total++; if (isShortlisted(app, shortlistKeys)) row.shortlisted++; if (interviewAppIds.has(Number(app.id))) row.interviews++; });
+      const body = document.getElementById("roleTableBody");
+      if (!rows.size) { body.innerHTML = '<tr><td colspan="6">No application data for this period.</td></tr>'; return; }
+      body.innerHTML = [...rows.entries()].sort((a, b) => b[1].total - a[1].total).map(([title, row]) => { const conversion = row.total ? row.shortlisted / row.total * 100 : 0; const label = row.shortlisted ? "Shortlisted" : "No shortlist"; const klass = row.shortlisted ? "pill-good" : "pill-medium"; return `<tr><td class="role-name">${escapeHTML(title)}</td><td>${row.total}</td><td>${row.shortlisted}</td><td>${row.interviews}</td><td>${conversion.toFixed(1)}%</td><td><span class="pill ${klass}">${label}</span></td></tr>`; }).join("");
+    }
+    function render() {
+      const apps = periodApplications(), shorts = shortlistSet(), interviews = allInterviews;
+      document.getElementById("rolePeriodLabel").textContent = `Last ${periodFilter.value} days`;
+      renderKPIs(apps, shorts, interviews); renderChart(apps); renderPipeline(apps, interviews); renderScoreCoverage(apps); renderInsights(apps, shorts, interviews); renderRoleTable(apps, shorts, interviews);
+    }
+    async function loadAnalytics() {
+      if (!token) { window.location.href = "login.html"; return; }
+      try {
+        const headers = { Authorization: `Bearer ${token}` };
+        const [applicationResponse, shortlistResponse, interviewResponse] = await Promise.all([
+          fetch(`${API_BASE_URL}/applications`, { headers }), fetch(`${API_BASE_URL}/shortlists`, { headers }), fetch(`${API_BASE_URL}/interviews`, { headers })
+        ]);
+        const [applicationData, shortlistData, interviewData] = await Promise.all([readJSON(applicationResponse), readJSON(shortlistResponse), readJSON(interviewResponse)]);
+        if ([applicationResponse, shortlistResponse, interviewResponse].some((response) => response.status === 401)) return logout();
+        if (!applicationResponse.ok) throw new Error(applicationData.message || "Could not load application analytics.");
+        if (!shortlistResponse.ok) throw new Error(shortlistData.message || "Could not load shortlist analytics.");
+        if (!interviewResponse.ok) throw new Error(interviewData.message || "Could not load interview analytics.");
+        allApplications = Array.isArray(applicationData.applications) ? applicationData.applications : [];
+        allShortlists = Array.isArray(shortlistData.entries) ? shortlistData.entries : [];
+        allInterviews = Array.isArray(interviewData.interviews) ? interviewData.interviews : [];
+        render();
+      } catch (error) {
+        console.error("Could not load analytics:", error);
+        document.querySelectorAll(".kpi-value").forEach((node) => { node.textContent = "—"; });
+        document.getElementById("roleTableBody").innerHTML = `<tr><td colspan="6">${escapeHTML(error.message || "Could not load analytics. Make sure the backend is running, then refresh.")}</td></tr>`;
+      }
+    }
+    periodFilter.addEventListener("change", render);
+    document.getElementById("exportButton").addEventListener("click", () => {
+      const apps = periodApplications(), shorts = shortlistSet();
+      if (!apps.length) return alert("There is no application data to export for this period.");
+      const rows = apps.map((app) => { const candidate = getCandidate(app), status = isShortlisted(app, shorts) && app.status !== "hired" ? "shortlisted" : app.status; return [candidate.name || "", candidate.email || "", getJobTitle(app), status || "", app.ai_score ?? "", app.created_at || ""]; });
+      const csv = [["Candidate", "Email", "Job", "Status", "AI score", "Applied at"], ...rows].map((row) => row.map((value) => `"${String(value ?? "").replace(/"/g, '""')}"`).join(",")).join("\r\n");
+      const link = document.createElement("a"); link.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" })); link.download = `ventrixcarros-analytics-${periodFilter.value}-days.csv`; link.click(); URL.revokeObjectURL(link.href);
+    });
+    document.querySelectorAll(".profile-logout, .nav-item[href='index.html']").forEach((link) => link.addEventListener("click", (event) => { event.preventDefault(); logout(); }));
+    loadAnalytics();
+  </script>
+
+  <script src="notification.js"></script>
+<script src="profile.js"></script>
+</body>
+</html>

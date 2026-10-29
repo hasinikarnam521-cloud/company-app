@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Users — VentrixCarros Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --navy: #050a30;
+      --blue: #2c83f8;
+      --royal: #274cdc;
+      --white: #fff;
+      --line: #e0e4f5;
+      --muted: #5b6b85;
+      --bg: #f7f9ff;
+      --green: #059669;
+      --orange: #d97706;
+      --red: #dc2626;
+      --shadow: 0 24px 70px rgba(5, 10, 48, .10);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      color: var(--navy);
+      font-family: "Inter", sans-serif;
+      line-height: 1.6;
+      background: var(--bg);
+      display: grid;
+      grid-template-columns: 260px 1fr;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
+    .container { width: min(1300px, 100% - 40px); margin: auto; }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 20px 16px;
+      overflow-y: auto;
+      background: var(--white);
+      border-right: 1px solid var(--line);
+    }
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      margin-bottom: 18px;
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+    }
+    .brand-mark { width: 40px; height: 40px; flex: 0 0 40px; }
+    .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
+    .admin-label {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .nav-list { display: grid; gap: 6px; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .nav-item:hover { color: var(--blue); background: rgba(44,131,248,.06); }
+    .nav-item.active {
+      color: var(--royal);
+      font-weight: 600;
+      background: rgba(44,131,248,.10);
+    }
+    .nav-icon { width: 22px; text-align: center; }
+    .nav-section { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line); }
+    .nav-section-title {
+      padding: 6px 12px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: .7px;
+      text-transform: uppercase;
+    }
+
+    .main-content { min-width: 0; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      padding: 14px 0;
+      background: rgba(247,249,255,.92);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar-inner, .topbar-left, .nav-right, .head-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .topbar-left { flex: 1; }
+    .page-title { font: 600 20px "Sora", sans-serif; }
+    .search-wrap { position: relative; flex: 1; max-width: 420px; }
+    .search-icon { position: absolute; top: 50%; left: 13px; transform: translateY(-50%); }
+    .search-input {
+      width: 100%;
+      padding: 11px 16px 11px 38px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      outline: none;
+      background: var(--white);
+    }
+    .search-input:focus { border-color: var(--blue); }
+
+    .back-btn, .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--navy);
+      background: var(--white);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-primary {
+      color: var(--white);
+      border-color: var(--blue);
+      background: linear-gradient(135deg, var(--blue), var(--royal));
+    }
+    .btn-sm { padding: 7px 12px; font-size: 12px; }
+    .icon-btn, .avatar-btn {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+    }
+    .icon-btn { border: 1px solid var(--line); background: var(--white); cursor: pointer; }
+    .avatar-btn {
+      color: var(--white);
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--blue), var(--royal));
+    }
+
+    .page-wrap { padding: 28px 0 60px; }
+    .page-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .page-heading { font: 700 27px "Sora", sans-serif; }
+    .page-sub, .panel-sub { color: var(--muted); font-size: 13px; }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .kpi-card, .panel {
+      padding: 18px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+    .kpi-label {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: .7px;
+      text-transform: uppercase;
+    }
+    .kpi-value { margin: 5px 0; font: 700 28px "Sora", sans-serif; }
+    .kpi-note { color: var(--muted); font-size: 11px; }
+
+    .panel { margin-bottom: 18px; }
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .panel-title { font: 600 18px "Sora", sans-serif; }
+    .badge {
+      display: inline-flex;
+      padding: 5px 10px;
+      border-radius: 999px;
+      color: var(--green);
+      background: #e8f7f1;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .table-wrap { overflow-x: auto; }
+    .table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .table th, .table td {
+      padding: 12px 10px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+    }
+    .table th { color: var(--muted); font-size: 11px; text-transform: uppercase; }
+    .user-cell { display: flex; align-items: center; gap: 10px; min-width: 210px; }
+    .user-avatar {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 38px;
+      border-radius: 12px;
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--blue), var(--royal));
+    }
+    .user-name { display: block; font-weight: 700; }
+    .user-sub { display: block; color: var(--muted); font-size: 11px; }
+    .pill {
+      display: inline-flex;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .pill-admin { color: var(--royal); background: #eef0ff; }
+    .pill-recruiter { color: var(--blue); background: #eaf3ff; }
+    .pill-candidate { color: var(--green); background: #e8f7f1; }
+    .pill-company-admin { color: var(--orange); background: #fff4df; }
+
+    dialog {
+      width: min(480px, calc(100% - 28px));
+      margin: auto;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+    dialog::backdrop { background: rgba(5,10,48,.45); }
+    .dialog-title { margin-bottom: 16px; font: 600 20px "Sora", sans-serif; }
+    .form-group { margin-bottom: 13px; }
+    .form-group label { display: block; margin-bottom: 5px; font-size: 12px; font-weight: 600; }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--white);
+    }
+    .dialog-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }
+
+    @media (max-width: 1000px) {
+      body { display: block; }
+      .sidebar { position: relative; height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+      .nav-list { grid-template-columns: repeat(2, 1fr); }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 700px) {
+      .nav-list, .kpi-grid { grid-template-columns: 1fr; }
+      .topbar-inner { flex-wrap: wrap; }
+      .search-wrap { order: 3; max-width: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark"><img src="ventrix-logo-mark.png" alt="VentrixCarros Logo"></div>
+      <div>
+        <span>VENTRIXCARROS</span>
+        <span class="admin-label">Admin console</span>
+      </div>
+    </div>
+
+    <nav class="nav-list">
+      <a href="admin-dashboard.html" class="nav-item"><span class="nav-icon">🛡️</span>Admin Dashboard</a>
+      <a href="admin-companies.html" class="nav-item"><span class="nav-icon">🏢</span>Companies</a>
+      <a href="admin-users.html" class="nav-item active"><span class="nav-icon">👤</span>Users</a>
+      <a href="admin-subscriptions.html" class="nav-item"><span class="nav-icon">💳</span>Subscriptions</a>
+      <a href="admin-jobs.html" class="nav-item"><span class="nav-icon">💼</span>Jobs</a>
+      <a href="admin-support.html" class="nav-item"><span class="nav-icon">🎧</span>Support</a>
+      <a href="admin-analytics.html" class="nav-item"><span class="nav-icon">📊</span>Platform Analytics</a>
+      <div class="nav-section">
+        <div class="nav-section-title">System</div>
+        <a href="admin-settings.html" class="nav-item"><span class="nav-icon">⚙️</span>Settings</a>
+        <a href="admin-logs.html" class="nav-item"><span class="nav-icon">🧾</span>Activity Logs</a>
+        <a href="index.html" class="nav-item"><span class="nav-icon">🚪</span>Logout</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="topbar-left">
+          <a href="admin-dashboard.html" class="back-btn">← Back</a>
+          <div class="page-title">Platform Admin</div>
+        </div>
+
+        <div class="search-wrap">
+          <span class="search-icon">🔎</span>
+          <input id="userSearch" class="search-input" type="search" placeholder="Search users, companies, or roles..." />
+        </div>
+
+        <div class="nav-right">
+          <button id="notificationButton" class="icon-btn" type="button" title="Notifications">🔔</button>
+          <div class="avatar-btn">AD</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-wrap">
+      <div class="container">
+        <section class="page-head">
+          <div>
+            <h1 class="page-heading">Users</h1>
+            <p class="page-sub">View platform accounts and manage their roles and company assignments.</p>
+          </div>
+          <div class="head-actions">
+            <button id="exportUsers" class="btn" type="button">⬇ Export users</button>
+            <a href="signup.html" class="btn btn-primary">+ Open signup</a>
+          </div>
+        </section>
+
+        <section class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Total users</div>
+            <div class="kpi-value" id="totalUsers">—</div>
+            <div class="kpi-note">Registered accounts</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Candidates</div>
+            <div class="kpi-value" id="candidateCount">—</div>
+            <div class="kpi-note">Candidate accounts</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Recruiters</div>
+            <div class="kpi-value" id="recruiterCount">—</div>
+            <div class="kpi-note">Recruiter accounts</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Admin accounts</div>
+            <div class="kpi-value" id="adminCount">—</div>
+            <div class="kpi-note">Company admins and platform admins</div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2 class="panel-title">Platform users</h2>
+              <p class="panel-sub">User details stored in the database</p>
+            </div>
+            <span class="badge">● Live data</span>
+          </div>
+
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Company</th>
+                  <th>Role</th>
+                  <th>Registered</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="userRows">
+                <tr><td colspan="5">Loading users...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <dialog id="userDialog">
+    <form id="userForm">
+      <h2 class="dialog-title">Manage user</h2>
+      <input type="hidden" id="userId" />
+
+      <div class="form-group">
+        <label for="userName">Name</label>
+        <input id="userName" required maxlength="100" />
+      </div>
+
+      <div class="form-group">
+        <label for="userRole">Role</label>
+        <select id="userRole">
+          <option value="candidate">Candidate</option>
+          <option value="recruiter">Recruiter</option>
+          <option value="company_admin">Company admin</option>
+          <option value="admin">Platform admin</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="userCompany">Company</label>
+        <select id="userCompany">
+          <option value="">No company</option>
+        </select>
+      </div>
+
+      <div class="dialog-actions">
+        <button class="btn" id="cancelDialog" type="button">Cancel</button>
+        <button class="btn btn-primary" id="saveUserButton" type="submit">Save user</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script>
+    const API_BASE_URL = "http://localhost:5000/api";
+    const token = localStorage.getItem("ventrixcarrosToken");
+    const userRows = document.getElementById("userRows");
+    const userSearch = document.getElementById("userSearch");
+    const userDialog = document.getElementById("userDialog");
+    let users = [];
+    let companies = [];
+
+    function escapeHTML(value) {
+      const entities = {
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;",
+      };
+      return String(value ?? "").replace(/[&<>"']/g, (character) => entities[character]);
+    }
+
+    async function apiRequest(path, options = {}) {
+      if (!token) throw new Error("Please sign in with an admin account.");
+
+      const response = await fetch(`${API_BASE_URL}${path}`, {
+        ...options,
+        headers: {
+          ...(options.body ? { "Content-Type": "application/json" } : {}),
+          Authorization: `Bearer ${token}`,
+          ...options.headers,
+        },
+      });
+
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.message || "The request failed.");
+      return data;
+    }
+
+    function roleLabel(role) {
+      return {
+        candidate: "Candidate",
+        recruiter: "Recruiter",
+        company_admin: "Company admin",
+        admin: "Platform admin",
+      }[role] || role;
+    }
+
+    function renderUsers() {
+      const term = userSearch.value.trim().toLowerCase();
+      const filtered = users.filter((user) =>
+        `${user.name} ${user.email} ${user.companyName} ${roleLabel(user.role)}`
+          .toLowerCase()
+          .includes(term)
+      );
+
+      if (!filtered.length) {
+        userRows.innerHTML = '<tr><td colspan="5">No users found.</td></tr>';
+        return;
+      }
+
+      userRows.innerHTML = filtered.map((user) => {
+        const initials = (user.name || user.email || "U")
+          .split(/\s+/).filter(Boolean).slice(0, 2)
+          .map((part) => part[0]).join("").toUpperCase();
+        const roleClass = {
+          admin: "pill-admin",
+          company_admin: "pill-company-admin",
+          recruiter: "pill-recruiter",
+          candidate: "pill-candidate",
+        }[user.role] || "pill-candidate";
+        const registered = user.createdAt
+          ? new Date(user.createdAt).toLocaleDateString()
+          : "—";
+
+        return `
+          <tr>
+            <td>
+              <div class="user-cell">
+                <div class="user-avatar">${escapeHTML(initials)}</div>
+                <div>
+                  <span class="user-name">${escapeHTML(user.name)}</span>
+                  <span class="user-sub">${escapeHTML(user.email)}</span>
+                </div>
+              </div>
+            </td>
+            <td>${escapeHTML(user.companyName || "—")}</td>
+            <td><span class="pill ${roleClass}">${escapeHTML(roleLabel(user.role))}</span></td>
+            <td>${escapeHTML(registered)}</td>
+            <td>
+              <button class="btn btn-sm edit-user" type="button" data-id="${Number(user.id)}">
+                Manage
+              </button>
+            </td>
+          </tr>`;
+      }).join("");
+
+      document.querySelectorAll(".edit-user").forEach((button) => {
+        button.addEventListener("click", () => {
+          const user = users.find((item) => item.id === Number(button.dataset.id));
+          if (user) openUserDialog(user);
+        });
+      });
+    }
+
+    function openUserDialog(user) {
+      document.getElementById("userId").value = user.id;
+      document.getElementById("userName").value = user.name || "";
+      document.getElementById("userRole").value = user.role || "candidate";
+
+      const companySelect = document.getElementById("userCompany");
+      companySelect.innerHTML =
+        '<option value="">No company</option>' +
+        companies.map((company) =>
+          `<option value="${Number(company.id)}">${escapeHTML(company.name)}</option>`
+        ).join("");
+      companySelect.value = user.company_id || "";
+
+      userDialog.showModal();
+    }
+
+    async function loadUsersPage() {
+      try {
+        const [userData, companyData] = await Promise.all([
+          apiRequest("/admin/users"),
+          apiRequest("/admin/companies"),
+        ]);
+
+        users = Array.isArray(userData.users) ? userData.users : [];
+        companies = Array.isArray(companyData.companies) ? companyData.companies : [];
+
+        const stats = userData.stats || {};
+        document.getElementById("totalUsers").textContent = Number(stats.totalUsers) || 0;
+        document.getElementById("candidateCount").textContent = Number(stats.candidates) || 0;
+        document.getElementById("recruiterCount").textContent = Number(stats.recruiters) || 0;
+        document.getElementById("adminCount").textContent =
+          (Number(stats.companyAdmins) || 0) + (Number(stats.admins) || 0);
+
+        renderUsers();
+      } catch (error) {
+        console.error("Could not load users:", error);
+        userRows.innerHTML =
+          `<tr><td colspan="5">${escapeHTML(error.message)}</td></tr>`;
+      }
+    }
+
+    document.getElementById("cancelDialog").addEventListener("click", () => {
+      userDialog.close();
+    });
+
+    document.getElementById("userForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const id = document.getElementById("userId").value;
+      const payload = {
+        name: document.getElementById("userName").value.trim(),
+        role: document.getElementById("userRole").value,
+        company_id: document.getElementById("userCompany").value || null,
+      };
+
+      const saveButton = document.getElementById("saveUserButton");
+      saveButton.disabled = true;
+
+      try {
+        await apiRequest(`/admin/users/${encodeURIComponent(id)}`, {
+          method: "PATCH",
+          body: JSON.stringify(payload),
+        });
+        userDialog.close();
+        await loadUsersPage();
+        alert("User updated.");
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        saveButton.disabled = false;
+      }
+    });
+
+    userSearch.addEventListener("input", renderUsers);
+
+    document.getElementById("exportUsers").addEventListener("click", () => {
+      const rows = [
+        ["Name", "Email", "Company", "Role", "Registered"],
+        ...users.map((user) => [
+          user.name,
+          user.email,
+          user.companyName || "",
+          roleLabel(user.role),
+          user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "",
+        ]),
+      ];
+
+      const csv = rows.map((row) =>
+        row.map((cell) => `"${String(cell ?? "").replace(/"/g, '""')}"`).join(",")
+      ).join("\r\n");
+
+      const url = URL.createObjectURL(
+        new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" })
+      );
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "users.csv";
+      link.click();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById("notificationButton").addEventListener("click", () => {
+      alert("Admin notifications are not connected yet.");
+    });
+
+    loadUsersPage();
+  </script>
+</body>
+</html>

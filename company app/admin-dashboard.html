@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — VentrixCarros</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --deep-navy: #050a30;
+      --electric-blue: #2c83f8;
+      --royal-blue: #274cdc;
+      --white: #ffffff;
+      --light-blue: #e0e4f5;
+      --muted: #5b6b85;
+      --bg: #f7f9ff;
+      --green: #059669;
+      --orange: #d97706;
+      --red: #dc2626;
+      --line: var(--light-blue);
+      --radius: 24px;
+      --shadow: 0 24px 70px rgba(5, 10, 48, 0.10);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--deep-navy);
+      font-family: "Inter", sans-serif;
+      line-height: 1.65;
+      background:
+        radial-gradient(
+          900px 600px at 50% -20%,
+          rgba(44, 131, 248, 0.08),
+          transparent 70%
+        ),
+        var(--bg);
+      display: grid;
+      grid-template-columns: 260px 1fr;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .container {
+      width: min(1300px, 100% - 40px);
+      margin-inline: auto;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 20px 16px;
+      overflow-y: auto;
+      background: var(--white);
+      border-right: 1px solid var(--line);
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      margin-bottom: 18px;
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: var(--white);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .brand-mark img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .admin-label {
+      display: block;
+      color: var(--muted);
+      font-family: "Inter", sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+      transition: 0.2s ease;
+    }
+
+    .nav-item:hover {
+      color: var(--electric-blue);
+      background: rgba(44, 131, 248, 0.06);
+    }
+
+    .nav-item.active {
+      color: var(--royal-blue);
+      font-weight: 600;
+      background: linear-gradient(
+        135deg,
+        rgba(44, 131, 248, 0.12),
+        rgba(39, 76, 220, 0.12)
+      );
+    }
+
+    .nav-icon {
+      width: 22px;
+      text-align: center;
+    }
+
+    .nav-section {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .nav-section-title {
+      padding: 6px 12px;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+    }
+
+    .main-content {
+      min-width: 0;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      padding: 14px 0;
+      backdrop-filter: blur(18px);
+      background: rgba(247, 249, 255, 0.86);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .back-btn,
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.25s ease;
+    }
+
+    .back-btn {
+      padding: 9px 14px;
+      color: var(--deep-navy);
+      background: var(--white);
+      border: 1px solid var(--line);
+      font-size: 13px;
+    }
+
+    .back-btn:hover {
+      color: var(--electric-blue);
+      border-color: var(--electric-blue);
+      transform: translateX(-2px);
+    }
+
+    .page-title {
+      font-family: "Sora", sans-serif;
+      font-size: 20px;
+    }
+
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      max-width: 420px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 11px 16px 11px 38px;
+      color: var(--deep-navy);
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .search-input:focus {
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 0 4px rgba(44, 131, 248, 0.12);
+    }
+
+    .search-icon {
+      position: absolute;
+      top: 50%;
+      left: 13px;
+      color: var(--muted);
+      transform: translateY(-50%);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-btn,
+    .avatar-btn {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+    }
+
+    .icon-btn {
+      color: var(--muted);
+      background: var(--white);
+      border: 1px solid var(--line);
+      cursor: pointer;
+      font-size: 17px;
+    }
+
+    .icon-btn:hover {
+      color: var(--electric-blue);
+      border-color: var(--electric-blue);
+    }
+
+    .avatar-btn {
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 700;
+      background: linear-gradient(
+        135deg,
+        var(--electric-blue),
+        var(--royal-blue)
+      );
+    }
+
+    .btn {
+      padding: 11px 18px;
+      border: none;
+      font-size: 13px;
+    }
+
+    .btn-primary {
+      color: var(--white);
+      background: linear-gradient(
+        135deg,
+        var(--electric-blue),
+        var(--royal-blue)
+      );
+      box-shadow: 0 14px 40px rgba(44, 131, 248, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+    }
+
+    .btn-outline {
+      color: var(--deep-navy);
+      background: var(--white);
+      border: 1px solid var(--line);
+    }
+
+    .btn-outline:hover {
+      color: var(--electric-blue);
+      border-color: var(--electric-blue);
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      color: var(--white);
+      background: linear-gradient(135deg, #dc2626, #991b1b);
+    }
+
+    .btn-sm {
+      padding: 7px 12px;
+      font-size: 12px;
+    }
+
+    .page-wrap {
+      padding: 28px 0 60px;
+    }
+
+    .page-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .page-heading {
+      margin-bottom: 3px;
+      font-family: "Sora", sans-serif;
+      font-size: 27px;
+      letter-spacing: -1px;
+    }
+
+    .page-sub {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .head-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .kpi-card,
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .kpi-card {
+      padding: 18px;
+      transition: 0.25s ease;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .kpi-label {
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+    }
+
+    .kpi-value {
+      margin-bottom: 4px;
+      font-family: "Sora", sans-serif;
+      font-size: 28px;
+    }
+
+    .kpi-note {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .note-up {
+      color: var(--green);
+    }
+
+    .note-warning {
+      color: var(--orange);
+    }
+
+    .note-danger {
+      color: var(--red);
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 0.6fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .panel {
+      padding: 20px;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .panel-title {
+      font-family: "Sora", sans-serif;
+      font-size: 18px;
+    }
+
+    .panel-sub {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .badge {
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .badge-live {
+      color: var(--green);
+      background: rgba(5, 150, 105, 0.1);
+      border: 1px solid rgba(5, 150, 105, 0.25);
+    }
+
+    .badge-warning {
+      color: var(--orange);
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .table th,
+    .table td {
+      padding: 11px 10px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .table th {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .company-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 190px;
+    }
+
+    .company-avatar {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 34px;
+      border-radius: 11px;
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 700;
+      background: linear-gradient(
+        135deg,
+        var(--electric-blue),
+        var(--royal-blue)
+      );
+    }
+
+    .company-name {
+      display: block;
+      font-weight: 700;
+    }
+
+    .company-sub {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .pill {
+      display: inline-flex;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .pill-active {
+      color: var(--green);
+      background: rgba(5, 150, 105, 0.1);
+      border: 1px solid rgba(5, 150, 105, 0.25);
+    }
+
+    .pill-trial {
+      color: var(--electric-blue);
+      background: rgba(44, 131, 248, 0.1);
+      border: 1px solid rgba(44, 131, 248, 0.25);
+    }
+
+    .pill-pending {
+      color: var(--orange);
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+
+    .pill-suspended {
+      color: var(--red);
+      background: rgba(220, 38, 38, 0.1);
+      border: 1px solid rgba(220, 38, 38, 0.25);
+    }
+
+    .row-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .activity-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .activity-item {
+      display: flex;
+      gap: 12px;
+      padding: 13px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      transition: 0.2s ease;
+    }
+
+    .activity-item:hover {
+      border-color: var(--electric-blue);
+      transform: translateY(-2px);
+    }
+
+    .activity-icon {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 38px;
+      border-radius: 12px;
+      color: var(--white);
+      background: linear-gradient(
+        135deg,
+        var(--electric-blue),
+        var(--royal-blue)
+      );
+    }
+
+    .activity-copy strong {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 13px;
+    }
+
+    .activity-copy span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .health-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .health-row {
+      display: grid;
+      grid-template-columns: 110px 1fr 48px;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .progress-track {
+      height: 9px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: var(--light-blue);
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(
+        90deg,
+        var(--electric-blue),
+        var(--royal-blue)
+      );
+    }
+
+    .health-value {
+      color: var(--deep-navy);
+      font-weight: 700;
+      text-align: right;
+    }
+
+    .support-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .support-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+    }
+
+    .support-copy strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .support-copy span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: revealUp 0.65s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    }
+
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .delay-1 {
+      animation-delay: 0.06s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.12s;
+    }
+
+    .delay-3 {
+      animation-delay: 0.18s;
+    }
+
+    @media (max-width: 1000px) {
+      body {
+        display: block;
+      }
+
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .kpi-grid,
+      .main-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .nav-list {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar-inner {
+        flex-wrap: wrap;
+      }
+
+      .search-wrap {
+        order: 3;
+        width: 100%;
+        max-width: none;
+      }
+
+      .kpi-grid,
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark">
+        <img src="ventrix-logo-mark.png" alt="VentrixCarros Logo">
+      </div>
+
+      <div>
+        <span>VENTRIXCARROS</span>
+        <span class="admin-label">Admin console</span>
+      </div>
+    </div>
+
+    <nav class="nav-list">
+      <a href="admin-dashboard.html" class="nav-item active">
+        <span class="nav-icon">🛡️</span>
+        Admin Dashboard
+      </a>
+      <a href="admin-companies.html" class="nav-item">
+        <span class="nav-icon">🏢</span>
+        Companies
+      </a>
+      <a href="admin-users.html" class="nav-item">
+        <span class="nav-icon">👤</span>
+        Users
+      </a>
+      <a href="admin-subscriptions.html" class="nav-item">
+        <span class="nav-icon">💳</span>
+        Subscriptions
+      </a>
+      <a href="admin-jobs.html" class="nav-item">
+        <span class="nav-icon">💼</span>
+        Jobs
+      </a>
+      <a href="admin-support.html" class="nav-item">
+        <span class="nav-icon">🎧</span>
+        Support
+      </a>
+      <a href="admin-analytics.html" class="nav-item">
+        <span class="nav-icon">📊</span>
+        Platform Analytics
+      </a>
+
+      <div class="nav-section">
+        <div class="nav-section-title">System</div>
+        <a href="admin-settings.html" class="nav-item">
+          <span class="nav-icon">⚙️</span>
+          Settings
+        </a>
+        <a href="admin-logs.html" class="nav-item">
+          <span class="nav-icon">🧾</span>
+          Activity Logs
+        </a>
+        <a href="index.html" class="nav-item">
+          <span class="nav-icon">🚪</span>
+          Logout
+        </a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="topbar-left">
+          <a href="index.html" class="back-btn">← Back</a>
+          <div class="page-title">Platform Admin</div>
+        </div>
+
+        <div class="search-wrap">
+          <span class="search-icon">🔎</span>
+          <input
+            id="adminSearch"
+            class="search-input"
+            type="search"
+            placeholder="Search the 10 most recent companies..."
+          />
+        </div>
+
+        <div class="nav-right">
+          <button id="notificationButton" class="icon-btn" type="button">🔔</button>
+          <div class="avatar-btn">AD</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-wrap">
+      <div class="container">
+        <section class="page-head reveal-up">
+          <div>
+            <h1 class="page-heading">Admin dashboard</h1>
+            <p class="page-sub">
+              Monitor platform activity, companies, users, revenue, and system health.
+            </p>
+          </div>
+
+          <div class="head-actions">
+            <button id="exportButton" class="btn btn-outline" type="button">
+              ⬇ Export recent companies CSV
+            </button>
+            <a href="admin-companies.html" class="btn btn-primary">
+              🏢 Manage companies
+            </a>
+          </div>
+        </section>
+
+        <section class="kpi-grid">
+          <div class="kpi-card reveal-up delay-1">
+            <div class="kpi-label">Total companies</div>
+            <div class="kpi-value" id="totalCompaniesCount">—</div>
+            <div class="kpi-note">Companies registered on the platform</div>
+          </div>
+
+          <div class="kpi-card reveal-up delay-2">
+            <div class="kpi-label">Total users</div>
+            <div class="kpi-value" id="totalUsersCount">—</div>
+            <div class="kpi-note">All registered user accounts</div>
+          </div>
+
+          <div class="kpi-card reveal-up delay-3">
+            <div class="kpi-label">Monthly revenue</div>
+            <div class="kpi-value" id="monthlyRevenueValue">—</div>
+            <div class="kpi-note">Paid payments this month</div>
+          </div>
+
+          <div class="kpi-card reveal-up delay-3">
+            <div class="kpi-label">Active jobs</div>
+            <div class="kpi-value" id="activeJobsCount">—</div>
+            <div class="kpi-note">Currently open jobs</div>
+          </div>
+        </section>
+
+        <section class="main-grid">
+          <div class="panel reveal-up delay-2">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">Recent companies</h2>
+                <p class="panel-sub">
+                  Latest organizations onboarded to VentrixCarros
+                </p>
+              </div>
+              <span class="badge badge-live">● Live</span>
+            </div>
+
+            <div class="table-wrap">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Company</th>
+                    <th>Email</th>
+                    <th>Users</th>
+                    <th>Active jobs</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="companyRows">
+                  <tr><td colspan="6">Loading companies...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel reveal-up delay-3">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">System health</h2>
+                <p class="panel-sub">Platform service status</p>
+              </div>
+              <span class="badge badge-warning">Monitoring not connected</span>
+            </div>
+
+            <div class="health-list">
+              <p class="panel-sub">Live service-health monitoring is not connected yet.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="main-grid">
+          <div class="panel reveal-up delay-2">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">Recent platform activity</h2>
+                <p class="panel-sub">
+                  Important events across companies and users
+                </p>
+              </div>
+              <a href="admin-logs.html" class="btn btn-outline btn-sm">
+                View all logs
+              </a>
+            </div>
+
+            <div class="activity-list">
+              <p class="panel-sub">Live platform activity is not connected to backend logging yet.</p>
+            </div>
+          </div>
+
+          <div class="panel reveal-up delay-3">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">Support queue</h2>
+                <p class="panel-sub">Tickets requiring attention</p>
+              </div>
+              <a href="admin-support.html" class="btn btn-outline btn-sm">
+                Open support
+              </a>
+            </div>
+
+            <div class="support-list">
+              <p class="panel-sub">Support tickets are not connected to the backend yet.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const API_BASE_URL = "http://localhost:5000/api";
+    const token = localStorage.getItem("ventrixcarrosToken");
+    const adminSearch = document.getElementById("adminSearch");
+    const companyRows = document.getElementById("companyRows");
+    let dashboardData = null;
+
+    function escapeHTML(value) {
+      const entities = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;",
+      };
+
+      return String(value ?? "").replace(/[&<>"']/g, (character) => entities[character]);
+    }
+
+    function renderCompanies(companies) {
+      const searchTerm = adminSearch.value.trim().toLowerCase();
+
+      const filteredCompanies = companies.filter((company) =>
+        `${company.name || ""} ${company.email || ""} ${company.location || ""} ${company.status || ""}`
+          .toLowerCase()
+          .includes(searchTerm)
+      );
+
+      if (!filteredCompanies.length) {
+        companyRows.innerHTML =
+          '<tr><td colspan="6">No companies found.</td></tr>';
+        return;
+      }
+
+      companyRows.innerHTML = filteredCompanies.map((company) => {
+        const initials = (company.name || "C").trim().slice(0, 2).toUpperCase();
+        const status = String(company.status || "pending").toLowerCase();
+
+        const statusClass = status === "active"
+          ? "pill-active"
+          : status === "inactive"
+            ? "pill-suspended"
+            : "pill-pending";
+
+        return `
+          <tr>
+            <td>
+              <div class="company-cell">
+                <div class="company-avatar">${escapeHTML(initials)}</div>
+                <div>
+                  <span class="company-name">${escapeHTML(company.name)}</span>
+                  <span class="company-sub">${escapeHTML(company.location || "Location not provided")}</span>
+                </div>
+              </div>
+            </td>
+            <td>${escapeHTML(company.email)}</td>
+            <td>${Number(company.users) || 0}</td>
+            <td>${Number(company.activeJobs) || 0}</td>
+            <td><span class="pill ${statusClass}">${escapeHTML(status)}</span></td>
+            <td>
+              <div class="row-actions">
+                <a class="btn btn-outline btn-sm"
+                   href="admin-companies.html?id=${encodeURIComponent(company.id)}">
+                  Manage
+                </a>
+              </div>
+            </td>
+          </tr>`;
+      }).join("");
+    }
+
+    async function loadAdminDashboard() {
+      if (!token) {
+        companyRows.innerHTML =
+          '<tr><td colspan="6">Please sign in with an admin account.</td></tr>';
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/admin/dashboard`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(data.message || "Could not load the admin dashboard.");
+        }
+
+        dashboardData = data;
+        const stats = data.stats || {};
+
+        document.getElementById("totalCompaniesCount").textContent =
+          Number(stats.totalCompanies) || 0;
+        document.getElementById("totalUsersCount").textContent =
+          Number(stats.totalUsers) || 0;
+        document.getElementById("activeJobsCount").textContent =
+          Number(stats.activeJobs) || 0;
+
+        document.getElementById("monthlyRevenueValue").textContent =
+          new Intl.NumberFormat("en-IN", {
+            style: "currency",
+            currency: "INR",
+            maximumFractionDigits: 0,
+          }).format(Number(stats.monthlyRevenue) || 0);
+
+        renderCompanies(
+          Array.isArray(data.recentCompanies) ? data.recentCompanies : []
+        );
+      } catch (error) {
+        console.error("Admin dashboard loading error:", error);
+        companyRows.innerHTML =
+          `<tr><td colspan="6">${escapeHTML(error.message || "Could not load companies.")}</td></tr>`;
+      }
+    }
+
+    adminSearch.addEventListener("input", () => {
+      if (dashboardData) {
+        renderCompanies(dashboardData.recentCompanies || []);
+      }
+    });
+
+    document.getElementById("exportButton").addEventListener("click", () => {
+      if (!dashboardData) {
+        alert("Wait for the dashboard data to load before exporting.");
+        return;
+      }
+
+      const rows = [
+        ["Company", "Email", "Location", "Users", "Active jobs", "Status"],
+        ...(dashboardData.recentCompanies || []).map((company) => [
+          company.name,
+          company.email,
+          company.location || "",
+          company.users,
+          company.activeJobs,
+          company.status,
+        ]),
+      ];
+
+      const csv = rows.map((row) =>
+        row
+          .map((cell) => `"${String(cell ?? "").replace(/"/g, '""')}"`)
+          .join(",")
+      ).join("\r\n");
+
+      const url = URL.createObjectURL(
+        new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" })
+      );
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "recent-companies.csv";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById("notificationButton").addEventListener("click", () => {
+      alert("Admin notifications are not connected yet.");
+    });
+
+    loadAdminDashboard();
+  </script>
+</body>
+</html>

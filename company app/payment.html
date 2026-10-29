@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment — VentrixCarros</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --deep-navy: #050a30;
+      --electric-blue: #2c83f8;
+      --royal-blue: #274cdc;
+      --white: #ffffff;
+      --light-blue: #e0e4f5;
+      --muted: #5b6b85;
+      --bg: #f7f9ff;
+      --green: #059669;
+      --line: var(--light-blue);
+      --radius: 24px;
+      --shadow: 0 24px 70px rgba(5, 10, 48, 0.10);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--deep-navy);
+      font-family: "Inter", sans-serif;
+      line-height: 1.65;
+      background:
+        radial-gradient(
+          900px 600px at 50% -20%,
+          rgba(44, 131, 248, 0.10),
+          transparent 70%
+        ),
+        var(--bg);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .container {
+      width: min(1140px, 100% - 32px);
+      margin-inline: auto;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 14px 0;
+      backdrop-filter: blur(18px);
+      background: rgba(247, 249, 255, 0.86);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      color: var(--white);
+      font-weight: 700;
+      background: linear-gradient(
+        135deg,
+        var(--electric-blue),
+        var(--royal-blue)
+      );
+      box-shadow: 0 10px 28px rgba(44, 131, 248, 0.3);
+    }
+
+    .brand small {
+      display: block;
+      color: var(--muted);
+      font-family: "Inter", sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 18px;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: 0.25s ease;
+    }
+
+    .btn-outline {
+      color: var(--deep-navy);
+      background: var(--white);
+      border: 1px solid var(--line);
+    }
+
+    .btn-outline:hover {
+      color: var(--electric-blue);
+      border-color: var(--electric-blue);
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      color: var(--white);
+      background: linear-gradient(
+        135deg,
+        var(--electric-blue),
+        var(--royal-blue)
+      );
+      box-shadow: 0 14px 40px rgba(44, 131, 248, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+    }
+
+    .btn-block {
+      width: 100%;
+      padding: 14px 18px;
+      font-size: 14px;
+    }
+
+    .page-wrap {
+      padding: 44px 0 70px;
+    }
+
+    .page-head {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .page-heading {
+      margin-bottom: 8px;
+      font-family: "Sora", sans-serif;
+      font-size: clamp(30px, 5vw, 44px);
+      letter-spacing: -1.5px;
+    }
+
+    .page-sub {
+      max-width: 620px;
+      margin-inline: auto;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .payment-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .panel {
+      padding: 24px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .panel-head {
+      margin-bottom: 18px;
+    }
+
+    .panel-title {
+      margin-bottom: 4px;
+      font-family: "Sora", sans-serif;
+      font-size: 20px;
+    }
+
+    .panel-sub {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      color: var(--deep-navy);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 12px 14px;
+      color: var(--deep-navy);
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 0 4px rgba(44, 131, 248, 0.12);
+    }
+
+    .payment-methods {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .payment-method {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      cursor: pointer;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      transition: 0.25s ease;
+    }
+
+    .payment-method:hover {
+      border-color: var(--electric-blue);
+    }
+
+    .payment-method.selected {
+      border-color: var(--electric-blue);
+      background: rgba(44, 131, 248, 0.06);
+      box-shadow: 0 0 0 4px rgba(44, 131, 248, 0.10);
+    }
+
+    .method-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 42px;
+      border-radius: 12px;
+      color: var(--white);
+      font-size: 18px;
+      background: linear-gradient(
+        135deg,
+        var(--electric-blue),
+        var(--royal-blue)
+      );
+    }
+
+    .method-copy strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .method-copy span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .method-radio {
+      margin-left: auto;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--electric-blue);
+    }
+
+    .plan-summary {
+      padding: 18px;
+      margin-bottom: 16px;
+      background: rgba(44, 131, 248, 0.04);
+      border: 1px solid rgba(44, 131, 248, 0.16);
+      border-radius: 18px;
+    }
+
+    .plan-name {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .plan-name strong {
+      font-family: "Sora", sans-serif;
+      font-size: 18px;
+    }
+
+    .pill {
+      display: inline-flex;
+      padding: 5px 10px;
+      border-radius: 999px;
+      color: var(--green);
+      background: rgba(5, 150, 105, 0.1);
+      border: 1px solid rgba(5, 150, 105, 0.25);
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .summary-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .summary-row.total {
+      margin-top: 8px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      color: var(--deep-navy);
+      font-family: "Sora", sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .secure-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .features-list {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .feature-icon {
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .success-message.error {
+      color: #8b1e2d;
+      background: #fff0f1;
+      border-color: #ffd2d6;
+    }
+
+    .success-message {
+      display: none;
+      padding: 18px;
+      margin-top: 16px;
+      color: var(--green);
+      text-align: center;
+      background: rgba(5, 150, 105, 0.08);
+      border: 1px solid rgba(5, 150, 105, 0.25);
+      border-radius: 16px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(18px);
+      animation: revealUp 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    }
+
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .delay-1 {
+      animation-delay: 0.08s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.16s;
+    }
+
+    @media (max-width: 900px) {
+      .payment-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .navbar-inner {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .nav-actions {
+        justify-content: space-between;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .page-wrap {
+        padding: 28px 0 50px;
+      }
+    }
+  </style>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+
+<body>
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <div class="brand">
+        <div class="brand-mark">V</div>
+
+        <div>
+          VENTRIXCARROS
+          <small>AI recruitment platform</small>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <a href="login.html" class="btn btn-outline">
+          ← Sign in
+        </a>
+
+        <a href="contact.html" class="btn btn-outline">
+          Need help?
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-wrap">
+    <div class="container">
+      <section class="page-head reveal-up">
+        <h1 class="page-heading">
+          Complete your payment
+        </h1>
+
+        <p class="page-sub">
+          Subscribe to VentrixCarros and unlock AI-powered recruitment tools for your company.
+        </p>
+      </section>
+
+      <section class="payment-grid">
+        <div class="panel reveal-up delay-1">
+          <div class="panel-head">
+            <h2 class="panel-title">Billing details</h2>
+            <p class="panel-sub">
+              Enter your company billing information
+            </p>
+          </div>
+
+          <form id="paymentForm">
+            <div class="form-grid">
+              <div class="field">
+                <label for="companyName">
+                  Company name
+                </label>
+
+                <input
+                  id="companyName"
+                  type="text"
+                  placeholder="Enter company name"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="contactName">
+                  Contact person
+                </label>
+
+                <input
+                  id="contactName"
+                  type="text"
+                  placeholder="Enter contact name"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="email">
+                  Email address
+                </label>
+
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="company@email.com"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="phone">
+                  Phone number
+                </label>
+
+                <input
+                  id="phone"
+                  type="tel"
+                  placeholder="+91 98765 43210"
+                  required
+                />
+              </div>
+
+              <div class="field full">
+                <label for="address">
+                  Billing address
+                </label>
+
+                <input
+                  id="address"
+                  type="text"
+                  placeholder="Enter billing address"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="city">
+                  City
+                </label>
+
+                <input
+                  id="city"
+                  type="text"
+                  placeholder="Enter city"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="pincode">
+                  PIN code
+                </label>
+
+                <input
+                  id="pincode"
+                  type="text"
+                  placeholder="Enter PIN code"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="panel-head" style="margin-top: 22px;">
+              <h2 class="panel-title">Payment method</h2>
+              <p class="panel-sub">
+                Choose how you want to pay
+              </p>
+            </div>
+
+            <div class="payment-methods">
+              <label
+                class="payment-method selected"
+                for="upi"
+              >
+                <div class="method-icon">📱</div>
+
+                <div class="method-copy">
+                  <strong>UPI</strong>
+                  <span>
+                    Pay using Google Pay, PhonePe, Paytm, or UPI ID
+                  </span>
+                </div>
+
+                <input
+                  id="upi"
+                  class="method-radio"
+                  type="radio"
+                  name="paymentMethod"
+                  value="upi"
+                  checked
+                />
+              </label>
+
+              <label
+                class="payment-method"
+                for="card"
+              >
+                <div class="method-icon">💳</div>
+
+                <div class="method-copy">
+                  <strong>Debit or credit card</strong>
+                  <span>
+                    Visa, Mastercard, RuPay, and more
+                  </span>
+                </div>
+
+                <input
+                  id="card"
+                  class="method-radio"
+                  type="radio"
+                  name="paymentMethod"
+                  value="card"
+                />
+              </label>
+
+              <label
+                class="payment-method"
+                for="netbanking"
+              >
+                <div class="method-icon">🏦</div>
+
+                <div class="method-copy">
+                  <strong>Net banking</strong>
+                  <span>
+                    Pay securely through your bank account
+                  </span>
+                </div>
+
+                <input
+                  id="netbanking"
+                  class="method-radio"
+                  type="radio"
+                  name="paymentMethod"
+                  value="netbanking"
+                />
+              </label>
+            </div>
+
+            <button
+              id="payButton"
+              class="btn btn-primary btn-block"
+              type="submit"
+            >
+              Continue to payment
+            </button>
+
+            <div id="successMessage" class="success-message" role="status" aria-live="polite">
+              Payment successful. Your ₹499 Plan is now active.
+            </div>
+          </form>
+        </div>
+
+        <aside class="panel reveal-up delay-2">
+          <div class="panel-head">
+            <h2 class="panel-title">Order summary</h2>
+            <p class="panel-sub">
+              Review your subscription before payment
+            </p>
+          </div>
+
+          <div class="plan-summary">
+            <div class="plan-name">
+              <strong id="planNameText">Loading plan...</strong>
+              <span class="pill" id="planPricePill">Loading price...</span>
+            </div>
+
+            <div class="summary-row">
+              <span>Subscription</span>
+              <span id="subscriptionPrice">Loading...</span>
+            </div>
+
+            <div class="summary-row">
+              <span>GST</span>
+              <span>As applicable</span>
+            </div>
+
+            <div class="summary-row">
+              <span>Billing cycle</span>
+              <span id="billingCycleText">Loading...</span>
+            </div>
+
+            <div class="summary-row total">
+              <span>Total due today</span>
+              <span id="totalDueText">Loading...</span>
+            </div>
+          </div>
+
+          <div class="features-list">
+            <div class="feature-item">
+              <span class="feature-icon">✓</span>
+              <span>
+                AI-powered candidate screening and shortlisting
+              </span>
+            </div>
+
+            <div class="feature-item">
+              <span class="feature-icon">✓</span>
+              <span>
+                Post jobs and manage applications
+              </span>
+            </div>
+
+            <div class="feature-item">
+              <span class="feature-icon">✓</span>
+              <span>
+                Interview scheduling and candidate tracking
+              </span>
+            </div>
+
+            <div class="feature-item">
+              <span class="feature-icon">✓</span>
+              <span>
+                Recruiter accounts and company dashboard access
+              </span>
+            </div>
+          </div>
+
+          <div class="secure-note">
+            🔒 Your payment information is encrypted and secure.
+          </div>
+        </aside>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const API_BASE_URL = "http://localhost:5000/api";
+    const paymentForm = document.getElementById("paymentForm");
+    const payButton = document.getElementById("payButton");
+    const statusBox = document.getElementById("successMessage");
+    const pendingSignupKey = "ventrixcarrosPendingSignup";
+    const pendingCheckoutKey = "ventrixcarrosPendingCheckout";
+    const returnAfterLoginKey = "ventrixcarrosReturnAfterLogin";
+    const onboardingPaymentTokenKey = "ventrixcarrosPaymentToken";
+
+    function getPaymentAuthorization() {
+      const onboardingToken = sessionStorage.getItem(onboardingPaymentTokenKey);
+      if (onboardingToken) return { token: onboardingToken, onboarding: true };
+      const loginToken = localStorage.getItem("ventrixcarrosToken");
+      return { token: loginToken, onboarding: false };
+    }
+
+    let activePlan = null;
+    let isProcessing = false;
+    let pendingVerification = readStoredJson("ventrixcarrosPendingPaymentVerification");
+
+    function readStoredJson(key) {
+      try {
+        return JSON.parse(sessionStorage.getItem(key) || "null");
+      } catch {
+        return null;
+      }
+    }
+
+    function showStatus(message, type) {
+      statusBox.textContent = message;
+      statusBox.className =
+        "success-message" + (type === "error" ? " error" : "");
+      statusBox.style.display = "block";
+    }
+
+    function hideStatus() {
+      statusBox.textContent = "";
+      statusBox.style.display = "none";
+      statusBox.className = "success-message";
+    }
+
+    function setBusy(busy, text) {
+      isProcessing = busy;
+      payButton.disabled = busy;
+      payButton.textContent = text;
+    }
+
+    function getInput(id) {
+      return document.getElementById(id).value.trim();
+    }
+
+    function formatMoney(amount, currency) {
+      return new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: currency || "INR",
+        minimumFractionDigits: 2,
+      }).format(Number(amount));
+    }
+
+    async function parseResponse(response) {
+      let data = {};
+
+      try {
+        data = await response.json();
+      } catch {
+        data = {};
+      }
+
+      if (!response.ok) {
+        const error = new Error(
+          data.message || "The request could not be completed."
+        );
+        error.status = response.status;
+        throw error;
+      }
+
+      return data;
+    }
+
+    async function apiRequest(path, options) {
+      const response = await fetch(API_BASE_URL + path, options || {});
+      return parseResponse(response);
+    }
+
+    function setAuthorization(headers, token) {
+      headers.Authorization = "Bearer " + token;
+      return headers;
+    }
+
+    function getSelectedPaymentMethod() {
+      const selected = document.querySelector('input[name="paymentMethod"]:checked');
+      return selected ? selected.value : "upi";
+    }
+
+    function paymentMethodConfig(method) {
+      const choices = {
+        upi: { label: "Pay using UPI", method: "upi" },
+        card: { label: "Pay by debit or credit card", method: "card" },
+        netbanking: { label: "Pay using net banking", method: "netbanking" },
+      };
+      const selected = choices[method] || choices.upi;
+      return {
+        display: {
+          blocks: { selectedMethod: { name: selected.label, instruments: [{ method: selected.method }] } },
+          sequence: ["block.selectedMethod"],
+          preferences: { show_default_blocks: true },
+        },
+      };
+    }
+
+    document.querySelectorAll('input[name="paymentMethod"]').forEach((radio) => {
+      radio.addEventListener("change", () => {
+        document.querySelectorAll(".payment-method").forEach((item) => item.classList.remove("selected"));
+        radio.closest(".payment-method").classList.add("selected");
+      });
+    });
+    function updatePlanSummary(plan) {
+      const price = formatMoney(plan.price, plan.currency);
+      const cycle = String(plan.billing_cycle || "monthly");
+      const cycleLabel = cycle.charAt(0).toUpperCase() + cycle.slice(1);
+
+      document.getElementById("planNameText").textContent =
+        plan.name + " Plan";
+      document.getElementById("planPricePill").textContent =
+        price + " / " + cycle;
+      document.getElementById("subscriptionPrice").textContent = price;
+      document.getElementById("billingCycleText").textContent = cycleLabel;
+      document.getElementById("totalDueText").textContent = price;
+
+      payButton.textContent = getPaymentAuthorization().token
+        ? "Pay " + price + " securely"
+        : "Continue to sign in";
+    }
+
+    async function loadPlan() {
+      const data = await apiRequest("/plans");
+      const plans = Array.isArray(data.plans) ? data.plans : [];
+
+      if (plans.length === 0) {
+        throw new Error("No active subscription plans are available.");
+      }
+
+      const requestedPlanId = new URLSearchParams(
+        window.location.search
+      ).get("planId");
+
+      activePlan =
+        plans.find((plan) => String(plan.id) === requestedPlanId) ||
+        plans.find((plan) => plan.slug === "basic") ||
+        plans[0];
+
+      updatePlanSummary(activePlan);
+    }
+
+    function prefillForm() {
+      const signup = readStoredJson(pendingSignupKey);
+      const checkout = readStoredJson(pendingCheckoutKey);
+      const user = readStoredJson("ventrixcarrosUser");
+
+      const values = {
+        companyName:
+          (signup && signup.companyName) ||
+          (user && user.companyName) ||
+          "",
+        contactName:
+          (signup && signup.name) ||
+          (user && user.name) ||
+          "",
+        email:
+          (signup && signup.email) ||
+          (user && user.email) ||
+          "",
+        phone: "",
+        address: "",
+        city: "",
+        pincode: "",
+      };
+
+      if (checkout) {
+        Object.assign(values, checkout);
+      }
+
+      Object.keys(values).forEach((id) => {
+        const input = document.getElementById(id);
+        if (input && values[id] && !input.value) {
+          input.value = values[id];
+        }
+      });
+
+      if (getPaymentAuthorization().token) {
+        payButton.textContent = activePlan
+          ? "Pay " +
+            formatMoney(activePlan.price, activePlan.currency) +
+            " securely"
+          : "Pay securely";
+      }
+    }
+
+    async function ensureCompany(token) {
+      const headers = setAuthorization({}, token);
+      const response = await fetch(API_BASE_URL + "/companies/mine", {
+        headers,
+      });
+
+      if (response.ok) {
+        await parseResponse(response);
+        return;
+      }
+
+      let errorData = {};
+
+      try {
+        errorData = await response.json();
+      } catch {
+        errorData = {};
+      }
+
+      if (response.status !== 404) {
+        throw new Error(
+          errorData.message || "Could not confirm your company profile."
+        );
+      }
+
+      const locationParts = [
+        getInput("address"),
+        getInput("city"),
+        getInput("pincode") ? "PIN " + getInput("pincode") : "",
+      ].filter(Boolean);
+
+      const body = {
+        name: getInput("companyName"),
+        email: getInput("email"),
+        location: locationParts.join(", "),
+      };
+
+      const createHeaders = setAuthorization(
+        { "Content-Type": "application/json" },
+        token
+      );
+
+      await apiRequest("/companies", {
+        method: "POST",
+        headers: createHeaders,
+        body: JSON.stringify(body),
+      });
+    }
+
+    async function verifyPayment(token, checkoutResponse) {
+      const headers = setAuthorization(
+        { "Content-Type": "application/json" },
+        token
+      );
+
+      const data = await apiRequest("/payments/verify", {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(checkoutResponse),
+      });
+
+      pendingVerification = null;
+      sessionStorage.removeItem("ventrixcarrosPendingPaymentVerification");
+      showStatus(
+        data.message || "Payment verified. Your subscription is active.",
+        "success"
+      );
+      setBusy(true, "Payment verified");
+
+      sessionStorage.removeItem(onboardingPaymentTokenKey);
+      sessionStorage.removeItem(pendingSignupKey);
+      sessionStorage.removeItem(pendingCheckoutKey);
+      sessionStorage.removeItem(returnAfterLoginKey);
+      sessionStorage.removeItem("ventrixcarrosOnboardingStep");
+      localStorage.removeItem("ventrixcarrosToken");
+      localStorage.removeItem("ventrixcarrosUser");
+
+      window.setTimeout(() => {
+        window.location.href = "login.html";
+      }, 1800);
+    }
+
+    async function startRazorpayCheckout(token, isOnboarding) {
+      if (!activePlan) {
+        throw new Error(
+          "The subscription plan has not loaded. Refresh this page and try again."
+        );
+      }
+
+      if (typeof window.Razorpay !== "function") {
+        throw new Error(
+          "Razorpay Checkout could not load. Check your internet connection and refresh."
+        );
+      }
+
+      if (!isOnboarding) {
+        await ensureCompany(token);
+      }
+
+      const orderHeaders = setAuthorization(
+        { "Content-Type": "application/json" },
+        token
+      );
+
+      const orderData = await apiRequest("/payments/create-order", {
+        method: "POST",
+        headers: orderHeaders,
+        body: JSON.stringify({ planId: Number(activePlan.id) }),
+      });
+
+      const order = orderData.order;
+
+      if (!order || !order.orderId || !order.keyId) {
+        throw new Error(
+          "The backend did not return the required Razorpay order details."
+        );
+      }
+
+      const options = {
+        key: order.keyId,
+        amount: order.amount,
+        currency: order.currency,
+        name: "VentrixCarros",
+        description: order.planName + " monthly subscription",
+        order_id: order.orderId,
+        prefill: {
+          name: getInput("contactName"),
+          email: getInput("email"),
+          contact: getInput("phone"),
+        },
+        config: paymentMethodConfig(getSelectedPaymentMethod()),
+        theme: { color: "#2c83f8" },
+        handler: function (checkoutResponse) {
+          pendingVerification = checkoutResponse;
+          sessionStorage.setItem(
+            "ventrixcarrosPendingPaymentVerification",
+            JSON.stringify(checkoutResponse)
+          );
+          verifyPayment(token, checkoutResponse).catch((error) => {
+            showStatus(
+              error.message ||
+                "Payment was made, but verification failed. Contact support before paying again.",
+              "error"
+            );
+            setBusy(false, "Retry payment verification");
+          });
+        },
+        modal: {
+          ondismiss: function () {
+            if (!isProcessing) {
+              setBusy(
+                false,
+                "Pay " +
+                  formatMoney(activePlan.price, activePlan.currency) +
+                  " securely"
+              );
+            }
+          },
+        },
+      };
+
+      const checkout = new window.Razorpay(options);
+
+      checkout.on("payment.failed", function (event) {
+        const message =
+          event && event.error && event.error.description
+            ? event.error.description
+            : "Razorpay could not complete the payment. You can try again.";
+
+        showStatus(message, "error");
+        setBusy(
+          false,
+          "Pay " +
+            formatMoney(activePlan.price, activePlan.currency) +
+            " securely"
+        );
+      });
+
+      setBusy(
+        false,
+        "Pay " + formatMoney(activePlan.price, activePlan.currency) + " securely"
+      );
+      checkout.open();
+    }
+
+    paymentForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      hideStatus();
+
+      if (isProcessing) return;
+
+      const authorization = getPaymentAuthorization();
+      const token = authorization.token;
+
+      if (!token) {
+        const draft = {
+          companyName: getInput("companyName"),
+          contactName: getInput("contactName"),
+          email: getInput("email"),
+          phone: getInput("phone"),
+          address: getInput("address"),
+          city: getInput("city"),
+          pincode: getInput("pincode"),
+        };
+
+        sessionStorage.setItem(pendingCheckoutKey, JSON.stringify(draft));
+        sessionStorage.setItem(returnAfterLoginKey, "payment.html");
+        window.location.href = "login.html";
+        return;
+      }
+
+      setBusy(true, pendingVerification ? "Retrying payment verification..." : "Preparing secure checkout...");
+
+      try {
+        if (pendingVerification) {
+          await verifyPayment(token, pendingVerification);
+          return;
+        }
+        await startRazorpayCheckout(token, authorization.onboarding);
+      } catch (error) {
+        showStatus(
+          error.message || "Could not start payment. Please try again.",
+          "error"
+        );
+        setBusy(
+          false,
+          activePlan
+            ? "Pay " +
+                formatMoney(activePlan.price, activePlan.currency) +
+                " securely"
+            : "Try again"
+        );
+      }
+    });
+
+    prefillForm();
+
+    loadPlan()
+      .then(prefillForm)
+      .catch((error) => {
+        showStatus(
+          error.message || "Could not load the subscription plan.",
+          "error"
+        );
+        setBusy(true, "Plan unavailable");
+      });
+  </script>
+</body>
+</html>

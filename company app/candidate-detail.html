@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Candidate Details — VentrixCarros</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --deep-navy: #050a30;
+      --electric-blue: #2c83f8;
+      --royal-blue: #274cdc;
+      --white: #ffffff;
+      --light-blue: #e0e4f5;
+      --muted: #5b6b85;
+      --bg: #f7f9ff;
+      --green: #059669;
+      --orange: #d97706;
+      --red: #dc2626;
+      --line: var(--light-blue);
+      --radius: 24px;
+      --shadow: 0 24px 70px rgba(5, 10, 48, 0.10);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      color: var(--deep-navy);
+      font-family: "Inter", sans-serif;
+      line-height: 1.65;
+      background:
+        radial-gradient(
+          900px 600px at 50% -20%,
+          rgba(44, 131, 248, 0.08),
+          transparent 70%
+        ),
+        var(--bg);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    .container {
+      width: min(1120px, 100% - 40px);
+      margin-inline: auto;
+    }
+
+    /* Top bar */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      padding: 14px 0;
+      backdrop-filter: blur(18px);
+      background: rgba(247, 249, 255, 0.88);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--deep-navy);
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      color: var(--white);
+      background: linear-gradient(
+        135deg,
+        var(--electric-blue),
+        var(--royal-blue)
+      );
+      box-shadow: 0 10px 28px rgba(44, 131, 248, 0.3);
+    }
+
+    .back-btn,
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.25s ease;
+    }
+
+    .back-btn {
+      padding: 9px 14px;
+      color: var(--deep-navy);
+      background: var(--white);
+      border: 1px solid var(--line);
+      font-size: 13px;
+    }
+
+    .back-btn:hover {
+      color: var(--electric-blue);
+      border-color: var(--electric-blue);
+      transform: translateX(-2px);
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 11px 18px;
+      border: none;
+      font-size: 13px;
+    }
+
+    .btn-primary {
+      color: var(--white);
+      background: linear-gradient(
+        135deg,
+        var(--electric-blue),
+        var(--royal-blue)
+      );
+      box-shadow: 0 14px 40px rgba(44, 131, 248, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 55px rgba(39, 76, 220, 0.35);
+    }
+
+    .btn-outline {
+      color: var(--deep-navy);
+      background: var(--white);
+      border: 1px solid var(--line);
+    }
+
+    .btn-outline:hover {
+      color: var(--electric-blue);
+      border-color: var(--electric-blue);
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      color: var(--white);
+      background: linear-gradient(135deg, #dc2626, #991b1b);
+    }
+
+    .btn-sm {
+      padding: 8px 13px;
+      font-size: 12px;
+    }
+
+    /* Page */
+    .page-wrap {
+      padding: 34px 0 70px;
+    }
+
+    .profile-header,
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 24px;
+      margin-bottom: 18px;
+    }
+
+    .profile-summary {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .large-avatar {
+      width: 76px;
+      height: 76px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 76px;
+      border-radius: 24px;
+      color: var(--white);
+      font-family: "Sora", sans-serif;
+      font-size: 25px;
+      font-weight: 800;
+      background: linear-gradient(
+        135deg,
+        var(--electric-blue),
+        var(--royal-blue)
+      );
+      box-shadow: 0 14px 36px rgba(44, 131, 248, 0.3);
+    }
+
+    .profile-name {
+      margin-bottom: 3px;
+      color: var(--deep-navy);
+      font-family: "Sora", sans-serif;
+      font-size: 26px;
+    }
+
+    .profile-meta {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .profile-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 9px;
+      flex-wrap: wrap;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+    }
+
+    .panel {
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .panel-title {
+      color: var(--deep-navy);
+      font-family: "Sora", sans-serif;
+      font-size: 18px;
+    }
+
+    .panel-sub {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* AI score */
+    .score-box {
+      display: grid;
+      grid-template-columns: 108px 1fr;
+      align-items: center;
+      gap: 18px;
+      padding: 16px;
+      border: 1px solid rgba(44, 131, 248, 0.22);
+      border-radius: 16px;
+      background: rgba(44, 131, 248, 0.05);
+    }
+
+    .score-circle {
+      width: 100px;
+      height: 100px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at center, var(--white) 57%, transparent 58%),
+        conic-gradient(var(--electric-blue) 92%, var(--light-blue) 0);
+    }
+
+    .score-number {
+      color: var(--royal-blue);
+      font-family: "Sora", sans-serif;
+      font-size: 23px;
+    }
+
+    .score-copy strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+
+    .score-copy span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .score-points {
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .score-point {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .check {
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    /* Details */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .detail-item {
+      padding: 13px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+    }
+
+    .detail-label {
+      margin-bottom: 3px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .detail-value {
+      color: var(--deep-navy);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* Tags */
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      padding: 6px 10px;
+      color: var(--royal-blue);
+      background: rgba(44, 131, 248, 0.07);
+      border: 1px solid rgba(44, 131, 248, 0.2);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Recommendation */
+    .recommendation {
+      display: flex;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid rgba(44, 131, 248, 0.25);
+      border-radius: 14px;
+      background: rgba(44, 131, 248, 0.04);
+    }
+
+    .recommendation-icon {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 38px;
+      border-radius: 11px;
+      color: var(--white);
+      background: linear-gradient(
+        135deg,
+        var(--electric-blue),
+        var(--royal-blue)
+      );
+    }
+
+    .recommendation strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 13px;
+    }
+
+    .recommendation span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* Timeline */
+    .timeline {
+      display: grid;
+      gap: 14px;
+    }
+
+    .timeline-item {
+      position: relative;
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+    }
+
+    .timeline-dot {
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      z-index: 1;
+      border-radius: 50%;
+      color: var(--white);
+      background: linear-gradient(
+        135deg,
+        var(--electric-blue),
+        var(--royal-blue)
+      );
+      font-size: 12px;
+    }
+
+    .timeline-item:not(:last-child)::before {
+      position: absolute;
+      top: 24px;
+      left: 11px;
+      width: 2px;
+      height: calc(100% + 14px);
+      content: "";
+      background: var(--line);
+    }
+
+    .timeline-title {
+      color: var(--deep-navy);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .timeline-meta,
+    .timeline-copy {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* Notes */
+    .note-form {
+      display: grid;
+      gap: 10px;
+    }
+
+    .note-textarea {
+      width: 100%;
+      min-height: 90px;
+      padding: 12px;
+      resize: vertical;
+      color: var(--deep-navy);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      outline: none;
+    }
+
+    .note-textarea:focus {
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 0 4px rgba(44, 131, 248, 0.12);
+    }
+
+    /* Animation */
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: revealUp 0.65s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    }
+
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .delay-1 {
+      animation-delay: 0.08s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.16s;
+    }
+
+    .delay-3 {
+      animation-delay: 0.24s;
+    }
+
+    @media (max-width: 900px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .topbar-inner {
+        flex-wrap: wrap;
+      }
+
+      .brand {
+        order: 1;
+      }
+
+      .back-btn {
+        order: 2;
+      }
+
+      .profile-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .profile-actions {
+        justify-content: flex-start;
+      }
+
+      .score-box,
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a href="dashboard.html" class="back-btn">
+        ← Back to dashboard
+      </a>
+
+      <a href="dashboard.html" class="brand">
+        <div class="brand-mark">V</div>
+        <span>VentrixCarros</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="page-wrap">
+    <div class="container">
+      <!-- Profile header -->
+      <section class="profile-header reveal-up">
+        <div class="profile-summary">
+          <div class="large-avatar" id="largeAvatar">RS</div>
+
+          <div>
+            <h1 class="profile-name" id="profileName">
+              Rahul Sharma
+            </h1>
+
+            <p class="profile-meta" id="profileRole">
+              Frontend Developer · 3 years experience · Remote
+            </p>
+
+            <p class="profile-meta" id="profileEmail">
+              rahul.sharma@example.com
+            </p>
+          </div>
+        </div>
+
+        <div class="profile-actions">
+          <button class="btn btn-outline" id="messageButton">
+            💬 Message
+          </button>
+
+          <button class="btn btn-outline" id="interviewButton">
+            🎤 Schedule interview
+          </button>
+
+          <button class="btn btn-primary" id="shortlistButton">
+            ⭐ Shortlist
+          </button>
+        </div>
+      </section>
+
+      <div class="content-grid">
+        <!-- Main column -->
+        <div>
+          <section class="panel reveal-up delay-1">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">AI candidate analysis</h2>
+                <p class="panel-sub">
+                  Generated from profile and job requirements
+                </p>
+              </div>
+
+              <span class="tag">● AI analyzed</span>
+            </div>
+
+            <div class="score-box">
+              <div class="score-circle">
+                <div class="score-number" id="scoreNumber">92%</div>
+              </div>
+
+              <div class="score-copy">
+                <strong>Excellent candidate match</strong>
+
+                <span>
+                  This candidate’s experience and technical skills strongly align
+                  with the role requirements.
+                </span>
+
+                <div class="score-points">
+                  <div class="score-point">
+                    <span class="check">✔</span>
+                    Strong technical experience
+                  </div>
+
+                  <div class="score-point">
+                    <span class="check">✔</span>
+                    Meets the required experience level
+                  </div>
+
+                  <div class="score-point">
+                    <span class="check">✔</span>
+                    Relevant product development background
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel reveal-up delay-2">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">Candidate information</h2>
+                <p class="panel-sub">Professional profile details</p>
+              </div>
+            </div>
+
+            <div class="detail-grid">
+              <div class="detail-item">
+                <div class="detail-label">Applied for</div>
+                <div class="detail-value" id="detailRole">
+                  Frontend Developer
+                </div>
+              </div>
+
+              <div class="detail-item">
+                <div class="detail-label">Application date</div>
+                <div class="detail-value">October 2, 2026</div>
+              </div>
+
+              <div class="detail-item">
+                <div class="detail-label">Experience</div>
+                <div class="detail-value" id="detailExperience">
+                  3 years
+                </div>
+              </div>
+
+              <div class="detail-item">
+                <div class="detail-label">Location</div>
+                <div class="detail-value" id="detailLocation">
+                  Remote
+                </div>
+              </div>
+
+              <div class="detail-item">
+                <div class="detail-label">Expected salary</div>
+                <div class="detail-value">₹12–15 LPA</div>
+              </div>
+
+              <div class="detail-item">
+                <div class="detail-label">Availability</div>
+                <div class="detail-value">30 days notice</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel reveal-up delay-3">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">Skills</h2>
+                <p class="panel-sub">
+                  Skills extracted from the candidate profile
+                </p>
+              </div>
+
+              <button class="btn btn-outline btn-sm" id="skillGapButton">
+                🧩 Analyze gaps
+              </button>
+            </div>
+
+            <div class="tag-list" id="skillsList">
+              <span class="tag">React</span>
+              <span class="tag">TypeScript</span>
+              <span class="tag">JavaScript</span>
+              <span class="tag">Next.js</span>
+              <span class="tag">HTML/CSS</span>
+              <span class="tag">Git</span>
+            </div>
+          </section>
+
+          <section class="panel reveal-up delay-3">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">Experience</h2>
+                <p class="panel-sub">Previous employment history</p>
+              </div>
+            </div>
+
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-dot">1</div>
+
+                <div>
+                  <div class="timeline-title">
+                    Frontend Developer · TechNest
+                  </div>
+
+                  <div class="timeline-meta">
+                    2023 – Present · Bengaluru
+                  </div>
+
+                  <div class="timeline-copy">
+                    Built customer-facing React applications and improved
+                    performance across key product flows.
+                  </div>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-dot">2</div>
+
+                <div>
+                  <div class="timeline-title">
+                    Junior Web Developer · StartupHub
+                  </div>
+
+                  <div class="timeline-meta">
+                    2021 – 2023 · Bengaluru
+                  </div>
+
+                  <div class="timeline-copy">
+                    Developed responsive interfaces and collaborated with
+                    designers and backend engineers.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Side column -->
+        <aside>
+          <section class="panel reveal-up delay-1">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">Application status</h2>
+                <p class="panel-sub">Current hiring stage</p>
+              </div>
+            </div>
+
+            <div class="detail-grid">
+              <div class="detail-item">
+                <div class="detail-label">Status</div>
+                <div class="detail-value" id="detailStatus">
+                  Shortlisted
+                </div>
+              </div>
+
+              <div class="detail-item">
+                <div class="detail-label">Owner</div>
+                <div class="detail-value">Amit Verma</div>
+              </div>
+
+              <div class="detail-item">
+                <div class="detail-label">Last updated</div>
+                <div class="detail-value">Today, 10:42 AM</div>
+              </div>
+
+              <div class="detail-item">
+                <div class="detail-label">Source</div>
+                <div class="detail-value">Careers page</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel reveal-up delay-2">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">AI recommendation</h2>
+                <p class="panel-sub">Suggested next action</p>
+              </div>
+            </div>
+
+            <div class="recommendation">
+              <div class="recommendation-icon">🧠</div>
+
+              <div>
+                <strong>Move to technical interview</strong>
+
+                <span>
+                  This candidate has a strong match score. Schedule a technical
+                  interview to validate role-specific skills.
+                </span>
+              </div>
+            </div>
+
+            <button
+              class="btn btn-primary"
+              id="recommendationButton"
+              style="width:100%; margin-top:14px;"
+            >
+              🎤 Schedule interview
+            </button>
+          </section>
+
+          <section class="panel reveal-up delay-3">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">Resume</h2>
+                <p class="panel-sub">Candidate document</p>
+              </div>
+            </div>
+
+            <div class="detail-item">
+              <div class="detail-value">📄 Candidate-Resume.pdf</div>
+
+              <div class="detail-label" style="margin-top:4px;">
+                Uploaded October 2, 2026
+              </div>
+            </div>
+
+            <button class="btn btn-outline" style="width:100%; margin-top:12px;">
+              👁 View resume
+            </button>
+          </section>
+
+          <section class="panel reveal-up delay-3">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">Recruiter notes</h2>
+                <p class="panel-sub">Private internal notes</p>
+              </div>
+            </div>
+
+            <form class="note-form" id="noteForm">
+              <textarea
+                class="note-textarea"
+                id="noteInput"
+                placeholder="Write a note about this candidate..."
+              ></textarea>
+
+              <button class="btn btn-primary" type="submit">
+                Save note
+              </button>
+            </form>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const candidateData = {
+      "rahul-sharma": {
+        name: "Rahul Sharma",
+        initials: "RS",
+        role: "Frontend Developer",
+        experience: "3 years",
+        location: "Remote",
+        email: "rahul.sharma@example.com",
+        score: "92%",
+        status: "Shortlisted",
+        skills: [
+          "React",
+          "TypeScript",
+          "JavaScript",
+          "Next.js",
+          "HTML/CSS",
+          "Git"
+        ]
+      },
+
+      "priya-nair": {
+        name: "Priya Nair",
+        initials: "PN",
+        role: "AI Engineer",
+        experience: "5 years",
+        location: "Bengaluru",
+        email: "priya.nair@example.com",
+        score: "89%",
+        status: "Interview",
+        skills: [
+          "Python",
+          "LLMs",
+          "PyTorch",
+          "MLOps",
+          "TensorFlow",
+          "SQL"
+        ]
+      },
+
+      "arjun-mehta": {
+        name: "Arjun Mehta",
+        initials: "AM",
+        role: "Frontend Developer",
+        experience: "2 years",
+        location: "Delhi NCR",
+        email: "arjun.mehta@example.com",
+        score: "78%",
+        status: "New",
+        skills: [
+          "React",
+          "JavaScript",
+          "HTML/CSS",
+          "Git",
+          "REST APIs"
+        ]
+      }
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const candidateId = params.get("id") || "rahul-sharma";
+    const candidate =
+      candidateData[candidateId] || candidateData["rahul-sharma"];
+
+    document.title = `${candidate.name} — Candidate Details`;
+
+    document.getElementById("largeAvatar").textContent = candidate.initials;
+    document.getElementById("profileName").textContent = candidate.name;
+
+    document.getElementById("profileRole").textContent =
+      `${candidate.role} · ${candidate.experience} experience · ${candidate.location}`;
+
+    document.getElementById("profileEmail").textContent = candidate.email;
+    document.getElementById("scoreNumber").textContent = candidate.score;
+    document.getElementById("detailRole").textContent = candidate.role;
+    document.getElementById("detailExperience").textContent =
+      candidate.experience;
+    document.getElementById("detailLocation").textContent =
+      candidate.location;
+    document.getElementById("detailStatus").textContent =
+      candidate.status;
+
+    document.getElementById("skillsList").innerHTML =
+      candidate.skills
+        .map((skill) => `<span class="tag">${skill}</span>`)
+        .join("");
+
+    document
+      .getElementById("messageButton")
+      .addEventListener("click", () => {
+        window.location.href = "messages.html";
+      });
+
+    document
+      .getElementById("interviewButton")
+      .addEventListener("click", () => {
+        window.location.href = "interviews.html";
+      });
+
+    document
+      .getElementById("recommendationButton")
+      .addEventListener("click", () => {
+        window.location.href = "interviews.html";
+      });
+
+    document
+      .getElementById("shortlistButton")
+      .addEventListener("click", (event) => {
+        event.currentTarget.textContent = "✓ Shortlisted";
+        alert(`${candidate.name} has been shortlisted.`);
+      });
+
+    document
+      .getElementById("skillGapButton")
+      .addEventListener("click", () => {
+        alert(`AI skill-gap analysis started for ${candidate.name}.`);
+      });
+
+    document
+      .getElementById("noteForm")
+      .addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const note = document.getElementById("noteInput").value.trim();
+
+        if (!note) {
+          alert("Please enter a note first.");
+          return;
+        }
+
+        alert("Recruiter note saved in demo mode.");
+        document.getElementById("noteInput").value = "";
+      });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings — VentrixCarros</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --deep-navy: #050a30;
+      --electric-blue: #2c83f8;
+      --royal-blue: #274cdc;
+      --white: #fff;
+      --light-blue: #e0e4f5;
+      --ink: var(--deep-navy);
+      --muted: #5b6b85;
+      --line: var(--light-blue);
+      --bg: #f7f9ff;
+      --surface: var(--white);
+      --radius: 24px;
+      --shadow: 0 24px 70px rgba(5, 10, 48, 0.10);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 600px at 50% -20%, rgba(44, 131, 248, 0.08), transparent 70%),
+        var(--bg);
+      line-height: 1.65;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1200px, 100% - 40px);
+      margin-inline: auto;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      background: var(--white);
+      border-right: 1px solid var(--line);
+      padding: 20px 16px;
+      overflow-y: auto;
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      margin-bottom: 18px;
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+    }
+
+    .sidebar-brand img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      transition: 0.2s ease;
+    }
+
+    .nav-item:hover {
+      background: rgba(44, 131, 248, 0.06);
+      color: var(--electric-blue);
+    }
+
+    .nav-item.active {
+      background: linear-gradient(135deg, rgba(44, 131, 248, 0.12), rgba(39, 76, 220, 0.12));
+      color: var(--royal-blue);
+      font-weight: 600;
+    }
+
+    .nav-icon {
+      width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-icon svg {
+      width: 19px;
+      height: 19px;
+      display: block;
+    }
+
+    .nav-section {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .nav-section-title {
+      padding: 6px 12px;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+    }
+
+    .main-content {
+      min-width: 0;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: rgba(247, 249, 255, 0.85);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 0;
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--white);
+      color: var(--deep-navy);
+      font-size: 13px;
+      font-weight: 600;
+      transition: 0.2s ease;
+    }
+
+    .back-btn:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+      transform: translateX(-2px);
+    }
+
+    .page-title {
+      font-family: "Sora", sans-serif;
+      font-size: 20px;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+    }
+
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      max-width: 420px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 11px 16px 11px 38px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font: 14px "Inter", sans-serif;
+      color: var(--deep-navy);
+      background: var(--white);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 0 4px rgba(44, 131, 248, 0.12);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-btn,
+    .avatar-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    .icon-btn {
+      border: 1px solid var(--line);
+      background: var(--white);
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .avatar-btn {
+      border: 0;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 10px 24px rgba(44, 131, 248, 0.25);
+    }
+
+    .profile-wrap {
+      position: relative;
+    }
+
+    .profile-panel,
+    .notification-panel {
+      position: fixed;
+      top: 82px;
+      right: 30px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 20px 55px rgba(5, 10, 48, 0.18);
+      overflow: hidden;
+      z-index: 100;
+      display: none;
+    }
+
+    .profile-panel.show,
+    .notification-panel.show {
+      display: block;
+    }
+
+    .profile-panel {
+      width: 280px;
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px;
+    }
+
+    .profile-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .profile-header strong {
+      display: block;
+      color: var(--deep-navy);
+      font-size: 13px;
+    }
+
+    .profile-header span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .profile-divider {
+      height: 1px;
+      background: var(--line);
+    }
+
+    .profile-item {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 13px 18px;
+      color: var(--deep-navy);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .profile-item span {
+      width: 22px;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    .profile-item:hover {
+      background: rgba(44, 131, 248, 0.06);
+      color: var(--electric-blue);
+    }
+
+    .profile-logout {
+      border-top: 1px solid var(--line);
+      color: #dc2626;
+    }
+
+    .notification-panel {
+      width: 360px;
+      max-width: calc(100vw - 30px);
+    }
+
+    .notification-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .notification-header strong {
+      color: var(--deep-navy);
+      font-family: "Sora", sans-serif;
+      font-size: 15px;
+    }
+
+    .notification-header button {
+      border: 0;
+      background: transparent;
+      color: var(--electric-blue);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .notification-item {
+      display: flex;
+      gap: 12px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .notification-item.unread {
+      background: rgba(44, 131, 248, 0.06);
+    }
+
+    .notification-icon {
+      width: 36px;
+      height: 36px;
+      flex: 0 0 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      background: rgba(44, 131, 248, 0.10);
+    }
+
+    .notification-item strong,
+    .notification-item span,
+    .notification-item small {
+      display: block;
+    }
+
+    .notification-item strong {
+      margin-bottom: 2px;
+      color: var(--deep-navy);
+      font-size: 12px;
+    }
+
+    .notification-item span {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .notification-item small {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .notification-empty {
+      display: none;
+      padding: 28px 18px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .page-wrap {
+      padding: 28px 0 60px;
+    }
+
+    .page-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .page-title-large {
+      font-family: "Sora", sans-serif;
+      font-size: 26px;
+      letter-spacing: -1px;
+      color: var(--deep-navy);
+    }
+
+    .page-sub {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .actions-right {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 0;
+      border-radius: 999px;
+      padding: 11px 18px;
+      font: 600 13px "Inter", sans-serif;
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    .btn-primary {
+      color: var(--white);
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      box-shadow: 0 14px 40px rgba(44, 131, 248, 0.30);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 55px rgba(39, 76, 220, 0.35);
+    }
+
+    .btn-outline {
+      border: 1px solid var(--line);
+      background: var(--white);
+      color: var(--deep-navy);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      color: var(--white);
+      background: linear-gradient(135deg, #dc2626, #991b1b);
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .tab {
+      padding: 9px 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--white);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .tab.active {
+      background: linear-gradient(135deg, rgba(44, 131, 248, 0.12), rgba(39, 76, 220, 0.12));
+      border-color: rgba(44, 131, 248, 0.35);
+      color: var(--royal-blue);
+    }
+
+    .panel {
+      padding: 20px;
+      margin-bottom: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .panel-title {
+      color: var(--deep-navy);
+      font-family: "Sora", sans-serif;
+      font-size: 18px;
+      letter-spacing: -0.5px;
+    }
+
+    .panel-sub {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--deep-navy);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .form-input,
+    .form-select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--white);
+      color: var(--deep-navy);
+      font: 14px "Inter", sans-serif;
+    }
+
+    .form-input:focus,
+    .form-select:focus {
+      outline: none;
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 0 4px rgba(44, 131, 248, 0.12);
+    }
+
+    .form-input[readonly] {
+      background: #f7f9ff;
+      color: var(--muted);
+    }
+
+    .toggle-row,
+    .integration-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px;
+      margin-bottom: 10px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--white);
+    }
+
+    .toggle-info strong,
+    .integration-name strong {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--deep-navy);
+      font-size: 13px;
+    }
+
+    .toggle-info span,
+    .integration-name span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 44px;
+      height: 26px;
+      border-radius: 999px;
+      background: #cbd5e1;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .toggle-switch.active {
+      background: var(--electric-blue);
+    }
+
+    .toggle-knob {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--white);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+      transition: 0.2s;
+    }
+
+    .toggle-switch.active .toggle-knob {
+      left: 21px;
+    }
+
+    .integration-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .integration-icon {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(44, 131, 248, 0.20);
+      border-radius: 10px;
+      background: rgba(44, 131, 248, 0.08);
+      color: var(--royal-blue);
+      font-size: 18px;
+    }
+
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: revealUp 0.65s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    }
+
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .delay-1 { animation-delay: 0.06s; }
+    .delay-2 { animation-delay: 0.12s; }
+    .delay-3 { animation-delay: 0.18s; }
+
+    @media (max-width: 1000px) {
+      body {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .nav-list {
+        grid-template-columns: 1fr;
+      }
+
+      .search-wrap {
+        order: 3;
+        width: 100%;
+        max-width: 100%;
+        margin-top: 10px;
+      }
+
+      .topbar-inner {
+        flex-wrap: wrap;
+      }
+
+      .tabs {
+        gap: 6px;
+      }
+
+      .tab {
+        padding: 8px 12px;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <img src="./ventrix-logo-mark.png" alt="VentrixCarros Logo" />
+      <span>VENTRIXCARROS</span>
+    </div>
+
+    <nav class="nav-list">
+      <a href="dashboard.html" class="nav-item"><span class="nav-icon">▦</span>Dashboard</a>
+      <a href="ai-recruitment.html" class="nav-item"><span class="nav-icon">✦</span>AI Recruitment</a>
+      <a href="jobs.html" class="nav-item"><span class="nav-icon">▣</span>Jobs</a>
+      <a href="candidates.html" class="nav-item"><span class="nav-icon">♙</span>Candidates</a>
+      <a href="applications.html" class="nav-item"><span class="nav-icon">▤</span>Applications</a>
+      <a href="shortlisted.html" class="nav-item"><span class="nav-icon">☆</span>Shortlisted</a>
+      <a href="interviews.html" class="nav-item"><span class="nav-icon">♩</span>Interviews</a>
+      <a href="messages.html" class="nav-item"><span class="nav-icon">▱</span>Messages</a>
+      <a href="analytics.html" class="nav-item"><span class="nav-icon">⌁</span>Analytics</a>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Account</div>
+        <a href="subscription.html" class="nav-item"><span class="nav-icon">▤</span>Subscription</a>
+        <a href="company-profile.html" class="nav-item"><span class="nav-icon">▥</span>Company Profile</a>
+        <a href="settings.html" class="nav-item active"><span class="nav-icon">⚙</span>Settings</a>
+        <a href="login.html" class="nav-item" id="sidebarLogout"><span class="nav-icon">↪</span>Logout</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="topbar-left">
+          <a href="dashboard.html" class="back-btn">← Back</a>
+          <div class="page-title">Settings</div>
+        </div>
+
+        <div class="search-wrap">
+          <span class="search-icon">🔎</span>
+          <input class="search-input" type="text" placeholder="Search settings..." />
+        </div>
+
+        <div class="nav-right">
+          <button class="icon-btn" id="notificationButton" title="Notifications">🔔</button>
+
+          <div class="profile-wrap">
+            <button class="avatar-btn" id="profileButton" title="Profile">
+              <span id="profileButtonInitials">VC</span>
+            </button>
+
+            <div class="profile-panel" id="profilePanel">
+              <div class="profile-header">
+                <div class="profile-avatar" id="profileAvatarInitials">VC</div>
+                <div>
+                  <strong id="profileName">Loading account...</strong>
+                  <span id="profileEmail">Loading email...</span>
+                </div>
+              </div>
+
+              <div class="profile-divider"></div>
+
+              <a href="company-profile.html" class="profile-item"><span>🏢</span>Company Profile</a>
+              <a href="settings.html" class="profile-item"><span>⚙️</span>Settings</a>
+              <a href="login.html" class="profile-item profile-logout" id="profileLogout">
+                <span>↪</span>Logout
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="notification-panel" id="notificationPanel">
+      <div class="notification-header">
+        <strong>Notifications</strong>
+        <button id="markNotificationsRead">Mark all as read</button>
+      </div>
+      <div class="notification-item unread">
+        <div class="notification-icon">👤</div>
+        <div>
+          <strong>New application received</strong>
+          <span>Rahul Sharma applied for Frontend Developer.</span>
+          <small>10 minutes ago</small>
+        </div>
+      </div>
+      <div class="notification-item">
+        <div class="notification-icon">🎤</div>
+        <div>
+          <strong>Interview scheduled</strong>
+          <span>Interview with Priya Nair is scheduled.</span>
+          <small>1 hour ago</small>
+        </div>
+      </div>
+      <div class="notification-item">
+        <div class="notification-icon">⭐</div>
+        <div>
+          <strong>Candidate shortlisted</strong>
+          <span>Arjun Mehta was shortlisted.</span>
+          <small>2 hours ago</small>
+        </div>
+      </div>
+      <div class="notification-empty" id="notificationEmpty">No new notifications</div>
+    </div>
+
+    <main class="page-wrap">
+      <div class="container">
+        <div class="page-head reveal-up">
+          <div>
+            <h1 class="page-title-large">Settings</h1>
+            <p class="page-sub">
+              Manage your account preferences, notifications, integrations, and security.
+            </p>
+          </div>
+          <div class="actions-right">
+            <button class="btn btn-outline" type="button">📥 Export my data</button>
+            <button class="btn btn-primary" id="saveProfileButton" type="button">💾 Save changes</button>
+          </div>
+        </div>
+
+        <div class="tabs reveal-up delay-1">
+          <div class="tab active" data-tab="general">General</div>
+          <div class="tab" data-tab="notifications">Notifications</div>
+          <div class="tab" data-tab="integrations">Integrations</div>
+          <div class="tab" data-tab="privacy">Privacy &amp; Security</div>
+        </div>
+
+        <section class="panel reveal-up delay-2" id="general-panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">General settings</div>
+              <div class="panel-sub">Profile, email, time zone, and language</div>
+            </div>
+          </div>
+
+          <form id="profileForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="fullName">Full name</label>
+                <input class="form-input" type="text" id="fullName" required />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="email">Registered email</label>
+                <input class="form-input" type="email" id="email" readonly />
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="timeZone">Time zone</label>
+                <select class="form-select" id="timeZone">
+                  <option>Asia/Kolkata (IST)</option>
+                  <option>America/New_York (EST)</option>
+                  <option>Europe/London (GMT)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="language">Language</label>
+                <select class="form-select" id="language">
+                  <option>English</option>
+                  <option>Hindi</option>
+                  <option>Spanish</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="newEmail">New email address</label>
+                <input
+                  class="form-input"
+                  type="email"
+                  id="newEmail"
+                  placeholder="Enter the email you want to use"
+                />
+              </div>
+
+              <div class="form-group" style="display: flex; align-items: end;">
+                <button class="btn btn-outline" id="requestEmailCodeButton" type="button">
+                  Send verification code
+                </button>
+              </div>
+            </div>
+
+            <div class="form-grid" id="emailCodeSection" style="display: none;">
+              <div class="form-group">
+                <label class="form-label" for="emailChangeCode">Verification code</label>
+                <input
+                  class="form-input"
+                  type="text"
+                  id="emailChangeCode"
+                  inputmode="numeric"
+                  autocomplete="one-time-code"
+                  maxlength="6"
+                  placeholder="Enter the 6-digit code"
+                />
+              </div>
+
+              <div class="form-group" style="display: flex; align-items: end;">
+                <button class="btn btn-outline" id="verifyEmailCodeButton" type="button">
+                  Verify and update email
+                </button>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel reveal-up delay-2" id="notifications-panel" style="display:none;">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Notifications</div>
+              <div class="panel-sub">Choose what you want to be notified about</div>
+            </div>
+          </div>
+
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <strong>New applications</strong>
+              <span>Email me when a candidate applies to any job</span>
+            </div>
+            <div class="toggle-switch active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+          </div>
+
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <strong>Interview reminders</strong>
+              <span>Send reminders before scheduled interviews</span>
+            </div>
+            <div class="toggle-switch active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+          </div>
+
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <strong>Weekly summary</strong>
+              <span>Weekly email with hiring stats and insights</span>
+            </div>
+            <div class="toggle-switch" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+          </div>
+
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <strong>Product updates</strong>
+              <span>Emails about new features and improvements</span>
+            </div>
+            <div class="toggle-switch active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+          </div>
+        </section>
+
+        <section class="panel reveal-up delay-2" id="integrations-panel" style="display:none;">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Integrations</div>
+              <div class="panel-sub">Connect your favorite tools</div>
+            </div>
+          </div>
+
+          <div class="integration-row">
+            <div class="integration-info">
+              <div class="integration-icon">📅</div>
+              <div class="integration-name">
+                <strong>Google Calendar</strong>
+                <span>Sync interviews with your calendar</span>
+              </div>
+            </div>
+            <button class="btn btn-outline btn-sm">Connect</button>
+          </div>
+
+          <div class="integration-row">
+            <div class="integration-info">
+              <div class="integration-icon">📨</div>
+              <div class="integration-name">
+                <strong>Email (SMTP)</strong>
+                <span>Send emails from your company domain</span>
+              </div>
+            </div>
+            <button class="btn btn-outline btn-sm">Configure</button>
+          </div>
+
+          <div class="integration-row">
+            <div class="integration-info">
+              <div class="integration-icon">🧩</div>
+              <div class="integration-name">
+                <strong>ATS Integration</strong>
+                <span>Push hired candidates to your ATS</span>
+              </div>
+            </div>
+            <button class="btn btn-outline btn-sm">Connect</button>
+          </div>
+
+          <div class="integration-row">
+            <div class="integration-info">
+              <div class="integration-icon">🌐</div>
+              <div class="integration-name">
+                <strong>Job Boards</strong>
+                <span>Publish jobs to external boards automatically</span>
+              </div>
+            </div>
+            <button class="btn btn-outline btn-sm">Manage</button>
+          </div>
+        </section>
+
+        <section class="panel reveal-up delay-2" id="privacy-panel" style="display:none;">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Privacy &amp; Security</div>
+              <div class="panel-sub">Password, 2FA, and account actions</div>
+            </div>
+          </div>
+
+          <form>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="currentPassword">Current password</label>
+                <input class="form-input" type="password" id="currentPassword" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="newPassword">New password</label>
+                <input class="form-input" type="password" id="newPassword" />
+              </div>
+            </div>
+
+            <div style="margin-bottom:18px;">
+              <button class="btn btn-outline btn-sm" type="button">Update password</button>
+            </div>
+          </form>
+
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <strong>Two-factor authentication (2FA)</strong>
+              <span>Add an extra layer of security to your account</span>
+            </div>
+            <button class="btn btn-outline btn-sm">Enable 2FA</button>
+          </div>
+
+          <div style="margin-top:18px; display:grid; gap:10px;">
+            <button class="btn btn-outline">📥 Download my data</button>
+            <button class="btn btn-danger">🗑️ Delete my account</button>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const API_BASE_URL = "http://localhost:5000/api";
+    const token = localStorage.getItem("ventrixcarrosToken");
+
+    const fullNameInput = document.getElementById("fullName");
+    const emailInput = document.getElementById("email");
+    const newEmailInput = document.getElementById("newEmail");
+    const emailCodeInput = document.getElementById("emailChangeCode");
+    const emailCodeSection = document.getElementById("emailCodeSection");
+
+    function logOut() {
+      localStorage.removeItem("ventrixcarrosToken");
+      localStorage.removeItem("ventrixcarrosUser");
+      window.location.href = "login.html";
+    }
+
+    document.getElementById("sidebarLogout").addEventListener("click", (event) => {
+      event.preventDefault();
+      logOut();
+    });
+
+    document.getElementById("profileLogout").addEventListener("click", (event) => {
+      event.preventDefault();
+      logOut();
+    });
+
+    function showAccount(user) {
+      if (!user) return;
+
+      const name = user.name || "User";
+      const email = user.email || "";
+      const initials = (name || email || "U")
+        .split(/\s+/)
+        .map((part) => part[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase();
+
+      document.getElementById("profileName").textContent = name;
+      document.getElementById("profileEmail").textContent = email;
+      document.getElementById("profileAvatarInitials").textContent = initials;
+      document.getElementById("profileButtonInitials").textContent = initials;
+      fullNameInput.value = name;
+      emailInput.value = email;
+    }
+
+    async function apiRequest(path, method, body) {
+      const response = await fetch(`${API_BASE_URL}${path}`, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(body),
+      });
+
+      const data = await response.json();
+
+      if (response.status === 401 || response.status === 403) {
+        logOut();
+        throw new Error("Your session expired. Please log in again.");
+      }
+
+      if (!response.ok) {
+        throw new Error(data.message || "The request could not be completed.");
+      }
+
+      return data;
+    }
+
+    // Use saved details immediately, then refresh them from the backend.
+    try {
+      const savedUser = localStorage.getItem("ventrixcarrosUser");
+      if (savedUser) {
+        showAccount(JSON.parse(savedUser));
+      }
+    } catch (error) {
+      console.error("Could not read saved account details:", error);
+    }
+
+    async function loadAccount() {
+      if (!token) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/auth/me`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 401 || response.status === 403) {
+          logOut();
+          return;
+        }
+
+        const data = await response.json();
+
+        if (!response.ok || !data.user) {
+          throw new Error(data.message || "Could not load account details.");
+        }
+
+        showAccount(data.user);
+        localStorage.setItem("ventrixcarrosUser", JSON.stringify(data.user));
+      } catch (error) {
+        console.error("Settings account loading error:", error);
+        alert(
+          "Could not load your account details. Make sure the backend is running, then refresh this page."
+        );
+      }
+    }
+
+    document.getElementById("saveProfileButton").addEventListener("click", async () => {
+      const name = fullNameInput.value.trim();
+
+      if (!name) {
+        alert("Please enter your name.");
+        return;
+      }
+
+      const button = document.getElementById("saveProfileButton");
+      button.disabled = true;
+
+      try {
+        const data = await apiRequest("/auth/profile", "PUT", { name });
+        showAccount(data.user);
+        localStorage.setItem("ventrixcarrosUser", JSON.stringify(data.user));
+        alert("Your name was saved.");
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        button.disabled = false;
+      }
+    });
+
+    document.getElementById("requestEmailCodeButton").addEventListener("click", async () => {
+      const email = newEmailInput.value.trim().toLowerCase();
+
+      if (!email) {
+        alert("Please enter your new email address.");
+        return;
+      }
+
+      const button = document.getElementById("requestEmailCodeButton");
+      button.disabled = true;
+
+      try {
+        const data = await apiRequest(
+          "/auth/profile/email/request",
+          "POST",
+          { email }
+        );
+
+        emailCodeSection.style.display = "grid";
+        alert(data.message || "A verification code was sent to your new email.");
+        emailCodeInput.focus();
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        button.disabled = false;
+      }
+    });
+
+    emailCodeInput.addEventListener("input", () => {
+      emailCodeInput.value = emailCodeInput.value.replace(/\D/g, "").slice(0, 6);
+    });
+
+    document.getElementById("verifyEmailCodeButton").addEventListener("click", async () => {
+      const email = newEmailInput.value.trim().toLowerCase();
+      const code = emailCodeInput.value.trim();
+
+      if (!/^\d{6}$/.test(code)) {
+        alert("Please enter the 6-digit verification code.");
+        return;
+      }
+
+      const button = document.getElementById("verifyEmailCodeButton");
+      button.disabled = true;
+
+      try {
+        const data = await apiRequest(
+          "/auth/profile/email/verify",
+          "POST",
+          { email, code }
+        );
+
+        showAccount(data.user);
+        localStorage.setItem("ventrixcarrosUser", JSON.stringify(data.user));
+        newEmailInput.value = "";
+        emailCodeInput.value = "";
+        emailCodeSection.style.display = "none";
+        alert("Your email address was verified and updated.");
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        button.disabled = false;
+      }
+    });
+
+    // Switch between settings sections.
+    const tabs = document.querySelectorAll(".tab");
+    const panels = {
+      general: document.getElementById("general-panel"),
+      notifications: document.getElementById("notifications-panel"),
+      integrations: document.getElementById("integrations-panel"),
+      privacy: document.getElementById("privacy-panel"),
+    };
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        tabs.forEach((item) => item.classList.remove("active"));
+        tab.classList.add("active");
+
+        Object.entries(panels).forEach(([name, panel]) => {
+          panel.style.display = name === tab.dataset.tab ? "block" : "none";
+        });
+      });
+    });
+
+    const currentPage = window.location.pathname.split("/").pop() || "settings.html";
+
+    document.querySelectorAll(".nav-item").forEach((item) => {
+      if (item.getAttribute("href") === currentPage) {
+        item.classList.add("active");
+      } else {
+        item.classList.remove("active");
+      }
+    });
+
+    loadAccount();
+  </script>
+
+  <script src="notification.js"></script>
+  <script src="profile.js"></script>
+</body>
+</html>

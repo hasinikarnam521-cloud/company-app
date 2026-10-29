@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log in — VentrixCarros</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --deep-navy: #050a30;
+      --navy: #070d3f;
+      --electric-blue: #2c83f8;
+      --royal-blue: #274cdc;
+      --vivid-blue: #1c19b8;
+      --white: #ffffff;
+      --light-blue: #e0e4f5;
+
+      --ink: var(--deep-navy);
+      --muted: #5b6b85;
+      --line: var(--light-blue);
+      --bg: #f7f9ff;
+      --surface: var(--white);
+
+      --radius: 24px;
+      --shadow: 0 24px 70px rgba(5, 10, 48, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 600px at 50% -20%, rgba(44, 131, 248, 0.12), transparent 70%),
+        var(--bg);
+      line-height: 1.65;
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1200px, 100% - 40px);
+      margin-inline: auto;
+    }
+
+    /* Header (same as home) */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(18px);
+      background: rgba(255, 255, 255, 0.85);
+      border-bottom: 1px solid var(--light-blue);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      color: var(--white);
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      box-shadow: 0 12px 32px rgba(44, 131, 248, 0.30);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .nav a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      transition: 0.2s;
+    }
+
+    .nav a:hover {
+      color: var(--electric-blue);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      border-radius: 999px;
+      padding: 14px 27px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    .btn-primary {
+      color: var(--white);
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      box-shadow: 0 16px 45px rgba(44, 131, 248, 0.30);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 22px 60px rgba(39, 76, 220, 0.35);
+    }
+
+    .btn-outline {
+      background: var(--white);
+      border: 1px solid var(--light-blue);
+      color: var(--deep-navy);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+      transform: translateY(-2px);
+    }
+
+    /* Centered login layout */
+    .login-wrap {
+      display: grid;
+      place-items: center;
+      padding: 50px 0 80px;
+    }
+
+    .login-box {
+      width: min(560px, 100% - 40px);
+      text-align: center;
+    }
+
+    .login-logo {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 18px;
+      border-radius: 20px;
+      display: grid;
+      place-items: center;
+      color: var(--white);
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+      font-size: 26px;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      box-shadow: 0 14px 40px rgba(44, 131, 248, 0.35);
+    }
+
+    .login-title {
+      font-family: "Sora", sans-serif;
+      font-size: 32px;
+      letter-spacing: -1px;
+      color: var(--deep-navy);
+      margin-bottom: 8px;
+    }
+
+    .login-sub {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 26px;
+    }
+
+    .value-prop {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 22px 20px;
+      text-align: left;
+      margin-bottom: 22px;
+    }
+
+    .value-prop h2 {
+      font-family: "Sora", sans-serif;
+      font-size: 20px;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+      margin-bottom: 10px;
+    }
+
+    .value-prop p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .login-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 36px 32px;
+      text-align: left;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+      position: relative;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--deep-navy);
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      padding-right: 44px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      font-size: 15px;
+      font-family: inherit;
+      color: var(--deep-navy);
+      background: var(--white);
+      transition: 0.2s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 0 4px rgba(44, 131, 248, 0.12);
+    }
+
+    .password-wrap {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 18px;
+      display: grid;
+      place-items: center;
+      padding: 6px;
+      border-radius: 8px;
+      transition: 0.2s;
+    }
+
+    .toggle-password:hover {
+      color: var(--electric-blue);
+      background: rgba(44, 131, 248, 0.08);
+    }
+
+    .form-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+      font-size: 13px;
+    }
+
+    .remember {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+    }
+
+    .forgot {
+      color: var(--electric-blue);
+      font-weight: 600;
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    .login-divider {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 24px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .login-divider::before,
+    .login-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+
+    .login-footer {
+      text-align: center;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .login-footer a {
+      color: var(--electric-blue);
+      font-weight: 600;
+    }
+
+    /* Benefits row under card */
+    .benefits-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 22px;
+      text-align: left;
+    }
+
+    .benefit-mini {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .benefit-mini-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: 16px;
+      color: var(--white);
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      box-shadow: 0 8px 20px rgba(44, 131, 248, 0.25);
+      flex: 0 0 34px;
+    }
+
+    .benefit-mini-text strong {
+      display: block;
+      font-size: 13px;
+      color: var(--deep-navy);
+      margin-bottom: 2px;
+    }
+
+    .benefit-mini-text span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Trusted strip */
+    .trusted-strip {
+      margin-top: 26px;
+      text-align: center;
+    }
+
+    .trusted-label {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 12px;
+    }
+
+    .trusted-logos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-family: "Sora", sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .trusted-logos span {
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--white);
+    }
+
+    /* Footer (same as home) */
+    .footer {
+      background: var(--deep-navy);
+      border-top: 1px solid rgba(224, 228, 245, 0.15);
+      padding: 34px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.70);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 22px;
+    }
+
+    .footer a:hover {
+      color: var(--electric-blue);
+    }
+
+    /* Responsive */
+    @media (max-width: 700px) {
+      .benefits-row {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container header-inner">
+      <div class="brand">
+        <div class="brand-mark">V</div>
+        VentrixCarros
+      </div>
+
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="signup.html">Sign up</a>
+        <a href="index.html" class="btn btn-outline">Back to site</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Centered Login -->
+  <main class="login-wrap">
+    <div class="login-box">
+      <div class="login-logo">V</div>
+      <h1 class="login-title">Log in to VentrixCarros</h1>
+      <p class="login-sub">
+        Access your company hiring dashboard
+      </p>
+
+      <!-- Value prop / intro content -->
+      <div class="value-prop">
+        <h2>Why companies use VentrixCarros</h2>
+        <p>
+          VentrixCarros brings jobs, candidates, applications, interviews, and
+          hiring insights into one clean dashboard. Recruiters save time on
+          manual screening, collaborate faster, and make data-driven hiring
+          decisions — from first application to final offer.
+        </p>
+      </div>
+
+      <div class="login-card">
+        <form id="loginForm">
+          <div class="form-group">
+            <label class="form-label" for="email">Email address</label>
+            <input
+              class="form-input"
+              type="email"
+              id="email"
+              name="email"
+              placeholder="you@company.com"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <div class="password-wrap">
+              <!-- Visible by default -->
+              <input
+                class="form-input"
+                type="text"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                required
+              />
+              <button
+                type="button"
+                class="toggle-password"
+                id="togglePassword"
+                title="Hide password"
+              >
+                🙈
+              </button>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <label class="remember">
+              <input type="checkbox" />
+              Remember me
+            </label>
+
+            <a class="forgot" href="#">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            Log in
+          </button>
+        </form>
+
+        <div class="login-divider">or</div>
+
+        <div class="login-footer">
+          Don’t have an account?
+          <a href="signup.html">Create company account</a>
+        </div>
+      </div>
+
+      <!-- Benefits row -->
+      <div class="benefits-row">
+        <div class="benefit-mini">
+          <div class="benefit-mini-icon">⚡</div>
+          <div class="benefit-mini-text">
+            <strong>AI screening</strong>
+            <span>Auto-rank candidates by fit</span>
+          </div>
+        </div>
+
+        <div class="benefit-mini">
+          <div class="benefit-mini-icon">📊</div>
+          <div class="benefit-mini-text">
+            <strong>Analytics</strong>
+            <span>Track applications & hires</span>
+          </div>
+        </div>
+
+        <div class="benefit-mini">
+          <div class="benefit-mini-icon">🔒</div>
+          <div class="benefit-mini-text">
+            <strong>Secure</strong>
+            <span>Private company data</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trusted strip -->
+      <div class="trusted-strip">
+        <div class="trusted-label">Trusted by hiring teams at</div>
+        <div class="trusted-logos">
+          <span>StartupHub</span>
+          <span>TechNest</span>
+          <span>HirePro</span>
+          <span>GrowthLab</span>
+          <span>TalentX</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>© 2026 VentrixCarros. All rights reserved.</p>
+
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms</a>
+        <a href="#">Support</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Toggle password visibility (default: visible)
+    const togglePassword = document.getElementById("togglePassword");
+    const passwordInput = document.getElementById("password");
+
+    togglePassword.addEventListener("click", () => {
+      const isCurrentlyVisible = passwordInput.type === "text";
+      passwordInput.type = isCurrentlyVisible ? "password" : "text";
+      togglePassword.textContent = isCurrentlyVisible ? "👁" : "🙈";
+      togglePassword.title = isCurrentlyVisible ? "Show password" : "Hide password";
+    });
+
+    // Demo login handler
+    const loginForm = document.getElementById("loginForm");
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      // TODO: Replace with real authentication
+      console.log("Login attempt:", { email, password });
+      alert("Demo login: check console for logged values.");
+    });
+  </script>
+</body>
+</html>

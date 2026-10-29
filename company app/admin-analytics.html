@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Platform Analytics — VentrixCarros</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --navy: #050a30;
+      --blue: #2c83f8;
+      --royal: #274cdc;
+      --white: #fff;
+      --line: #e0e4f5;
+      --muted: #5b6b85;
+      --bg: #f7f9ff;
+      --green: #059669;
+      --orange: #d97706;
+      --red: #dc2626;
+      --radius: 20px;
+      --shadow: 0 18px 50px rgba(5, 10, 48, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      color: var(--navy);
+      font-family: "Inter", sans-serif;
+      background: var(--bg);
+      display: grid;
+      grid-template-columns: 250px 1fr;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 22px 16px;
+      overflow-y: auto;
+      background: var(--white);
+      border-right: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px;
+      margin-bottom: 22px;
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+    }
+
+    .brand img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+
+    .admin-label {
+      display: block;
+      color: var(--muted);
+      font-family: "Inter", sans-serif;
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      color: var(--royal);
+      background: rgba(44, 131, 248, 0.1);
+    }
+
+    .nav-section {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .nav-section-title {
+      padding: 6px 12px;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .main-content {
+      min-width: 0;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      padding: 14px 0;
+      background: rgba(247, 249, 255, 0.94);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .container {
+      width: min(1280px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .topbar-inner,
+    .topbar-left,
+    .page-head,
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .topbar-left {
+      justify-content: flex-start;
+    }
+
+    .back-btn,
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--white);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .btn:hover,
+    .back-btn:hover {
+      color: var(--blue);
+      border-color: var(--blue);
+    }
+
+    .avatar {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--white);
+      background: linear-gradient(135deg, var(--blue), var(--royal));
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .page-wrap {
+      padding: 30px 0 60px;
+    }
+
+    .page-head {
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    h1,
+    h2 {
+      font-family: "Sora", sans-serif;
+    }
+
+    h1 {
+      margin-bottom: 4px;
+      font-size: 28px;
+    }
+
+    .page-sub,
+    .panel-sub {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .card,
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .card {
+      padding: 18px;
+    }
+
+    .kpi-label {
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .kpi-value {
+      font-family: "Sora", sans-serif;
+      font-size: 28px;
+    }
+
+    .kpi-note {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .panel-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .panel {
+      min-width: 0;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    .panel-head {
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .panel-head h2 {
+      margin-bottom: 3px;
+      font-size: 18px;
+    }
+
+    .bar-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .bar-row {
+      display: grid;
+      gap: 6px;
+    }
+
+    .bar-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .bar-track {
+      height: 9px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #edf1fb;
+    }
+
+    .bar-fill {
+      height: 100%;
+      min-width: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--blue), var(--royal));
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th,
+    td {
+      padding: 11px 10px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .status-pill {
+      display: inline-block;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(44, 131, 248, 0.1);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .error-message {
+      display: none;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(220, 38, 38, 0.25);
+      border-radius: 12px;
+      color: var(--red);
+      background: rgba(220, 38, 38, 0.06);
+      font-size: 13px;
+    }
+
+    @media (max-width: 1000px) {
+      body {
+        display: block;
+      }
+
+      .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .container {
+        width: min(100% - 24px, 1280px);
+      }
+
+      .nav-list {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar-inner {
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .kpi-grid,
+      .panel-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .page-head {
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .kpi-grid,
+      .panel-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <img src="ventrix-logo-mark.png" alt="VentrixCarros logo" />
+      <div>
+        <span>VENTRIXCARROS</span>
+        <span class="admin-label">Admin console</span>
+      </div>
+    </div>
+
+    <nav class="nav-list">
+      <a href="admin-dashboard.html" class="nav-item">🛡️ Admin Dashboard</a>
+      <a href="admin-companies.html" class="nav-item">🏢 Companies</a>
+      <a href="admin-users.html" class="nav-item">👤 Users</a>
+      <a href="admin-subscriptions.html" class="nav-item">💳 Subscriptions</a>
+      <a href="admin-jobs.html" class="nav-item">💼 Jobs</a>
+      <a href="admin-support.html" class="nav-item">🎧 Support</a>
+      <a href="admin-analytics.html" class="nav-item active">📊 Platform Analytics</a>
+
+      <div class="nav-section">
+        <div class="nav-section-title">System</div>
+        <a href="admin-settings.html" class="nav-item">⚙️ Settings</a>
+        <a href="admin-logs.html" class="nav-item">🧾 Activity Logs</a>
+        <a href="index.html" class="nav-item" id="logoutLink">🚪 Logout</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="topbar-left">
+          <a href="index.html" class="back-btn">← Back</a>
+          <strong>Platform Admin</strong>
+        </div>
+
+        <div class="topbar-left">
+          <button id="exportButton" class="btn" type="button">
+            ⬇ Export analytics
+          </button>
+          <div class="avatar">AD</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-wrap">
+      <div class="container">
+        <section class="page-head">
+          <div>
+            <h1>Platform Analytics</h1>
+            <p class="page-sub">Live counts from your platform database.</p>
+          </div>
+        </section>
+
+        <div id="errorMessage" class="error-message"></div>
+
+        <section class="kpi-grid">
+          <div class="card">
+            <div class="kpi-label">Companies</div>
+            <div class="kpi-value" id="companiesCount">—</div>
+            <div class="kpi-note">Registered companies</div>
+          </div>
+          <div class="card">
+            <div class="kpi-label">Users</div>
+            <div class="kpi-value" id="usersCount">—</div>
+            <div class="kpi-note">All user accounts</div>
+          </div>
+          <div class="card">
+            <div class="kpi-label">Active jobs</div>
+            <div class="kpi-value" id="activeJobsCount">—</div>
+            <div class="kpi-note">Currently published jobs</div>
+          </div>
+          <div class="card">
+            <div class="kpi-label">Monthly revenue</div>
+            <div class="kpi-value" id="monthlyRevenue">—</div>
+            <div class="kpi-note">Paid revenue recorded this month</div>
+          </div>
+        </section>
+
+        <section class="panel-grid">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Job status</h2>
+                <p class="panel-sub">Job count by current status.</p>
+              </div>
+            </div>
+            <div id="jobStatusChart" class="bar-list"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Subscription status</h2>
+                <p class="panel-sub">Subscription count by current status.</p>
+              </div>
+            </div>
+            <div id="subscriptionStatusChart" class="bar-list"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Support tickets</h2>
+                <p class="panel-sub">Ticket count by current status.</p>
+              </div>
+            </div>
+            <div id="supportStatusChart" class="bar-list"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Companies</h2>
+                <p class="panel-sub">Company count by account status.</p>
+              </div>
+            </div>
+            <div id="companyStatusChart" class="bar-list"></div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Recent jobs</h2>
+              <p class="panel-sub">Latest jobs recorded in the database.</p>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Job</th>
+                  <th>Company</th>
+                  <th>Status</th>
+                  <th>Posted</th>
+                </tr>
+              </thead>
+              <tbody id="recentJobs">
+                <tr><td colspan="4">Loading jobs…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const API_BASE_URL = "http://localhost:5000/api";
+    const token = localStorage.getItem("ventrixcarrosToken");
+    let analyticsData = null;
+
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (character) => {
+        const replacements = {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;",
+        };
+        return replacements[character];
+      });
+    }
+
+    async function apiRequest(path) {
+      const response = await fetch(API_BASE_URL + path, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(path + ": " + (data.message || "Could not load analytics data."));
+      }
+
+      return data;
+    }
+
+    function renderBars(elementId, entries) {
+      const element = document.getElementById(elementId);
+
+      if (!entries.length) {
+        element.innerHTML = "<p class='panel-sub'>No data available.</p>";
+        return;
+      }
+
+      const maximum = Math.max(1, ...entries.map((entry) => Number(entry.value) || 0));
+
+      element.innerHTML = entries.map((entry) => {
+        const value = Number(entry.value) || 0;
+        const width = value === 0 ? 0 : Math.max(4, (value / maximum) * 100);
+
+        return `
+          <div class="bar-row">
+            <div class="bar-label">
+              <span>${escapeHTML(entry.label)}</span>
+              <strong>${value.toLocaleString("en-IN")}</strong>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:${width}%"></div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderRecentJobs(jobs) {
+      const tbody = document.getElementById("recentJobs");
+
+      if (!jobs.length) {
+        tbody.innerHTML = '<tr><td colspan="4">No jobs found.</td></tr>';
+        return;
+      }
+
+      const recent = [...jobs]
+        .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
+        .slice(0, 8);
+
+      tbody.innerHTML = recent.map((job) => `
+        <tr>
+          <td>${escapeHTML(job.title || "Untitled job")}</td>
+          <td>${escapeHTML(job.company?.name || "—")}</td>
+          <td><span class="status-pill">${escapeHTML(job.status || "—")}</span></td>
+          <td>${job.created_at ? new Date(job.created_at).toLocaleDateString("en-IN") : "—"}</td>
+        </tr>
+      `).join("");
+    }
+
+    function countBy(items, field, labels) {
+      return labels.map((label) => ({
+        label,
+        value: items.filter((item) => item[field] === label).length,
+      }));
+    }
+
+    function renderAnalytics(data) {
+      const dashboardStats = data.dashboard.stats || {};
+      const companyList = data.companies.companies || [];
+      const userList = data.users.users || [];
+      const jobList = data.jobs.jobs || [];
+      const subscriptionStats = data.subscriptions.stats || {};
+      const supportStats = data.support.stats || {};
+
+      document.getElementById("companiesCount").textContent =
+        Number(dashboardStats.totalCompanies ?? companyList.length).toLocaleString("en-IN");
+
+      document.getElementById("usersCount").textContent =
+        Number(dashboardStats.totalUsers ?? userList.length).toLocaleString("en-IN");
+
+      document.getElementById("activeJobsCount").textContent =
+        Number(dashboardStats.activeJobs ?? jobList.filter((job) => job.status === "active").length).toLocaleString("en-IN");
+
+      document.getElementById("monthlyRevenue").textContent =
+        new Intl.NumberFormat("en-IN", {
+          style: "currency",
+          currency: "INR",
+          maximumFractionDigits: 0,
+        }).format(Number(dashboardStats.monthlyRevenue) || 0);
+
+      renderBars(
+        "jobStatusChart",
+        countBy(jobList, "status", ["draft", "active", "closed"])
+      );
+
+      renderBars("subscriptionStatusChart", [
+        { label: "Active", value: subscriptionStats.active || 0 },
+        { label: "Pending", value: subscriptionStats.pending || 0 },
+        { label: "Cancelled", value: subscriptionStats.cancelled || 0 },
+        { label: "Expired", value: subscriptionStats.expired || 0 },
+      ]);
+
+      renderBars("supportStatusChart", [
+        { label: "Open", value: supportStats.open || 0 },
+        { label: "In progress", value: supportStats.in_progress || 0 },
+        { label: "Resolved", value: supportStats.resolved || 0 },
+      ]);
+
+      renderBars(
+        "companyStatusChart",
+        countBy(companyList, "status", ["active", "pending", "inactive"])
+      );
+
+      renderRecentJobs(jobList);
+    }
+
+    async function loadAnalytics() {
+      const errorMessage = document.getElementById("errorMessage");
+
+      if (!token) {
+        errorMessage.textContent =
+          "Please log in again. Your admin login token was not found.";
+        errorMessage.style.display = "block";
+        return;
+      }
+
+      try {
+        const [dashboard, companies, users, jobs, subscriptions, support] =
+          await Promise.all([
+            apiRequest("/admin/dashboard"),
+            apiRequest("/admin/companies"),
+            apiRequest("/admin/users"),
+            apiRequest("/jobs/admin"),
+            apiRequest("/admin/subscriptions"),
+            apiRequest("/admin/support"),
+          ]);
+
+        analyticsData = {
+          dashboard,
+          companies,
+          users,
+          jobs,
+          subscriptions,
+          support,
+        };
+
+        renderAnalytics(analyticsData);
+      } catch (error) {
+        errorMessage.textContent =
+          error.message || "Could not load analytics from the backend.";
+        errorMessage.style.display = "block";
+      }
+    }
+
+    function exportAnalytics() {
+      if (!analyticsData) {
+        alert("Analytics have not loaded yet.");
+        return;
+      }
+
+      const stats = analyticsData.dashboard.stats || {};
+      const companies = analyticsData.companies.companies || [];
+      const users = analyticsData.users.users || [];
+      const jobs = analyticsData.jobs.jobs || [];
+      const subscriptionStats = analyticsData.subscriptions.stats || {};
+      const supportStats = analyticsData.support.stats || {};
+
+      const csvRows = [
+        ["Metric", "Value"],
+        ["Total companies", stats.totalCompanies ?? companies.length],
+        ["Total users", stats.totalUsers ?? users.length],
+        ["Active jobs", stats.activeJobs ?? jobs.filter((job) => job.status === "active").length],
+        ["Monthly revenue (INR)", stats.monthlyRevenue || 0],
+        ["Active subscriptions", subscriptionStats.active || 0],
+        ["Pending subscriptions", subscriptionStats.pending || 0],
+        ["Open support tickets", supportStats.open || 0],
+        ["In progress support tickets", supportStats.in_progress || 0],
+        ["Resolved support tickets", supportStats.resolved || 0],
+      ];
+
+      const csv = csvRows
+        .map((row) =>
+          row.map((value) => `"${String(value).replace(/"/g, '""')}"`).join(",")
+        )
+        .join("\r\n");
+
+      const url = URL.createObjectURL(
+        new Blob([csv], { type: "text/csv;charset=utf-8;" })
+      );
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "ventrixcarros-platform-analytics.csv";
+      link.click();
+
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    document
+      .getElementById("exportButton")
+      .addEventListener("click", exportAnalytics);
+
+    document.getElementById("logoutLink").addEventListener("click", () => {
+      localStorage.removeItem("ventrixcarrosToken");
+      localStorage.removeItem("ventrixcarrosUser");
+    });
+
+    loadAnalytics();
+  </script>
+</body>
+</html>

@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Activity Logs — VentrixCarros Admin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --deep-navy:#050a30;
+      --electric-blue:#2c83f8;
+      --royal-blue:#274cdc;
+      --white:#fff;
+      --light-blue:#e0e4f5;
+      --muted:#5b6b85;
+      --bg:#f7f9ff;
+      --green:#059669;
+      --orange:#d97706;
+      --red:#dc2626;
+      --line:var(--light-blue);
+      --radius:24px;
+      --shadow:0 24px 70px rgba(5,10,48,.10);
+    }
+
+    * {
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    body {
+      min-height:100vh;
+      overflow-x:hidden;
+      color:var(--deep-navy);
+      font-family:"Inter",sans-serif;
+      background:
+        radial-gradient(900px 600px at 50% -20%,rgba(44,131,248,.08),transparent 70%),
+        var(--bg);
+      display:grid;
+      grid-template-columns:260px 1fr;
+    }
+
+    a {
+      color:inherit;
+      text-decoration:none;
+    }
+
+    button,input,select {
+      font:inherit;
+    }
+
+    .container {
+      width:min(1300px,100% - 40px);
+      margin:auto;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      position:sticky;
+      top:0;
+      height:100vh;
+      padding:20px 16px;
+      overflow-y:auto;
+      background:white;
+      border-right:1px solid var(--line);
+    }
+
+    .sidebar-brand {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:10px 12px;
+      margin-bottom:18px;
+      font-family:"Sora",sans-serif;
+      font-weight:800;
+    }
+
+    .brand-mark {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: var(--white);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.brand-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+    .admin-label {
+      display:block;
+      color:var(--muted);
+      font-size:10px;
+      font-weight:600;
+      letter-spacing:1px;
+      text-transform:uppercase;
+    }
+
+    .nav-list {
+      display:block;
+      width:100%;
+    }
+
+    .nav-item {
+      width:100%;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:11px 12px;
+      margin-bottom:6px;
+      border-radius:12px;
+      color:var(--muted);
+      font-size:14px;
+      font-weight:500;
+      transition:.2s ease;
+    }
+
+    .nav-item:hover {
+      color:var(--electric-blue);
+      background:rgba(44,131,248,.06);
+    }
+
+    .nav-item.active {
+      color:var(--royal-blue);
+      font-weight:600;
+      background:linear-gradient(
+        135deg,
+        rgba(44,131,248,.12),
+        rgba(39,76,220,.12)
+      );
+    }
+
+    .nav-icon {
+      width:22px;
+      min-width:22px;
+      text-align:center;
+    }
+
+    .nav-section {
+      display:block;
+      width:100%;
+      margin-top:18px;
+      padding-top:14px;
+      border-top:1px solid var(--line);
+    }
+
+    .nav-section-title {
+      display:block;
+      width:100%;
+      padding:6px 12px;
+      margin-bottom:6px;
+      color:var(--muted);
+      font-size:11px;
+      letter-spacing:.7px;
+      text-transform:uppercase;
+    }
+
+    /* TOPBAR */
+    .main-content {
+      min-width:0;
+    }
+
+    .topbar {
+      position:sticky;
+      top:0;
+      z-index:30;
+      padding:14px 0;
+      backdrop-filter:blur(18px);
+      background:rgba(247,249,255,.86);
+      border-bottom:1px solid var(--line);
+    }
+
+    .topbar-inner {
+      display:flex;
+      align-items:center;
+      gap:16px;
+    }
+
+    .topbar-left {
+      display:flex;
+      align-items:center;
+      gap:14px;
+      flex:1;
+    }
+
+    .back-btn,
+    .btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:600;
+      transition:.25s ease;
+    }
+
+    .back-btn {
+      padding:9px 14px;
+      color:var(--deep-navy);
+      background:white;
+      border:1px solid var(--line);
+      font-size:13px;
+    }
+
+    .page-title {
+      font-family:"Sora",sans-serif;
+      font-size:20px;
+    }
+
+    .search-wrap {
+      position:relative;
+      flex:1;
+      max-width:420px;
+    }
+
+    .search-input {
+      width:100%;
+      padding:11px 16px 11px 38px;
+      color:var(--deep-navy);
+      background:white;
+      border:1px solid var(--line);
+      border-radius:999px;
+      outline:none;
+      font-size:14px;
+    }
+
+    .search-input:focus {
+      border-color:var(--electric-blue);
+      box-shadow:0 0 0 4px rgba(44,131,248,.12);
+    }
+
+    .search-icon {
+      position:absolute;
+      top:50%;
+      left:13px;
+      transform:translateY(-50%);
+      color:var(--muted);
+    }
+
+    .nav-right {
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .icon-btn,
+    .avatar-btn {
+      width:38px;
+      height:38px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+    }
+
+    .icon-btn {
+      color:var(--muted);
+      background:white;
+      border:1px solid var(--line);
+      cursor:pointer;
+      font-size:17px;
+    }
+
+    .avatar-btn {
+      color:white;
+      font-size:13px;
+      font-weight:700;
+      background:linear-gradient(135deg,var(--electric-blue),var(--royal-blue));
+    }
+
+    /* PAGE */
+    .page-wrap {
+      padding:28px 0 60px;
+    }
+
+    .page-head {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      margin-bottom:20px;
+    }
+
+    .page-heading {
+      margin-bottom:3px;
+      font-family:"Sora",sans-serif;
+      font-size:27px;
+      letter-spacing:-1px;
+    }
+
+    .page-sub {
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .head-actions {
+      display:flex;
+      gap:10px;
+    }
+
+    .btn {
+      padding:11px 18px;
+      border:none;
+      font-size:13px;
+    }
+
+    .btn-primary {
+      color:white;
+      background:linear-gradient(135deg,var(--electric-blue),var(--royal-blue));
+      box-shadow:0 14px 40px rgba(44,131,248,.3);
+    }
+
+    .btn-outline {
+      color:var(--deep-navy);
+      background:white;
+      border:1px solid var(--line);
+    }
+
+    /* KPI */
+    .kpi-grid {
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+      margin-bottom:18px;
+    }
+
+    .kpi-card {
+      padding:18px;
+      background:white;
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+    }
+
+    .kpi-label {
+      margin-bottom:6px;
+      color:var(--muted);
+      font-size:11px;
+      letter-spacing:.7px;
+      text-transform:uppercase;
+    }
+
+    .kpi-value {
+      margin-bottom:4px;
+      font-family:"Sora",sans-serif;
+      font-size:28px;
+    }
+
+    .kpi-note {
+      color:var(--muted);
+      font-size:11px;
+    }
+
+    .note-up {
+      color:var(--green);
+    }
+
+    .note-warning {
+      color:var(--orange);
+    }
+
+    /* PANEL */
+    .panel {
+      padding:20px;
+      background:white;
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+    }
+
+    .panel-head {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:16px;
+    }
+
+    .panel-title {
+      font-family:"Sora",sans-serif;
+      font-size:18px;
+    }
+
+    .panel-sub {
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .badge {
+      padding:5px 10px;
+      border-radius:999px;
+      color:var(--green);
+      background:rgba(5,150,105,.1);
+      border:1px solid rgba(5,150,105,.25);
+      font-size:10px;
+      font-weight:700;
+      text-transform:uppercase;
+    }
+
+    /* TABLE */
+    .table-wrap {
+      overflow-x:auto;
+    }
+
+    .table {
+      width:100%;
+      border-collapse:collapse;
+      font-size:13px;
+    }
+
+    .table th,
+    .table td {
+      padding:13px 10px;
+      text-align:left;
+      border-bottom:1px solid var(--line);
+      white-space:nowrap;
+    }
+
+    .table th {
+      color:var(--muted);
+      font-size:11px;
+      text-transform:uppercase;
+    }
+
+    .user-cell {
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .log-icon {
+      width:34px;
+      height:34px;
+      display:grid;
+      place-items:center;
+      border-radius:11px;
+      color:white;
+      background:linear-gradient(135deg,var(--electric-blue),var(--royal-blue));
+    }
+
+    .user-name {
+      display:block;
+      font-weight:700;
+    }
+
+    .user-sub {
+      display:block;
+      color:var(--muted);
+      font-size:11px;
+    }
+
+    .pill {
+      display:inline-flex;
+      padding:4px 9px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:700;
+    }
+
+    .pill-success {
+      color:var(--green);
+      background:rgba(5,150,105,.1);
+      border:1px solid rgba(5,150,105,.25);
+    }
+
+    .pill-warning {
+      color:var(--orange);
+      background:rgba(245,158,11,.1);
+      border:1px solid rgba(245,158,11,.25);
+    }
+
+    .pill-danger {
+      color:var(--red);
+      background:rgba(220,38,38,.1);
+      border:1px solid rgba(220,38,38,.25);
+    }
+
+    .pill-info {
+      color:var(--electric-blue);
+      background:rgba(44,131,248,.1);
+      border:1px solid rgba(44,131,248,.25);
+    }
+
+    @media(max-width:1000px) {
+      body {
+        display:block;
+      }
+
+      .sidebar {
+        position:relative;
+        width:100%;
+        height:auto;
+        border-right:none;
+        border-bottom:1px solid var(--line);
+      }
+
+      .kpi-grid {
+        grid-template-columns:repeat(2,1fr);
+      }
+    }
+
+    @media(max-width:700px) {
+      .topbar-inner {
+        flex-wrap:wrap;
+      }
+
+      .search-wrap {
+        order:3;
+        width:100%;
+        max-width:none;
+      }
+
+      .kpi-grid {
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-brand">
+      <div class="brand-mark">
+  <img src="ventrix-logo-mark.png" alt="VentrixCarros Logo">
+</div>
+
+      <div>
+        <span>VENTRIXCARROS</span>
+        <span class="admin-label">Admin console</span>
+      </div>
+    </div>
+
+    <nav class="nav-list">
+
+      <a href="admin-dashboard.html" class="nav-item">
+        <span class="nav-icon">🛡️</span>
+        Admin Dashboard
+      </a>
+
+      <a href="admin-companies.html" class="nav-item">
+        <span class="nav-icon">🏢</span>
+        Companies
+      </a>
+
+      <a href="admin-users.html" class="nav-item">
+        <span class="nav-icon">👤</span>
+        Users
+      </a>
+
+      <a href="admin-subscriptions.html" class="nav-item">
+        <span class="nav-icon">💳</span>
+        Subscriptions
+      </a>
+
+      <a href="admin-jobs.html" class="nav-item">
+        <span class="nav-icon">💼</span>
+        Jobs
+      </a>
+
+      <a href="admin-support.html" class="nav-item">
+        <span class="nav-icon">🎧</span>
+        Support
+      </a>
+
+      <a href="admin-analytics.html" class="nav-item">
+        <span class="nav-icon">📊</span>
+        Platform Analytics
+      </a>
+
+      <div class="nav-section">
+
+        <div class="nav-section-title">System</div>
+
+        <a href="admin-settings.html" class="nav-item">
+          <span class="nav-icon">⚙️</span>
+          Settings
+        </a>
+
+        <a href="admin-logs.html" class="nav-item active">
+          <span class="nav-icon">🧾</span>
+          Activity Logs
+        </a>
+
+        <a href="index.html" class="nav-item">
+          <span class="nav-icon">🚪</span>
+          Logout
+        </a>
+
+      </div>
+
+    </nav>
+  </aside>
+
+  <div class="main-content">
+
+    <header class="topbar">
+      <div class="container topbar-inner">
+
+        <div class="topbar-left">
+          <a href="index.html" class="back-btn">← Back</a>
+          <div class="page-title">Platform Admin</div>
+        </div>
+
+        <div class="search-wrap">
+          <span class="search-icon">🔎</span>
+          <input
+            id="logSearch"
+            class="search-input"
+            type="search"
+            placeholder="Search activity, users, or actions..."
+          />
+        </div>
+
+        <div class="nav-right">
+          <button class="icon-btn" onclick="showNotification()">🔔</button>
+          <div class="avatar-btn">AD</div>
+        </div>
+
+      </div>
+    </header>
+
+    <main class="page-wrap">
+
+      <div class="container">
+
+        <section class="page-head">
+
+          <div>
+            <h1 class="page-heading">Activity Logs</h1>
+            <p class="page-sub">
+              Monitor important actions and events across the VentrixCarros platform.
+            </p>
+          </div>
+
+          <div class="head-actions">
+            <button class="btn btn-outline" onclick="exportLogs()">
+              ⬇ Export logs
+            </button>
+
+            <button class="btn btn-primary" onclick="clearDemoLogs()">
+              Clear filters
+            </button>
+          </div>
+
+        </section>
+
+        <section class="kpi-grid">
+
+          <div class="kpi-card">
+            <div class="kpi-label">Total events</div>
+            <div class="kpi-value">12,486</div>
+            <div class="kpi-note note-up">↑ 8% this month</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-label">Today</div>
+            <div class="kpi-value">486</div>
+            <div class="kpi-note note-up">↑ 42 today</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-label">Admin actions</div>
+            <div class="kpi-value">128</div>
+            <div class="kpi-note">Across platform</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-label">Security alerts</div>
+            <div class="kpi-value">7</div>
+            <div class="kpi-note note-warning">Requires review</div>
+          </div>
+
+        </section>
+
+        <section class="panel">
+
+          <div class="panel-head">
+
+            <div>
+              <h2 class="panel-title">Recent activity</h2>
+              <p class="panel-sub">
+                Latest actions performed across the platform
+              </p>
+            </div>
+
+            <span class="badge">● Platform live</span>
+
+          </div>
+
+          <div class="table-wrap">
+
+            <table class="table">
+
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Action</th>
+                  <th>Target</th>
+                  <th>Date & Time</th>
+                  <th>IP Address</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+
+              <tbody id="logRows">
+
+                <tr>
+                  <td>
+                    <div class="user-cell">
+                      <div class="log-icon">AD</div>
+                      <div>
+                        <span class="user-name">Admin</span>
+                        <span class="user-sub">Administrator</span>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>Updated company</td>
+                  <td>TechNest</td>
+                  <td>Today · 10:24 AM</td>
+                  <td>192.168.1.24</td>
+
+                  <td>
+                    <span class="pill pill-success">Success</span>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <div class="user-cell">
+                      <div class="log-icon">AD</div>
+                      <div>
+                        <span class="user-name">Admin</span>
+                        <span class="user-sub">Administrator</span>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>Created user</td>
+                  <td>Rahul Sharma</td>
+                  <td>Today · 10:02 AM</td>
+                  <td>192.168.1.18</td>
+
+                  <td>
+                    <span class="pill pill-success">Success</span>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <div class="user-cell">
+                      <div class="log-icon">RS</div>
+                      <div>
+                        <span class="user-name">Rahul Sharma</span>
+                        <span class="user-sub">Recruiter</span>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>Posted job</td>
+                  <td>Frontend Developer</td>
+                  <td>Today · 9:48 AM</td>
+                  <td>10.24.15.82</td>
+
+                  <td>
+                    <span class="pill pill-success">Success</span>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <div class="user-cell">
+                      <div class="log-icon">AD</div>
+                      <div>
+                        <span class="user-name">Admin</span>
+                        <span class="user-sub">Administrator</span>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>Payment review</td>
+                  <td>FinServe</td>
+                  <td>Today · 8:35 AM</td>
+                  <td>192.168.1.24</td>
+
+                  <td>
+                    <span class="pill pill-warning">Pending</span>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <div class="user-cell">
+                      <div class="log-icon">PN</div>
+                      <div>
+                        <span class="user-name">Priya Nair</span>
+                        <span class="user-sub">Recruiter</span>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>Updated profile</td>
+                  <td>StartupHub</td>
+                  <td>Yesterday · 6:42 PM</td>
+                  <td>10.25.12.42</td>
+
+                  <td>
+                    <span class="pill pill-success">Success</span>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <div class="user-cell">
+                      <div class="log-icon">AD</div>
+                      <div>
+                        <span class="user-name">Admin</span>
+                        <span class="user-sub">Administrator</span>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>Suspended account</td>
+                  <td>HealthCore</td>
+                  <td>Yesterday · 4:18 PM</td>
+                  <td>192.168.1.24</td>
+
+                  <td>
+                    <span class="pill pill-danger">Security</span>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <div class="user-cell">
+                      <div class="log-icon">AM</div>
+                      <div>
+                        <span class="user-name">Arjun Mehta</span>
+                        <span class="user-sub">Admin</span>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>Changed subscription</td>
+                  <td>TechNest</td>
+                  <td>Yesterday · 2:30 PM</td>
+                  <td>10.22.18.10</td>
+
+                  <td>
+                    <span class="pill pill-info">Updated</span>
+                  </td>
+                </tr>
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <script>
+    const logSearch = document.getElementById("logSearch");
+    const logRows = document.querySelectorAll("#logRows tr");
+
+    logSearch.addEventListener("input", function () {
+      const searchTerm = logSearch.value.toLowerCase().trim();
+
+      logRows.forEach(function (row) {
+        row.style.display =
+          row.textContent.toLowerCase().includes(searchTerm)
+            ? ""
+            : "none";
+      });
+    });
+
+    function exportLogs() {
+      alert("Activity log export started in demo mode.");
+    }
+
+    function clearDemoLogs() {
+      logSearch.value = "";
+
+      logRows.forEach(function (row) {
+        row.style.display = "";
+      });
+    }
+
+    function showNotification() {
+      alert("You have 6 platform notifications.");
+    }
+  </script>
+
+</body>
+</html>

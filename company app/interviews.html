@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interviews — VentrixCarros</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --deep-navy: #050a30;
+      --electric-blue: #2c83f8;
+      --royal-blue: #274cdc;
+      --white: #ffffff;
+      --light-blue: #e0e4f5;
+      --muted: #5b6b85;
+      --bg: #f7f9ff;
+      --green: #059669;
+      --orange: #d97706;
+      --red: #dc2626;
+      --line: var(--light-blue);
+      --radius: 24px;
+      --shadow: 0 24px 70px rgba(5, 10, 48, 0.10);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--deep-navy);
+      font-family: "Inter", sans-serif;
+      line-height: 1.65;
+      background:
+        radial-gradient(
+          900px 600px at 50% -20%,
+          rgba(44, 131, 248, 0.08),
+          transparent 70%
+        ),
+        var(--bg);
+      display: grid;
+      grid-template-columns: 260px 1fr;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    .container {
+      width: min(1200px, 100% - 40px);
+      margin-inline: auto;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 20px 16px;
+      overflow-y: auto;
+      background: var(--white);
+      border-right: 1px solid var(--line);
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      margin-bottom: 18px;
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+    }
+    .sidebar-brand img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+}
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      color: var(--white);
+      font-weight: 700;
+      background: linear-gradient(
+        135deg,
+        var(--electric-blue),
+        var(--royal-blue)
+      );
+      box-shadow: 0 10px 28px rgba(44, 131, 248, 0.3);
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+      transition: 0.2s ease;
+    }
+
+    .nav-item:hover {
+      color: var(--electric-blue);
+      background: rgba(44, 131, 248, 0.06);
+    }
+
+    .nav-item.active {
+      color: var(--royal-blue);
+      font-weight: 600;
+      background: linear-gradient(
+        135deg,
+        rgba(44, 131, 248, 0.12),
+        rgba(39, 76, 220, 0.12)
+      );
+    }
+
+    .nav-icon {
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+    .nav-section {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .nav-section-title {
+      padding: 6px 12px;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+    }
+
+    /* Topbar */
+    .main-content {
+      min-width: 0;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      padding: 14px 0;
+      backdrop-filter: blur(18px);
+      background: rgba(247, 249, 255, 0.86);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .back-btn,
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.25s ease;
+    }
+
+    .back-btn {
+      padding: 9px 14px;
+      color: var(--deep-navy);
+      background: var(--white);
+      border: 1px solid var(--line);
+      font-size: 13px;
+    }
+
+    .back-btn:hover {
+      color: var(--electric-blue);
+      border-color: var(--electric-blue);
+      transform: translateX(-2px);
+    }
+
+    .page-title {
+      font-family: "Sora", sans-serif;
+      font-size: 20px;
+    }
+
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      max-width: 420px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 11px 16px 11px 38px;
+      color: var(--deep-navy);
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .search-input:focus {
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 0 4px rgba(44, 131, 248, 0.12);
+    }
+
+    .search-icon {
+      position: absolute;
+      top: 50%;
+      left: 13px;
+      color: var(--muted);
+      transform: translateY(-50%);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-btn,
+    .avatar-btn {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+    }
+
+    .icon-btn {
+      color: var(--muted);
+      background: var(--white);
+      border: 1px solid var(--line);
+      cursor: pointer;
+      font-size: 17px;
+    }
+
+    .icon-btn:hover {
+      color: var(--electric-blue);
+      border-color: var(--electric-blue);
+    }
+
+    .avatar-btn {
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 700;
+      background: linear-gradient(
+        135deg,
+        var(--electric-blue),
+        var(--royal-blue)
+      );
+    }
+
+    .profile-wrap {
+  position: relative;
+}
+
+.profile-panel {
+  position: fixed;
+  top: 82px;
+  right: 30px;
+  width: 280px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 20px 55px rgba(5,10,48,.18);
+  overflow: hidden;
+  z-index: 100;
+  display: none;
+}
+
+.profile-panel.show {
+  display: block;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px;
+}
+
+.profile-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg,var(--electric-blue),var(--royal-blue));
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.profile-header strong {
+  display: block;
+  color: var(--deep-navy);
+  font-size: 13px;
+}
+
+.profile-header span {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.profile-divider {
+  height: 1px;
+  background: var(--line);
+}
+
+.profile-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 13px 18px;
+  color: var(--deep-navy);
+  font-size: 12px;
+  font-weight: 500;
+  transition: background .2s ease, color .2s ease;
+}
+
+.profile-item span {
+  width: 22px;
+  text-align: center;
+  font-size: 15px;
+}
+
+.profile-item:hover {
+  background: rgba(44,131,248,.06);
+  color: var(--electric-blue);
+}
+
+.profile-logout {
+  border-top: 1px solid var(--line);
+  color: #dc2626;
+}
+
+.profile-logout:hover {
+  background: rgba(220,38,38,.05);
+  color: #dc2626;
+}
+
+.notification-panel {
+  position: fixed;
+  top: 82px;
+  right: 30px;
+  width: 360px;
+  max-width: calc(100vw - 30px);
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 20px 55px rgba(5,10,48,0.18);
+  overflow: hidden;
+  z-index: 100;
+  display: none;
+}
+
+.notification-panel.show {
+  display: block;
+}
+
+.notification-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.notification-header strong {
+  color: var(--deep-navy);
+  font-family: "Sora", sans-serif;
+  font-size: 15px;
+}
+
+.notification-header button {
+  border: none;
+  background: transparent;
+  color: var(--electric-blue);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.notification-item {
+  display: flex;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  transition: background .2s ease;
+}
+
+.notification-item:hover {
+  background: rgba(44,131,248,.04);
+}
+
+.notification-item.unread {
+  background: rgba(44,131,248,.06);
+}
+
+.notification-icon {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: rgba(44,131,248,.10);
+}
+
+.notification-item strong {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--deep-navy);
+  font-size: 12px;
+}
+
+.notification-item span {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.notification-item small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.notification-empty {
+  display: none;
+  padding: 28px 18px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 12px;
+}
+
+    /* Buttons */
+    .btn {
+      padding: 11px 18px;
+      border: none;
+      font-size: 13px;
+    }
+
+    .btn-primary {
+      color: var(--white);
+      background: linear-gradient(
+        135deg,
+        var(--electric-blue),
+        var(--royal-blue)
+      );
+      box-shadow: 0 14px 40px rgba(44, 131, 248, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+    }
+
+    .btn-outline {
+      color: var(--deep-navy);
+      background: var(--white);
+      border: 1px solid var(--line);
+    }
+
+    .btn-outline:hover {
+      color: var(--electric-blue);
+      border-color: var(--electric-blue);
+      transform: translateY(-2px);
+    }
+
+    .btn-sm {
+      padding: 7px 12px;
+      font-size: 12px;
+    }
+
+    /* Page */
+    .page-wrap {
+      padding: 28px 0 60px;
+    }
+
+    .page-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .page-heading {
+      margin-bottom: 3px;
+      font-family: "Sora", sans-serif;
+      font-size: 27px;
+      letter-spacing: -1px;
+    }
+
+    .page-sub {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .head-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .stat-card,
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .stat-card {
+      padding: 18px;
+      transition: 0.25s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .stat-label {
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+    }
+
+    .stat-value {
+      font-family: "Sora", sans-serif;
+      font-size: 27px;
+    }
+
+    .stat-note {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .note-up {
+      color: var(--green);
+    }
+
+    .note-warning {
+      color: var(--orange);
+    }
+
+    /* Filters */
+    .filters {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 16px;
+      margin-bottom: 18px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .filter-select {
+      padding: 10px 14px;
+      color: var(--deep-navy);
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      outline: none;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .filter-select:focus {
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 0 4px rgba(44, 131, 248, 0.12);
+    }
+
+    .filter-reset {
+      margin-left: auto;
+    }
+
+    /* Interview cards */
+    .interview-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .interview-card {
+      padding: 20px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      transition: 0.25s ease;
+    }
+
+    .interview-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--electric-blue);
+    }
+
+    .interview-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .date-card {
+      width: 50px;
+      padding: 7px;
+      text-align: center;
+      color: var(--royal-blue);
+      background: rgba(44, 131, 248, 0.08);
+      border: 1px solid rgba(44, 131, 248, 0.2);
+      border-radius: 12px;
+    }
+
+    .date-card strong {
+      display: block;
+      font-family: "Sora", sans-serif;
+      font-size: 18px;
+    }
+
+    .date-card span {
+      font-size: 9px;
+      text-transform: uppercase;
+    }
+
+    .interview-title {
+      margin-bottom: 3px;
+      font-family: "Sora", sans-serif;
+      font-size: 16px;
+    }
+
+    .interview-role {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .pill {
+      display: inline-flex;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .pill-today {
+      color: var(--green);
+      background: rgba(5, 150, 105, 0.1);
+      border: 1px solid rgba(5, 150, 105, 0.25);
+    }
+
+    .pill-upcoming {
+      color: var(--electric-blue);
+      background: rgba(44, 131, 248, 0.1);
+      border: 1px solid rgba(44, 131, 248, 0.25);
+    }
+
+    .pill-completed {
+      color: var(--muted);
+      background: rgba(91, 107, 133, 0.1);
+      border: 1px solid rgba(91, 107, 133, 0.25);
+    }
+
+    .interview-details {
+      display: grid;
+      gap: 8px;
+      padding: 12px;
+      margin-bottom: 14px;
+      background: rgba(44, 131, 248, 0.04);
+      border: 1px solid rgba(44, 131, 248, 0.14);
+      border-radius: 14px;
+    }
+
+    .detail-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .detail-row strong {
+      color: var(--deep-navy);
+      font-size: 12px;
+    }
+
+    .interview-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .interview-actions .btn {
+      flex: 1;
+    }
+
+/* Schedule panel */
+.panel {
+  padding: 20px;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.panel-title {
+  margin-bottom: 3px;
+  font-family: "Sora", sans-serif;
+  font-size: 20px;
+  line-height: 1.3;
+}
+
+.panel-sub {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.schedule-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.schedule-grid .field {
+  min-width: 0;
+}
+
+.schedule-grid .field:last-child {
+  grid-column: 1 / -1;
+}
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      padding: 11px 13px;
+      color: var(--deep-navy);
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      outline: none;
+      font-size: 13px;
+    }
+
+    .field textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 0 4px rgba(44, 131, 248, 0.12);
+    }
+
+    .empty-state {
+      display: none;
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    /* Animation */
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: revealUp 0.65s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    }
+
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .delay-1 {
+      animation-delay: 0.06s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.12s;
+    }
+
+    .delay-3 {
+      animation-delay: 0.18s;
+    }
+
+    @media (max-width: 1000px) {
+      body {
+        display: block;
+      }
+
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stats-grid,
+      .interview-grid,
+      .schedule-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .nav-list {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar-inner {
+        flex-wrap: wrap;
+      }
+
+      .search-wrap {
+        order: 3;
+        width: 100%;
+        max-width: none;
+      }
+
+      .stats-grid,
+      .interview-grid,
+      .schedule-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .filter-reset {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <img src="./ventrix-logo-mark.png" alt="VentrixCarros Logo">
+      <span>VENTRIXCARROS</span>
+    </div>
+
+    <nav class="nav-list">
+      <a href="dashboard.html" class="nav-item active">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+    <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+    <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+    <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+  </svg>
+</span>
+        Dashboard
+      </a>
+      <a href="ai-recruitment.html" class="nav-item">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="8" r="3"></circle>
+    <path d="M5 21v-2a7 7 0 0 1 14 0v2"></path>
+    <path d="M19 5l1 1"></path>
+    <path d="M20 4l-1 1"></path>
+  </svg>
+</span>
+        AI Recruitment
+      </a>
+      <a href="jobs.html" class="nav-item">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="7" width="18" height="13" rx="2"></rect>
+    <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+    <path d="M3 12h18"></path>
+    <path d="M10 12v2h4v-2"></path>
+  </svg>
+</span>
+        Jobs
+      </a>
+      <a href="candidates.html" class="nav-item">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="9" cy="8" r="3"></circle>
+    <path d="M3 20v-2a6 6 0 0 1 12 0v2"></path>
+    <circle cx="17" cy="9" r="2.5"></circle>
+    <path d="M16 15a5 5 0 0 1 5 5"></path>
+  </svg>
+</span>
+        Candidates
+      </a>
+      <a href="applications.html" class="nav-item">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="5" y="3" width="14" height="18" rx="2"></rect>
+    <path d="M9 3v3h6V3"></path>
+    <path d="M8 12l2 2 4-4"></path>
+  </svg>
+</span>
+        Applications
+      </a>
+      <a href="shortlisted.html" class="nav-item">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="8" r="3"></circle>
+    <path d="M5 21v-2a7 7 0 0 1 14 0v2"></path>
+    <path d="M19 3l.6 1.2L21 4.4l-1 1 .2 1.4-1.2-.7-1.2.7.2-1.4-1-1 1.4-.2L19 3z"></path>
+  </svg>
+</span>
+        Shortlisted
+      </a>
+      <a href="interviews.html" class="nav-item">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="8" y="3" width="8" height="12" rx="4"></rect>
+    <path d="M5 11a7 7 0 0 0 14 0"></path>
+    <path d="M12 18v3"></path>
+    <path d="M9 21h6"></path>
+  </svg>
+</span>
+        Interviews
+      </a>
+      <a href="messages.html" class="nav-item">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 11.5a7.5 7.5 0 0 1-8 7.5 8.5 8.5 0 0 1-3-.5L4 20l1.5-4A7.5 7.5 0 1 1 20 11.5z"></path>
+  </svg>
+</span>
+        Messages
+      </a>
+      <a href="analytics.html" class="nav-item">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 19V5"></path>
+    <path d="M4 19h17"></path>
+    <path d="M7 15l4-4 3 2 5-6"></path>
+    <path d="M16 7h3v3"></path>
+  </svg>
+</span>
+        Analytics
+      </a>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Account</div>
+        <a href="subscription.html" class="nav-item">
+          <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+    <path d="M3 10h18"></path>
+    <path d="M7 15h4"></path>
+  </svg>
+</span>
+          Subscription
+        </a>
+        <a href="company-profile.html" class="nav-item">
+          <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"></path>
+    <path d="M2 21h20"></path>
+    <path d="M8 7h2"></path>
+    <path d="M8 11h2"></path>
+    <path d="M8 15h2"></path>
+    <path d="M16 9h2"></path>
+    <path d="M16 13h2"></path>
+    <path d="M16 17h2"></path>
+  </svg>
+</span>
+          Company Profile
+        </a>
+        <a href="settings.html" class="nav-item">
+          <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="3"></circle>
+    <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.8 1.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V20h-2.6v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1-1.8-1.8.1-.1A1.7 1.7 0 0 0 8 15a1.7 1.7 0 0 0-1.6-1H6v-2.6h.4A1.7 1.7 0 0 0 8 10a1.7 1.7 0 0 0-.3-1.9l-.1-.1 1.8-1.8.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.6V5H15v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1 1.8 1.8-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.4V14h-.4a1.7 1.7 0 0 0-1.6 1z"></path>
+  </svg>
+</span>
+          Settings
+        </a>
+        <a href="index.html" class="nav-item">
+          <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 5H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4"></path>
+    <path d="M14 8l4 4-4 4"></path>
+    <path d="M9 12h9"></path>
+  </svg>
+</span>
+          Logout
+        </a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="topbar-left">
+          <a href="dashboard.html" class="back-btn">← Back</a>
+          <div class="page-title">Interviews</div>
+        </div>
+
+        <div class="search-wrap">
+          <span class="search-icon">🔎</span>
+          <input
+            id="interviewSearch"
+            class="search-input"
+            type="search"
+            placeholder="Search interviews by candidate or role..."
+          />
+        </div>
+
+        <div class="nav-right">
+  <button class="icon-btn" id="notificationButton" title="Notifications">🔔</button>
+
+  <div class="profile-wrap">
+    <button class="avatar-btn" id="profileButton" title="Profile">VC</button>
+
+    <div class="profile-panel" id="profilePanel">
+      <div class="profile-header">
+        <div class="profile-avatar">VC</div>
+        <div>
+          <strong>VentrixCarros</strong>
+          <span>Company Account</span>
+        </div>
+      </div>
+
+      <div class="profile-divider"></div>
+
+      <a href="company-profile.html" class="profile-item">
+        <span>🏢</span> Company Profile
+      </a>
+
+      <a href="settings.html" class="profile-item">
+        <span>⚙️</span> Settings
+      </a>
+
+      <a href="index.html" class="profile-item profile-logout">
+        <span>↪</span> Logout
+      </a>
+    </div>
+  </div>
+</div>
+      </div>
+    </header>
+
+    <div class="notification-panel" id="notificationPanel">
+  <div class="notification-header"><strong>Notifications</strong><button id="markNotificationsRead" type="button">Mark all as read</button></div>
+  <div class="notification-empty" style="display:block">No notifications available yet</div>
+</div>
+
+    <main class="page-wrap">
+      <div class="container">
+        <section class="page-head reveal-up">
+          <div>
+            <h1 class="page-heading">Interview management</h1>
+            <p class="page-sub">
+              Schedule, track, and manage candidate interviews.
+            </p>
+          </div>
+
+          <div class="head-actions">
+            <button id="scheduleFocusButton" class="btn btn-primary">
+              ➕ Schedule interview
+            </button>
+
+            <button id="exportButton" class="btn btn-outline">
+              ⬇ Export schedule
+            </button>
+          </div>
+        </section>
+
+        <section class="stats-grid">
+          <div class="stat-card reveal-up delay-1"><div class="stat-label">Total interviews</div><div class="stat-value" id="totalInterviews">0</div><div class="stat-note">Scheduled for your company</div></div>
+          <div class="stat-card reveal-up delay-2"><div class="stat-label">Scheduled today</div><div class="stat-value" id="todayInterviews">0</div><div class="stat-note">Interviews on today’s date</div></div>
+          <div class="stat-card reveal-up delay-3"><div class="stat-label">Upcoming</div><div class="stat-value" id="upcomingInterviews">0</div><div class="stat-note">Scheduled for a future date</div></div>
+          <div class="stat-card reveal-up delay-3"><div class="stat-label">Completed</div><div class="stat-value" id="completedInterviews">0</div><div class="stat-note">Marked completed</div></div>
+        </section>
+
+        <section class="filters reveal-up delay-2">
+          <select id="statusFilter" class="filter-select">
+            <option value="">All interviews</option><option value="today">Today</option><option value="upcoming">Upcoming</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option><option value="past">Past due</option>
+          </select>
+
+          <select id="roleFilter" class="filter-select"><option value="">All roles</option></select>
+
+          <button id="resetFilters" class="btn btn-outline btn-sm filter-reset">
+            Reset filters
+          </button>
+        </section>
+
+        <section id="interviewGrid" class="interview-grid" aria-live="polite"></section>
+
+        <div id="emptyState" class="empty-state" role="status" style="display:block">Loading your interviews...</div>
+
+        <section class="panel reveal-up delay-3" id="scheduleSection">
+          <div class="panel-head">
+            <div>
+              <h2 class="panel-title">Schedule new interview</h2>
+              <p class="panel-sub">
+                Create an interview slot for a shortlisted candidate
+              </p>
+            </div>
+
+            <span class="pill pill-upcoming">Connected</span>
+          </div>
+
+          <form id="interviewForm">
+            <div class="schedule-grid">
+              <div class="field"><label for="applicationSelect">Shortlisted candidate and job</label><select id="applicationSelect" required><option value="">Loading shortlisted applicants...</option></select></div>
+              <div class="field"><label for="interviewerName">Interviewer</label><input id="interviewerName" type="text" placeholder="Enter interviewer name" required /></div>
+              <div class="field"><label for="interviewDate">Date</label><input id="interviewDate" type="date" required /></div>
+              <div class="field"><label for="interviewTime">Time</label><input id="interviewTime" type="time" required /></div>
+              <div class="field"><label for="interviewMode">Mode</label><select id="interviewMode" required><option value="">Select mode</option><option value="online">Online</option><option value="in_person">In person</option><option value="phone">Phone</option></select></div>
+              <div class="field"><label for="meetingLink">Meeting link (online only)</label><input id="meetingLink" type="url" placeholder="https://..." /></div>
+            </div>
+            <p id="formMessage" class="panel-sub" role="status" style="margin-top:12px"></p>
+            <button class="btn btn-primary" id="scheduleSubmit" type="submit" style="margin-top:14px;">Schedule interview</button>
+          </form>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const API_BASE_URL = "http://localhost:5000/api";
+    const token = localStorage.getItem("ventrixcarrosToken");
+    const interviewGrid = document.getElementById("interviewGrid");
+    const emptyState = document.getElementById("emptyState");
+    const searchInput = document.getElementById("interviewSearch");
+    const statusFilter = document.getElementById("statusFilter");
+    const roleFilter = document.getElementById("roleFilter");
+    const resetFilters = document.getElementById("resetFilters");
+    const interviewForm = document.getElementById("interviewForm");
+    const applicationSelect = document.getElementById("applicationSelect");
+    const formMessage = document.getElementById("formMessage");
+    const scheduleSubmit = document.getElementById("scheduleSubmit");
+    let interviews = [];
+    let applications = [];
+    let shortlistEntries = [];
+
+    function logout() {
+      localStorage.removeItem("ventrixcarrosToken");
+      localStorage.removeItem("ventrixcarrosUser");
+      window.location.href = "login.html";
+    }
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[character]);
+    }
+    function getNested(object, lower, upper) { return object?.[lower] || object?.[upper] || {}; }
+    function dateOnly(value) { return String(value || "").slice(0, 10); }
+    function classify(interview) {
+      if (interview.status === "completed") return "completed";
+      if (interview.status === "cancelled") return "cancelled";
+      const today = new Date().toISOString().slice(0, 10);
+      const date = dateOnly(interview.interview_date);
+      return date === today ? "today" : date > today ? "upcoming" : "past";
+    }
+    function formatDate(value) {
+      const date = new Date(`${dateOnly(value)}T00:00:00`);
+      return Number.isNaN(date.getTime()) ? { day: "—", month: "Date" } : { day: String(date.getDate()).padStart(2, "0"), month: date.toLocaleDateString(undefined, { month: "short" }) };
+    }
+    function formatTime(value) {
+      if (!value) return "Not provided";
+      const parts = String(value).split(":");
+      const date = new Date(); date.setHours(Number(parts[0]), Number(parts[1]), 0, 0);
+      return Number.isNaN(date.getTime()) ? value : date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+    }
+    function getCandidate(interview) { return getNested(interview, "candidate", "Candidate"); }
+    function getApplication(interview) { return getNested(interview, "application", "Application"); }
+    function getJob(interview) { return getNested(getApplication(interview), "job", "Job"); }
+    function renderStats() {
+      const today = new Date().toISOString().slice(0, 10);
+      document.getElementById("totalInterviews").textContent = interviews.length;
+      document.getElementById("todayInterviews").textContent = interviews.filter((item) => item.status === "scheduled" && dateOnly(item.interview_date) === today).length;
+      document.getElementById("upcomingInterviews").textContent = interviews.filter((item) => item.status === "scheduled" && dateOnly(item.interview_date) > today).length;
+      document.getElementById("completedInterviews").textContent = interviews.filter((item) => item.status === "completed").length;
+    }
+    function populateApplicationSelect() {
+      const shortlistedKeys = new Set(shortlistEntries.map((entry) => `${Number(entry.candidate_id || getNested(entry, "candidate", "Candidate").id)}:${Number(entry.job_id || getNested(entry, "job", "Job").id)}`));
+      const eligible = applications.filter((application) => shortlistedKeys.has(`${Number(application.candidate_id)}:${Number(application.job_id)}`));
+      applicationSelect.innerHTML = '<option value="">Select a shortlisted applicant</option>' + eligible.map((application) => {
+        const candidate = getNested(application, "candidate", "Candidate");
+        const job = getNested(application, "job", "Job");
+        return `<option value="${Number(application.id)}">${escapeHTML(candidate.name || "Candidate")} — ${escapeHTML(job.title || "Job")}</option>`;
+      }).join("");
+      if (!eligible.length) applicationSelect.innerHTML = '<option value="">No shortlisted applicants available</option>';
+    }
+    function populateRoleFilter() {
+      const previous = roleFilter.value;
+      const roles = [...new Set(interviews.map((item) => getJob(item).title).filter(Boolean))].sort();
+      roleFilter.innerHTML = '<option value="">All roles</option>' + roles.map((role) => `<option value="${escapeHTML(role)}">${escapeHTML(role)}</option>`).join("");
+      if (roles.includes(previous)) roleFilter.value = previous;
+    }
+    function getVisibleInterviews() {
+      const query = searchInput.value.trim().toLowerCase();
+      return interviews.filter((item) => {
+        const candidate = getCandidate(item), job = getJob(item), status = classify(item);
+        const text = [candidate.name, candidate.email, job.title, item.interviewer].filter(Boolean).join(" ").toLowerCase();
+        const selectedStatus = statusFilter.value;
+        const matchesStatus = !selectedStatus || (selectedStatus === "today" ? status === "today" : selectedStatus === "upcoming" ? status === "upcoming" : status === selectedStatus);
+        return (!query || text.includes(query)) && matchesStatus && (!roleFilter.value || job.title === roleFilter.value);
+      });
+    }
+    function renderInterviews() {
+      const visible = getVisibleInterviews();
+      const pillClasses = { today: "pill-today", upcoming: "pill-upcoming", completed: "pill-completed", cancelled: "pill-completed", past: "pill-completed" };
+      interviewGrid.innerHTML = visible.map((item) => {
+        const candidate = getCandidate(item), job = getJob(item), status = classify(item), date = formatDate(item.interview_date);
+        const modeLabels = { online: "Online", in_person: "In person", phone: "Phone" };
+        const meeting = item.meeting_link ? `<div class="detail-row"><span>Meeting link</span><strong><a href="${escapeHTML(item.meeting_link)}" target="_blank" rel="noopener">Open link</a></strong></div>` : "";
+        const candidateId = Number(item.candidate_id || candidate.id);
+        const join = item.status === "scheduled" && item.mode === "online" && item.meeting_link ? `<a class="btn btn-primary btn-sm" href="${escapeHTML(item.meeting_link)}" target="_blank" rel="noopener">Join interview</a>` : "";
+        const statusText = { today: "Today", upcoming: "Upcoming", completed: "Completed", cancelled: "Cancelled", past: "Past due" }[status] || status;
+        return `<article class="interview-card reveal-up"><div class="interview-head"><div class="date-card"><strong>${escapeHTML(date.day)}</strong><span>${escapeHTML(date.month)}</span></div><div style="flex:1;"><h3 class="interview-title">${escapeHTML(candidate.name || "Candidate")}</h3><p class="interview-role">${escapeHTML(job.title || "Job interview")}</p></div><span class="pill ${pillClasses[status] || "pill-upcoming"}">${statusText}</span></div>
+          <div class="interview-details"><div class="detail-row"><span>Date and time</span><strong>${escapeHTML(dateOnly(item.interview_date))} · ${escapeHTML(formatTime(item.interview_time))}</strong></div><div class="detail-row"><span>Interviewer</span><strong>${escapeHTML(item.interviewer || "Not provided")}</strong></div><div class="detail-row"><span>Mode</span><strong>${escapeHTML(modeLabels[item.mode] || item.mode || "Not provided")}</strong></div>${meeting}${item.feedback ? `<div class="detail-row"><span>Feedback</span><strong>${escapeHTML(item.feedback)}</strong></div>` : ""}</div>
+          <div class="interview-actions">${candidateId ? `<a class="btn btn-outline btn-sm" href="candidate-detail.html?id=${candidateId}">View candidate</a>` : ""}${join}</div></article>`;
+      }).join("");
+      if (visible.length) emptyState.style.display = "none";
+      else { emptyState.textContent = interviews.length ? "No interviews match the selected filters." : "No interviews are scheduled yet. Choose a shortlisted applicant below to schedule one."; emptyState.style.display = "block"; }
+    }
+    async function readJSON(response) { return response.json().catch(() => ({})); }
+    async function loadPageData() {
+      if (!token) { emptyState.textContent = "Please log in to view company interviews."; emptyState.style.display = "block"; window.location.href = "login.html"; return; }
+      try {
+        const headers = { Authorization: `Bearer ${token}` };
+        const [interviewResponse, applicationResponse, shortlistResponse] = await Promise.all([
+          fetch(`${API_BASE_URL}/interviews`, { headers }),
+          fetch(`${API_BASE_URL}/applications`, { headers }),
+          fetch(`${API_BASE_URL}/shortlists`, { headers })
+        ]);
+        const [interviewData, applicationData, shortlistData] = await Promise.all([readJSON(interviewResponse), readJSON(applicationResponse), readJSON(shortlistResponse)]);
+        if ([interviewResponse, applicationResponse, shortlistResponse].some((response) => response.status === 401)) return logout();
+        if (!interviewResponse.ok) throw new Error(interviewData.message || "The company interview list endpoint is not available yet. Add the recruiter GET /api/interviews route, then refresh this page.");
+        if (!applicationResponse.ok) throw new Error(applicationData.message || "Could not load applications.");
+        if (!shortlistResponse.ok) throw new Error(shortlistData.message || "Could not load shortlisted applicants.");
+        interviews = Array.isArray(interviewData.interviews) ? interviewData.interviews : [];
+        applications = Array.isArray(applicationData.applications) ? applicationData.applications : [];
+        shortlistEntries = Array.isArray(shortlistData.entries) ? shortlistData.entries : [];
+        renderStats(); populateRoleFilter(); populateApplicationSelect(); renderInterviews();
+      } catch (error) {
+        console.error("Could not load interviews:", error);
+        emptyState.textContent = error.message || "Could not load interviews. Make sure the backend is running, then refresh.";
+        emptyState.style.display = "block";
+      }
+    }
+    interviewForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      formMessage.textContent = "";
+      const applicationId = Number(applicationSelect.value);
+      if (!applicationId) { formMessage.textContent = "Select a shortlisted applicant first."; return; }
+      const payload = {
+        interviewer: document.getElementById("interviewerName").value.trim(),
+        interview_date: document.getElementById("interviewDate").value,
+        interview_time: document.getElementById("interviewTime").value,
+        mode: document.getElementById("interviewMode").value,
+        meeting_link: document.getElementById("meetingLink").value.trim() || undefined
+      };
+      scheduleSubmit.disabled = true; scheduleSubmit.textContent = "Scheduling...";
+      try {
+        const response = await fetch(`${API_BASE_URL}/interviews/applications/${applicationId}`, { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, body: JSON.stringify(payload) });
+        const data = await readJSON(response);
+        if (response.status === 401) return logout();
+        if (!response.ok) throw new Error(data.message || "Could not schedule the interview.");
+        formMessage.textContent = "Interview scheduled successfully.";
+        formMessage.style.color = "#059669";
+        interviewForm.reset();
+        await loadPageData();
+      } catch (error) { formMessage.textContent = error.message || "Could not schedule the interview."; formMessage.style.color = "#dc2626"; }
+      finally { scheduleSubmit.disabled = false; scheduleSubmit.textContent = "Schedule interview"; }
+    });
+    document.getElementById("scheduleFocusButton").addEventListener("click", () => document.getElementById("scheduleSection").scrollIntoView({ behavior: "smooth" }));
+    [searchInput, statusFilter, roleFilter].forEach((control) => control.addEventListener(control === searchInput ? "input" : "change", renderInterviews));
+    resetFilters.addEventListener("click", () => { searchInput.value = ""; statusFilter.value = ""; roleFilter.value = ""; renderInterviews(); });
+    document.getElementById("exportButton").addEventListener("click", () => {
+      const rows = getVisibleInterviews().map((item) => { const candidate = getCandidate(item), job = getJob(item); return [candidate.name, candidate.email, job.title, item.interview_date, item.interview_time, item.interviewer, item.mode, item.status]; });
+      if (!rows.length) return alert("There are no interviews to export.");
+      const csv = [["Candidate", "Email", "Job", "Date", "Time", "Interviewer", "Mode", "Status"], ...rows].map((row) => row.map((value) => `"${String(value ?? "").replace(/"/g, '""')}"`).join(",")).join("\r\n");
+      const link = document.createElement("a"); link.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" })); link.download = "ventrixcarros-interviews.csv"; link.click(); URL.revokeObjectURL(link.href);
+    });
+    document.querySelectorAll(".profile-logout, .nav-item[href='index.html']").forEach((link) => link.addEventListener("click", (event) => { event.preventDefault(); logout(); }));
+    const todayISO = new Date().toISOString().slice(0, 10);
+    document.getElementById("interviewDate").min = todayISO;
+    loadPageData();
+  </script>
+
+<script src="notification.js"></script>
+<script src="profile.js"></script>
+</body>
+</html>
+    

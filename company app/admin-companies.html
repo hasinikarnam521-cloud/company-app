@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Companies — VentrixCarros Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --navy: #050a30;
+      --blue: #2c83f8;
+      --royal: #274cdc;
+      --white: #fff;
+      --line: #e0e4f5;
+      --muted: #5b6b85;
+      --bg: #f7f9ff;
+      --green: #059669;
+      --orange: #d97706;
+      --red: #dc2626;
+      --shadow: 0 24px 70px rgba(5, 10, 48, .10);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      color: var(--navy);
+      font-family: "Inter", sans-serif;
+      line-height: 1.6;
+      background: var(--bg);
+      display: grid;
+      grid-template-columns: 260px 1fr;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
+    .container { width: min(1300px, 100% - 40px); margin: auto; }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 20px 16px;
+      overflow-y: auto;
+      background: var(--white);
+      border-right: 1px solid var(--line);
+    }
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      margin-bottom: 18px;
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+    }
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
+    .admin-label {
+      display: block;
+      color: var(--muted);
+      font: 600 10px "Inter", sans-serif;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .nav-list { display: grid; gap: 6px; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .nav-item:hover { color: var(--blue); background: rgba(44,131,248,.06); }
+    .nav-item.active {
+      color: var(--royal);
+      font-weight: 600;
+      background: rgba(44,131,248,.10);
+    }
+    .nav-icon { width: 22px; text-align: center; }
+    .nav-section { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line); }
+    .nav-section-title {
+      padding: 6px 12px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: .7px;
+      text-transform: uppercase;
+    }
+
+    .main-content { min-width: 0; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      padding: 14px 0;
+      background: rgba(247,249,255,.92);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar-inner, .topbar-left, .nav-right, .head-actions, .row-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .topbar-left { flex: 1; }
+    .page-title { font: 600 20px "Sora", sans-serif; }
+    .search-wrap { position: relative; flex: 1; max-width: 420px; }
+    .search-icon { position: absolute; top: 50%; left: 13px; transform: translateY(-50%); }
+    .search-input {
+      width: 100%;
+      padding: 11px 16px 11px 38px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      outline: none;
+      background: var(--white);
+    }
+    .search-input:focus { border-color: var(--blue); }
+
+    .back-btn, .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--white);
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-primary {
+      color: var(--white);
+      border-color: var(--blue);
+      background: linear-gradient(135deg, var(--blue), var(--royal));
+    }
+    .btn-sm { padding: 7px 12px; font-size: 12px; }
+    .icon-btn, .avatar-btn {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+    }
+    .icon-btn { border: 1px solid var(--line); background: var(--white); cursor: pointer; }
+    .avatar-btn {
+      color: var(--white);
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--blue), var(--royal));
+    }
+
+    .page-wrap { padding: 28px 0 60px; }
+    .page-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .page-heading { font: 700 27px "Sora", sans-serif; }
+    .page-sub, .panel-sub { color: var(--muted); font-size: 13px; }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .kpi-card, .panel {
+      padding: 18px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+    .kpi-label {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: .7px;
+      text-transform: uppercase;
+    }
+    .kpi-value { margin: 5px 0; font: 700 28px "Sora", sans-serif; }
+    .kpi-note { color: var(--muted); font-size: 11px; }
+
+    .panel { margin-bottom: 18px; }
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .panel-title { font: 600 18px "Sora", sans-serif; }
+    .badge, .pill {
+      display: inline-flex;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .badge-live, .pill-active { color: var(--green); background: #e8f7f1; }
+    .pill-pending { color: var(--orange); background: #fff4df; }
+    .pill-inactive { color: var(--red); background: #fdecec; }
+
+    .table-wrap { overflow-x: auto; }
+    .table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .table th, .table td {
+      padding: 12px 10px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+    }
+    .table th { color: var(--muted); font-size: 11px; text-transform: uppercase; }
+    .company-cell { display: flex; align-items: center; gap: 10px; min-width: 180px; }
+    .company-avatar {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 38px;
+      border-radius: 12px;
+      color: var(--white);
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--blue), var(--royal));
+    }
+    .company-name { display: block; font-weight: 700; }
+    .company-sub { display: block; color: var(--muted); font-size: 11px; }
+
+    .overview-grid, .info-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .overview-grid { grid-template-columns: 1fr 1fr; }
+    .info-item { padding: 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--bg); }
+    .info-label { display: block; color: var(--muted); font-size: 10px; text-transform: uppercase; }
+    .info-value { font-weight: 700; font-size: 14px; }
+
+    dialog {
+      width: min(520px, calc(100% - 28px));
+      margin: auto;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+    dialog::backdrop { background: rgba(5,10,48,.45); }
+    .dialog-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .dialog-title { font: 600 20px "Sora", sans-serif; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-group { margin-bottom: 12px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label { display: block; margin-bottom: 5px; font-size: 12px; font-weight: 600; }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+    .dialog-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; }
+
+    @media (max-width: 1000px) {
+      body { display: block; }
+      .sidebar { position: relative; height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+      .nav-list { grid-template-columns: repeat(2, 1fr); }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 700px) {
+      .nav-list, .kpi-grid, .overview-grid { grid-template-columns: 1fr; }
+      .topbar-inner { flex-wrap: wrap; }
+      .search-wrap { order: 3; max-width: none; }
+      .form-grid, .info-list { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark"><img src="ventrix-logo-mark.png" alt="VentrixCarros Logo"></div>
+      <div>
+        <span>VENTRIXCARROS</span>
+        <span class="admin-label">Admin console</span>
+      </div>
+    </div>
+
+    <nav class="nav-list">
+      <a href="admin-dashboard.html" class="nav-item"><span class="nav-icon">🛡️</span>Admin Dashboard</a>
+      <a href="admin-companies.html" class="nav-item active"><span class="nav-icon">🏢</span>Companies</a>
+      <a href="admin-users.html" class="nav-item"><span class="nav-icon">👤</span>Users</a>
+      <a href="admin-subscriptions.html" class="nav-item"><span class="nav-icon">💳</span>Subscriptions</a>
+      <a href="admin-jobs.html" class="nav-item"><span class="nav-icon">💼</span>Jobs</a>
+      <a href="admin-support.html" class="nav-item"><span class="nav-icon">🎧</span>Support</a>
+      <a href="admin-analytics.html" class="nav-item"><span class="nav-icon">📊</span>Platform Analytics</a>
+      <div class="nav-section">
+        <div class="nav-section-title">System</div>
+        <a href="admin-settings.html" class="nav-item"><span class="nav-icon">⚙️</span>Settings</a>
+        <a href="admin-logs.html" class="nav-item"><span class="nav-icon">🧾</span>Activity Logs</a>
+        <a href="index.html" class="nav-item"><span class="nav-icon">🚪</span>Logout</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="topbar-left">
+          <a href="admin-dashboard.html" class="back-btn">← Back</a>
+          <div class="page-title">Platform Admin</div>
+        </div>
+
+        <div class="search-wrap">
+          <span class="search-icon">🔎</span>
+          <input id="companySearch" class="search-input" type="search" placeholder="Search companies..." />
+        </div>
+
+        <div class="nav-right">
+          <button id="notificationButton" class="icon-btn" type="button" title="Notifications">🔔</button>
+          <div class="avatar-btn">AD</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-wrap">
+      <div class="container">
+        <section class="page-head">
+          <div>
+            <h1 class="page-heading">Companies</h1>
+            <p class="page-sub">Manage registered companies and account status.</p>
+          </div>
+          <div class="head-actions">
+            <button id="exportCompanies" class="btn" type="button">⬇ Export companies</button>
+            <button id="addCompany" class="btn btn-primary" type="button">+ Add company</button>
+          </div>
+        </section>
+
+        <section class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Total companies</div>
+            <div class="kpi-value" id="totalCompanies">—</div>
+            <div class="kpi-note">Registered company records</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Active</div>
+            <div class="kpi-value" id="activeCompanies">—</div>
+            <div class="kpi-note" id="activePercent">—</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Pending</div>
+            <div class="kpi-value" id="pendingCompanies">—</div>
+            <div class="kpi-note" id="pendingPercent">—</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Inactive</div>
+            <div class="kpi-value" id="inactiveCompanies">—</div>
+            <div class="kpi-note" id="inactivePercent">—</div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2 class="panel-title">All companies</h2>
+              <p class="panel-sub">Company records from the database</p>
+            </div>
+            <span class="badge badge-live">● Live data</span>
+          </div>
+
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Company</th>
+                  <th>Email</th>
+                  <th>Users</th>
+                  <th>Active jobs</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="companyRows">
+                <tr><td colspan="6">Loading companies...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="overview-grid">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">Company status overview</h2>
+                <p class="panel-sub">Current account distribution</p>
+              </div>
+            </div>
+            <div class="info-list">
+              <div class="info-item"><span class="info-label">Active</span><span class="info-value" id="overviewActive">—</span></div>
+              <div class="info-item"><span class="info-label">Pending</span><span class="info-value" id="overviewPending">—</span></div>
+              <div class="info-item"><span class="info-label">Inactive</span><span class="info-value" id="overviewInactive">—</span></div>
+              <div class="info-item"><span class="info-label">Total</span><span class="info-value" id="overviewTotal">—</span></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">Account status</h2>
+                <p class="panel-sub">Statuses stored for company records</p>
+              </div>
+            </div>
+            <p class="panel-sub">Use the Manage button to update a company’s details or status.</p>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <dialog id="companyDialog">
+    <form id="companyForm">
+      <div class="dialog-head">
+        <h2 class="dialog-title" id="dialogTitle">Add company</h2>
+      </div>
+
+      <input type="hidden" id="companyId" />
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="companyName">Company name</label>
+          <input id="companyName" name="name" required maxlength="150" />
+        </div>
+        <div class="form-group">
+          <label for="companyEmail">Email</label>
+          <input id="companyEmail" name="email" type="email" required maxlength="255" />
+        </div>
+        <div class="form-group">
+          <label for="companyLocation">Location</label>
+          <input id="companyLocation" name="location" maxlength="150" />
+        </div>
+        <div class="form-group">
+          <label for="companyWebsite">Website</label>
+          <input id="companyWebsite" name="website" type="url" maxlength="255" />
+        </div>
+        <div class="form-group">
+          <label for="companyIndustry">Industry</label>
+          <input id="companyIndustry" name="industry" maxlength="100" />
+        </div>
+        <div class="form-group">
+          <label for="companySize">Company size</label>
+          <input id="companySize" name="company_size" maxlength="50" />
+        </div>
+        <div class="form-group full">
+          <label for="companyStatus">Status</label>
+          <select id="companyStatus" name="status">
+            <option value="pending">Pending</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="dialog-actions">
+        <button class="btn" id="cancelDialog" type="button">Cancel</button>
+        <button class="btn btn-primary" id="saveCompanyButton" type="submit">Save company</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script>
+    const API_BASE_URL = "http://localhost:5000/api";
+    const token = localStorage.getItem("ventrixcarrosToken");
+    const companyRows = document.getElementById("companyRows");
+    const companySearch = document.getElementById("companySearch");
+    const companyDialog = document.getElementById("companyDialog");
+    const companyForm = document.getElementById("companyForm");
+    let companies = [];
+
+    function escapeHTML(value) {
+      const entities = {
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;",
+      };
+      return String(value ?? "").replace(/[&<>"']/g, (character) => entities[character]);
+    }
+
+    async function apiRequest(path, options = {}) {
+      if (!token) throw new Error("Please sign in with an admin account.");
+
+      const response = await fetch(`${API_BASE_URL}${path}`, {
+        ...options,
+        headers: {
+          ...(options.body ? { "Content-Type": "application/json" } : {}),
+          Authorization: `Bearer ${token}`,
+          ...options.headers,
+        },
+      });
+
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.message || "The request failed.");
+      return data;
+    }
+
+    function renderCompanies() {
+      const term = companySearch.value.trim().toLowerCase();
+      const filtered = companies.filter((company) =>
+        `${company.name} ${company.email} ${company.location || ""} ${company.status}`
+          .toLowerCase()
+          .includes(term)
+      );
+
+      if (!filtered.length) {
+        companyRows.innerHTML = '<tr><td colspan="6">No companies found.</td></tr>';
+        return;
+      }
+
+      companyRows.innerHTML = filtered.map((company) => {
+        const status = String(company.status || "pending").toLowerCase();
+        const statusClass = status === "active"
+          ? "pill-active"
+          : status === "inactive"
+            ? "pill-inactive"
+            : "pill-pending";
+        const initials = (company.name || "C").trim().slice(0, 2).toUpperCase();
+
+        return `
+          <tr>
+            <td>
+              <div class="company-cell">
+                <div class="company-avatar">${escapeHTML(initials)}</div>
+                <div>
+                  <span class="company-name">${escapeHTML(company.name)}</span>
+                  <span class="company-sub">${escapeHTML(company.location || "Location not provided")}</span>
+                </div>
+              </div>
+            </td>
+            <td>${escapeHTML(company.email)}</td>
+            <td>${Number(company.users) || 0}</td>
+            <td>${Number(company.activeJobs) || 0}</td>
+            <td><span class="pill ${statusClass}">${escapeHTML(status)}</span></td>
+            <td>
+              <button class="btn btn-sm edit-company" type="button" data-id="${Number(company.id)}">
+                Manage
+              </button>
+            </td>
+          </tr>`;
+      }).join("");
+
+      document.querySelectorAll(".edit-company").forEach((button) => {
+        button.addEventListener("click", () => {
+          const company = companies.find((item) => item.id === Number(button.dataset.id));
+          if (company) openCompanyDialog(company);
+        });
+      });
+    }
+
+    function updateStats(stats) {
+      const total = Number(stats.totalCompanies) || 0;
+      const active = Number(stats.activeCompanies) || 0;
+      const pending = Number(stats.pendingCompanies) || 0;
+      const inactive = Number(stats.inactiveCompanies) || 0;
+      const percent = (count) => total ? `${((count / total) * 100).toFixed(1)}% of total` : "0% of total";
+
+      document.getElementById("totalCompanies").textContent = total;
+      document.getElementById("activeCompanies").textContent = active;
+      document.getElementById("pendingCompanies").textContent = pending;
+      document.getElementById("inactiveCompanies").textContent = inactive;
+      document.getElementById("activePercent").textContent = percent(active);
+      document.getElementById("pendingPercent").textContent = percent(pending);
+      document.getElementById("inactivePercent").textContent = percent(inactive);
+      document.getElementById("overviewActive").textContent = active;
+      document.getElementById("overviewPending").textContent = pending;
+      document.getElementById("overviewInactive").textContent = inactive;
+      document.getElementById("overviewTotal").textContent = total;
+    }
+
+    async function loadCompanies() {
+      try {
+        const data = await apiRequest("/admin/companies");
+        companies = Array.isArray(data.companies) ? data.companies : [];
+        updateStats(data.stats || {});
+        renderCompanies();
+
+        const requestedId = Number(new URLSearchParams(location.search).get("id"));
+        if (requestedId) {
+          const company = companies.find((item) => item.id === requestedId);
+          if (company) openCompanyDialog(company);
+        }
+      } catch (error) {
+        console.error("Could not load companies:", error);
+        companyRows.innerHTML =
+          `<tr><td colspan="6">${escapeHTML(error.message)}</td></tr>`;
+      }
+    }
+
+    function openCompanyDialog(company = null) {
+      companyForm.reset();
+      document.getElementById("companyId").value = company?.id || "";
+      document.getElementById("dialogTitle").textContent =
+        company ? "Manage company" : "Add company";
+      document.getElementById("companyName").value = company?.name || "";
+      document.getElementById("companyEmail").value = company?.email || "";
+      document.getElementById("companyLocation").value = company?.location || "";
+      document.getElementById("companyWebsite").value = company?.website || "";
+      document.getElementById("companyIndustry").value = company?.industry || "";
+      document.getElementById("companySize").value = company?.company_size || "";
+      document.getElementById("companyStatus").value = company?.status || "pending";
+      companyDialog.showModal();
+    }
+
+    document.getElementById("addCompany").addEventListener("click", () => {
+      openCompanyDialog();
+    });
+
+    document.getElementById("cancelDialog").addEventListener("click", () => {
+      companyDialog.close();
+    });
+
+    companyForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const id = document.getElementById("companyId").value;
+      const payload = {
+        name: document.getElementById("companyName").value.trim(),
+        email: document.getElementById("companyEmail").value.trim(),
+        location: document.getElementById("companyLocation").value.trim(),
+        website: document.getElementById("companyWebsite").value.trim(),
+        industry: document.getElementById("companyIndustry").value.trim(),
+        company_size: document.getElementById("companySize").value.trim(),
+        status: document.getElementById("companyStatus").value,
+      };
+
+      const saveButton = document.getElementById("saveCompanyButton");
+      saveButton.disabled = true;
+
+      try {
+        if (id) {
+          await apiRequest(`/admin/companies/${encodeURIComponent(id)}`, {
+            method: "PATCH",
+            body: JSON.stringify(payload),
+          });
+          alert("Company updated.");
+        } else {
+          await apiRequest("/admin/companies", {
+            method: "POST",
+            body: JSON.stringify(payload),
+          });
+          alert("Company added. It starts with Pending status.");
+        }
+
+        companyDialog.close();
+        await loadCompanies();
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        saveButton.disabled = false;
+      }
+    });
+
+    companySearch.addEventListener("input", renderCompanies);
+
+    document.getElementById("exportCompanies").addEventListener("click", () => {
+      const rows = [
+        ["Company", "Email", "Location", "Users", "Active jobs", "Status"],
+        ...companies.map((company) => [
+          company.name,
+          company.email,
+          company.location || "",
+          company.users,
+          company.activeJobs,
+          company.status,
+        ]),
+      ];
+
+      const csv = rows.map((row) =>
+        row.map((cell) => `"${String(cell ?? "").replace(/"/g, '""')}"`).join(",")
+      ).join("\r\n");
+
+      const url = URL.createObjectURL(
+        new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" })
+      );
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "companies.csv";
+      link.click();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById("notificationButton").addEventListener("click", () => {
+      alert("Admin notifications are not connected yet.");
+    });
+
+    loadCompanies();
+  </script>
+</body>
+</html>

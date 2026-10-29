@@ -1,0 +1,1705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VentrixCarros — Hire Exceptional Talent</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --deep-navy: #050a30;
+      --navy: #070d3f;
+      --electric-blue: #2c83f8;
+      --royal-blue: #274cdc;
+      --vivid-blue: #1c19b8;
+      --white: #ffffff;
+      --light-blue: #e0e4f5;
+
+      --ink: var(--deep-navy);
+      --muted: #5b6b85;
+      --line: var(--light-blue);
+      --bg: var(--white);
+      --surface: var(--light-blue);
+
+      --radius: 24px;
+      --shadow: 0 24px 70px rgba(5, 10, 48, 0.10);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1200px, 100% - 40px);
+      margin-inline: auto;
+    }
+
+    /* Loading screen */
+    #loadingScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(700px 500px at 20% 20%, rgba(44, 131, 248, 0.18), transparent),
+        radial-gradient(600px 450px at 80% 80%, rgba(28, 25, 184, 0.22), transparent),
+        var(--deep-navy);
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    #loadingScreen.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .loader-box {
+  width: min(520px, 90%);
+  text-align: center;
+  animation: fadeUp 0.8s ease both;
+}
+
+.loader-brand {
+  font-size: 24px;
+}
+
+.loader-subtext {
+  font-size: 15px;
+}
+
+.progress-track {
+  height: 8px;
+}
+
+.progress-meta {
+  font-size: 14px;
+}
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+  .loader-logo {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 28px;
+  border-radius: 24px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(
+    135deg,
+    var(--electric-blue),
+    var(--royal-blue),
+    var(--vivid-blue)
+  );
+  box-shadow:
+    0 20px 55px rgba(44, 131, 248, 0.35),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  animation: logoPulse 2.2s ease-in-out infinite;
+}
+
+.loader-logo img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  display: block;
+  border-radius: 18px;
+}
+
+    @keyframes logoPulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow:
+          0 20px 55px rgba(44, 131, 248, 0.35),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+      }
+
+      50% {
+        transform: scale(1.05);
+        box-shadow:
+          0 26px 70px rgba(44, 131, 248, 0.48),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+      }
+    }
+
+    .loader-brand {
+      font-family: "Sora", sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .loader-subtext {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.62);
+      margin-bottom: 34px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(224, 228, 245, 0.14);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--electric-blue), var(--royal-blue), var(--vivid-blue));
+      box-shadow: 0 0 18px rgba(44, 131, 248, 0.55);
+      transition: width 0.35s ease;
+    }
+
+    .progress-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 16px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.60);
+    }
+
+    #loadingPercent {
+      font-family: "Sora", sans-serif;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    /* Header */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(18px);
+      background: rgba(255, 255, 255, 0.85);
+      border-bottom: 1px solid var(--light-blue);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 0;
+    }
+
+    .brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: "Sora", sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--deep-navy);
+}
+
+.brand-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  border-radius: 10px;
+  display: block;
+}
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .nav a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      transition: 0.2s;
+    }
+
+    .nav a:hover {
+      color: var(--electric-blue);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      border-radius: 999px;
+      padding: 14px 27px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    .btn-primary {
+     color: #ffffff;
+     background: #3b82f6;
+     border: 2px solid #3b82f6;
+     padding: 12px 24px;
+     border-radius: 14px;
+     font-weight: 600;
+     box-shadow: 0 8px 22px rgba(59, 130, 246, 0.20);
+     transition: all 0.3s ease;
+   }
+
+.btn-primary:hover {
+  background: #2563eb;
+  border-color: #2539eb;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(59, 130, 246, 0.30);
+}
+.nav .btn-start {
+  color: #ffffff;
+  background: #3b82f6;
+  border: 2px solid #3b82f6;
+  padding: 12px 24px;
+  border-radius: 14px;
+  font-weight: 800;
+  box-shadow: 0 8px 22px rgba(59, 130, 246, 0.20);
+  transition: all 0.3s ease;
+}
+
+.nav .btn-start:hover {
+  color: #ffffff;
+  background: #2563eb;
+  border-color: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(59, 130, 246, 0.30);
+}
+.btn-start:hover {
+  color: #2563eb;
+  background: transparent;
+  transform: translateY(-1px);
+}
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 22px 60px rgba(39, 76, 220, 0.35);
+    }
+
+    .btn-outline {
+      background: var(--white);
+      border: 1px solid var(--light-blue);
+      color: var(--deep-navy);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+      transform: translateY(-2px);
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      padding: 150px 0 110px;
+      background:
+        radial-gradient(700px 450px at 10% 10%, rgba(44, 131, 248, 0.10), transparent),
+        radial-gradient(600px 400px at 90% 20%, rgba(224, 228, 245, 0.75), transparent);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      align-items: center;
+      gap: 80px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 17px;
+      border-radius: 999px;
+      background: var(--light-blue);
+      border: 1px solid rgba(44, 131, 248, 0.20);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--royal-blue);
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      font-family: "Sora", sans-serif;
+      font-size: clamp(44px, 6.5vw, 78px);
+      line-height: 1.02;
+      letter-spacing: -3px;
+      margin-bottom: 24px;
+      color: var(--deep-navy);
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, var(--electric-blue), var(--royal-blue), var(--vivid-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      max-width: 520px;
+      color: var(--muted);
+      font-size: 18px;
+      margin-bottom: 38px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 55px;
+    }
+
+    .proof {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .avatars {
+      display: flex;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 3px solid var(--white);
+      margin-left: -12px;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+    }
+
+    .avatar:first-child {
+      margin-left: 0;
+    }
+
+    .proof strong {
+      display: block;
+      font-size: 14px;
+      color: var(--deep-navy);
+    }
+
+    .proof span {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* Floating dashboard */
+    .dashboard {
+      position: relative;
+      animation: floatCard 8s ease-in-out infinite;
+    }
+    .hero-dashboard-image {
+  width: 100%;
+  height: 520px;
+  display: block;
+  object-fit: cover;
+  border-radius: 24px;
+}
+
+    @keyframes floatCard {
+      0%, 100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-16px);
+      }
+    }
+
+    .dashboard-card {
+      position: relative;
+      background: var(--white);
+      border: 1px solid var(--light-blue);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px;
+    }
+
+    .dashboard-card::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: 26px;
+      background: linear-gradient(135deg, rgba(44, 131, 248, 0.35), rgba(28, 25, 184, 0.25), transparent);
+      z-index: -1;
+      filter: blur(1px);
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .card-title {
+      font-family: "Sora", sans-serif;
+      font-weight: 700;
+      color: var(--deep-navy);
+    }
+
+    .live {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: #ecfdf5;
+      color: #059669;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .metric {
+      background: var(--white);
+      border: 1px solid var(--light-blue);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .metric strong {
+      display: block;
+      font-family: "Sora", sans-serif;
+      font-size: 28px;
+      color: var(--deep-navy);
+    }
+
+    .metric span {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .candidate {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 17px;
+      border: 1px solid var(--light-blue);
+      border-radius: 18px;
+      margin-bottom: 10px;
+      background: var(--white);
+      transition: 0.25s ease;
+    }
+
+    .candidate:hover {
+      transform: translateX(6px);
+      border-color: rgba(44, 131, 248, 0.45);
+    }
+
+    .candidate-info strong {
+      display: block;
+      font-size: 14px;
+      color: var(--deep-navy);
+    }
+
+    .candidate-info span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .score {
+      font-family: "Sora", sans-serif;
+      font-weight: 700;
+    }
+
+    .score-high {
+      color: var(--electric-blue);
+    }
+
+    .score-medium {
+      color: var(--royal-blue);
+    }
+
+    .score-low {
+      color: var(--vivid-blue);
+    }
+
+    /* Strip */
+    .strip {
+      padding: 20px 0 90px;
+    }
+
+    .strip-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 28px;
+      color: var(--muted);
+      font-family: "Sora", sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    /* Sections */
+    .section {
+      padding: 100px 0;
+    }
+
+    .section-head {
+      max-width: 660px;
+      margin: 0 auto 60px;
+      text-align: center;
+    }
+
+    .section-head h2 {
+      font-family: "Sora", sans-serif;
+      font-size: clamp(30px, 4.5vw, 52px);
+      letter-spacing: -2px;
+      margin-bottom: 14px;
+      color: var(--deep-navy);
+    }
+
+    .section-head p {
+      color: var(--muted);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .feature-card {
+      position: relative;
+      background: var(--white);
+      border: 1px solid var(--light-blue);
+      border-radius: var(--radius);
+      padding: 32px;
+      transition: 0.25s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow);
+    }
+
+    .feature-card.wide {
+      grid-column: span 2;
+    }
+
+    .feature-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 22px;
+  background: transparent;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.feature-icon img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  display: block;
+}
+
+    .feature-card h3 {
+      font-family: "Sora", sans-serif;
+      margin-bottom: 10px;
+      color: var(--deep-navy);
+    }
+
+    .feature-card p {
+      color: var(--muted);
+    }
+
+    .mini-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      height: 140px;
+      margin-top: 30px;
+    }
+
+    .bar {
+      flex: 1;
+      border-radius: 12px 12px 0 0;
+      background: linear-gradient(180deg, var(--electric-blue), rgba(39, 76, 220, 0.35));
+    }
+
+    /* Workflow */
+    .workflow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .step {
+      background: var(--white);
+      border: 1px solid var(--light-blue);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: 0.25s ease;
+    }
+
+    .step:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow);
+    }
+
+    .step-number {
+      display: grid;
+      place-items: center;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      color: var(--white);
+      font-weight: 700;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+    }
+
+    .step h3 {
+      font-family: "Sora", sans-serif;
+      margin-bottom: 8px;
+      color: var(--deep-navy);
+    }
+
+    .step p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* Pricing */
+    .price-card {
+      max-width: 440px;
+      margin-inline: auto;
+      background: var(--navy);
+      color: var(--white);
+      border: 1px solid rgba(224, 228, 245, 0.15);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .price-card::before {
+      content: "";
+      position: absolute;
+      width: 350px;
+      height: 350px;
+      top: -150px;
+      right: -120px;
+      background: rgba(44, 131, 248, 0.30);
+      border-radius: 50%;
+      filter: blur(70px);
+    }
+
+    .price {
+      font-family: "Sora", sans-serif;
+      font-size: 72px;
+      font-weight: 800;
+      letter-spacing: -3px;
+      color: var(--white);
+    }
+
+    .price-period {
+      color: rgba(255, 255, 255, 0.65);
+    }
+
+    .price-list {
+      margin: 30px 0;
+      text-align: left;
+    }
+
+    .price-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(224, 228, 245, 0.15);
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .price-list li::before {
+      content: "✔";
+      color: var(--electric-blue);
+      margin-right: 10px;
+      font-weight: 700;
+    }
+
+    .btn-light {
+      width: 100%;
+      color: var(--white);
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+    }
+
+    /* CTA */
+    .final-cta {
+      background: var(--white);
+      border-top: 1px solid var(--light-blue);
+      padding: 110px 0;
+      text-align: center;
+    }
+
+    .final-cta h2 {
+      font-family: "Sora", sans-serif;
+      font-size: clamp(32px, 5vw, 62px);
+      letter-spacing: -3px;
+      margin-bottom: 18px;
+      color: var(--deep-navy);
+    }
+
+    .final-cta p {
+      max-width: 580px;
+      margin: 0 auto 35px;
+      color: var(--muted);
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--deep-navy);
+      border-top: 1px solid rgba(224, 228, 245, 0.15);
+      padding: 34px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.70);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 22px;
+    }
+
+    .footer a:hover {
+      color: var(--electric-blue);
+    }
+
+    /* Responsive */
+    @media (max-width: 1000px) {
+      .hero-grid,
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-card.wide {
+        grid-column: span 1;
+      }
+
+      .workflow {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .nav {
+        display: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+  .workflow {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    padding: 120px 0 80px;
+  }
+
+  .metric-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================
+   VENTRIX AI CHATBOT
+========================= */
+
+.ventrix-chatbot {
+  position: fixed;
+  left: 24px;
+  bottom: 24px;
+  z-index: 9999;
+  font-family: inherit;
+}
+
+.chatbot-button {
+  width: 58px;
+  height: 58px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(5, 10, 48, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chatbot-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 35px rgba(5, 10, 48, 0.32);
+}
+
+.chatbot-icon {
+  font-size: 27px;
+  line-height: 1;
+}
+
+.chatbot-window {
+  position: absolute;
+  left: 0;
+  bottom: 72px;
+  width: 350px;
+  height: 480px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  box-shadow: 0 24px 70px rgba(5, 10, 48, 0.20);
+  overflow: hidden;
+  display: none;
+  flex-direction: column;
+}
+
+.chatbot-window.open {
+  display: flex;
+  animation: chatbotOpen 0.2s ease;
+}
+
+@keyframes chatbotOpen {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.chatbot-header {
+  padding: 16px 18px;
+  background: linear-gradient(135deg, var(--deep-navy), var(--royal-blue));
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chatbot-brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.chatbot-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--white);
+  color: var(--royal-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.chatbot-brand strong {
+  display: block;
+  font-size: 14px;
+}
+
+.chatbot-brand span {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  opacity: 0.75;
+}
+
+.chatbot-close {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: transparent;
+  color: var(--white);
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.chatbot-messages {
+  flex: 1;
+  padding: 18px;
+  overflow-y: auto;
+  background: #f7f9ff;
+}
+
+.bot-message {
+  max-width: 85%;
+  padding: 12px 14px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 14px 14px 14px 4px;
+  color: var(--deep-navy);
+  font-size: 13px;
+  line-height: 1.5;
+  box-shadow: 0 5px 15px rgba(5, 10, 48, 0.05);
+}
+
+.user-message {
+  max-width: 85%;
+  margin: 12px 0 0 auto;
+  padding: 11px 14px;
+  background: var(--royal-blue);
+  color: var(--white);
+  border-radius: 14px 14px 4px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.chatbot-options {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.chatbot-options button {
+  width: 100%;
+  padding: 10px 12px;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--white);
+  color: var(--deep-navy);
+  font-size: 12px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.chatbot-options button:hover {
+  border-color: var(--electric-blue);
+  color: var(--royal-blue);
+}
+
+.chatbot-input-area {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  background: var(--white);
+  border-top: 1px solid var(--line);
+}
+
+.chatbot-input-area input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  outline: none;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.chatbot-input-area input:focus {
+  border-color: var(--electric-blue);
+}
+
+.chatbot-input-area button {
+  width: 40px;
+  border: none;
+  border-radius: 10px;
+  background: var(--royal-blue);
+  color: var(--white);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.chatbot-input-area button:hover {
+  background: var(--vivid-blue);
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .ventrix-chatbot {
+    left: 16px;
+    bottom: 16px;
+  }
+
+  .chatbot-window {
+    width: calc(100vw - 32px);
+    height: 450px;
+  }
+}
+
+.feature-popup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5, 10, 48, 0.55);
+  backdrop-filter: blur(6px);
+}
+
+.feature-popup-overlay.show {
+  display: flex;
+}
+
+.feature-popup {
+  width: min(420px, calc(100% - 40px));
+  background: var(--white);
+  border-radius: 24px;
+  padding: 34px;
+  text-align: center;
+  box-shadow: 0 30px 90px rgba(5, 10, 48, 0.25);
+  animation: featurePopupIn 0.25s ease;
+}
+
+.feature-popup h3 {
+  font-family: "Sora", sans-serif;
+  font-size: 22px;
+  color: var(--deep-navy);
+  margin-bottom: 10px;
+}
+
+.feature-popup p {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.feature-popup-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.feature-popup-close {
+  padding: 12px 20px;
+  border: 1px solid var(--light-blue);
+  border-radius: 12px;
+  background: var(--white);
+  color: var(--deep-navy);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.feature-popup-signup {
+  padding: 12px 20px;
+  border-radius: 12px;
+  background: #3b82f6;
+  color: var(--white);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+@keyframes featurePopupIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Make feature cards clickable */
+.feature-card {
+  cursor: pointer;
+}
+
+</style>
+</head>
+
+<body>
+  <!-- Loading Screen -->
+<div id="loadingScreen">
+  <div class="loader-box">
+
+    <div class="loader-logo">
+      <img src="./ventrix-logo-mark.png" alt="VentrixCarros Logo">
+    </div>
+
+    <div class="loader-brand">VENTRIXCARROS</div>
+    <div class="loader-subtext">Preparing your AI hiring workspace</div>
+
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="progress-meta">
+      <span id="loadingStatus">Initialising platform</span>
+      <span id="loadingPercent">0%</span>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const featureCards = document.querySelectorAll(".feature-card");
+  const featurePopup = document.getElementById("featurePopup");
+  const featurePopupClose = document.getElementById("featurePopupClose");
+
+  featureCards.forEach(function (card) {
+    card.addEventListener("click", function () {
+      featurePopup.classList.add("show");
+    });
+  });
+
+  featurePopupClose.addEventListener("click", function () {
+    featurePopup.classList.remove("show");
+  });
+
+  featurePopup.addEventListener("click", function (event) {
+    if (event.target === featurePopup) {
+      featurePopup.classList.remove("show");
+    }
+  });
+</script>
+
+  <!-- Header -->
+<header class="header">
+  <div class="container header-inner">
+    <div class="brand">
+      <img src="./ventrix-logo-mark.png" alt="VentrixCarros Logo" class="brand-logo">
+      VentrixCarros
+    </div>
+
+      <nav class="nav">
+        <a href="#features">Features</a>
+        <a href="#workflow">How it works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="login.html">Log in</a>
+        <a href="signup.html" class="btn btn-start">Get started</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="pill">● AI Recruitment Intelligence</span>
+
+          <h1>
+            Hire exceptional talent, <span class="gradient-text">faster.</span>
+          </h1>
+
+          <p>
+            VentrixCarros brings jobs, candidates, applications, interviews, and
+            hiring insights into one clean company dashboard.
+          </p>
+
+          <div class="hero-actions">
+            <a href="signup.html" class="btn btn-primary">Create company account</a>
+            <a href="#features" class="btn btn-outline">Explore features</a>
+          </div>
+
+          <div class="proof">
+            <div class="avatars">
+              <span class="avatar"></span>
+              <span class="avatar"></span>
+              <span class="avatar"></span>
+            </div>
+
+            <div>
+              <strong>Trusted by growing teams</strong>
+              <span>2,500+ jobs published</span>
+            </div>
+          </div>
+        </div>
+
+                <div class="dashboard">
+          <img
+            src="./ventrix-careers.jpeg"
+            alt="VentrixCarros Careers"
+            class="hero-dashboard-image"
+          >
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>Everything your HR team needs</h2>
+
+          <p>
+            Post roles, screen candidates automatically, schedule interviews, and
+            track hiring performance in one place.
+          </p>
+        </div>
+
+        <div class="feature-grid">
+  <article class="feature-card wide">
+    <div class="feature-icon">
+    <img src="smart-job-management-icon-correct.png" alt="Smart Job Management">
+    </div> 
+    <h3>Smart job management</h3>
+    <p>
+      Create job openings, enter requirements, generate AI descriptions,
+      preview listings, and publish roles in minutes.
+    </p>
+
+            <div class="mini-chart">
+              <span style="height: 40%;"></span>
+              <span style="height: 65%;"></span>
+              <span style="height: 50%;"></span>
+              <span style="height: 85%;"></span>
+              <span style="height: 60%;"></span>
+              <span style="height: 100%;"></span>
+            </div>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon">
+  <img src="ai-recruitment-icon-correct.png" alt="AI Recruitment">
+</div>
+            <h3>AI recruitment</h3>
+            <p>Generate professional job descriptions and intelligent candidate match scores.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon">
+  <img src="candidate-profiles-icon-correct.png" alt="Candidate Profiles">
+</div>
+            <h3>Candidate profiles</h3>
+            <p>Review resumes, skills, experience, education, and AI analysis.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon">
+  <img src="interview-workflow-icon-correct.png" alt="Interview Workflow">
+</div>
+            <h3>Interview workflow</h3>
+            <p>Schedule interviews, send notifications, and collect recruiter feedback.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon">
+  <img src="hiring-analytics-icon-correct.png" alt="Hiring Analytics">
+</div>
+            <h3>Hiring analytics</h3>
+            <p>Monitor applications, shortlists, interviews, selections, and hiring results.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Workflow -->
+    <section id="workflow" class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>From application to hire</h2>
+
+          <p>A clear workflow that reduces manual screening and helps recruiters focus on the right people.</p>
+        </div>
+
+        <div class="workflow">
+          <article class="step">
+            <div class="step-number">1</div>
+            <h3>Apply</h3>
+            <p>Candidates submit their profile and resume.</p>
+          </article>
+
+          <article class="step">
+            <div class="step-number">2</div>
+            <h3>AI screening</h3>
+            <p>The platform evaluates skills, experience, and fit.</p>
+          </article>
+
+          <article class="step">
+            <div class="step-number">3</div>
+            <h3>Interview</h3>
+            <p>Recruiters schedule interviews and collect feedback.</p>
+          </article>
+
+          <article class="step">
+            <div class="step-number">4</div>
+            <h3>Hire</h3>
+            <p>Select the right candidate and complete the process.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>Simple monthly pricing</h2>
+
+          <p>Activate full dashboard access with one affordable subscription.</p>
+        </div>
+
+        <div class="price-card">
+          <span>Company Plan</span>
+
+          <div class="price">₹499</div>
+          <div class="price-period">per month</div>
+
+          <ul class="price-list">
+            <li>Full company dashboard access</li>
+            <li>Unlimited job postings</li>
+            <li>AI job description generator</li>
+            <li>AI candidate screening</li>
+            <li>Interview management</li>
+            <li>Analytics dashboard</li>
+          </ul>
+
+          <a href="signup.html" class="btn btn-light">Choose ₹499 / Month</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="final-cta">
+      <div class="container">
+        <h2>Start hiring smarter today</h2>
+
+        <p>
+          Create your company account, activate your subscription, and manage
+          your complete hiring workflow with AI.
+        </p>
+
+        <a href="signup.html" class="btn btn-primary">Get started now</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>© 2026 VentrixCarros. All rights reserved.</p>
+
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms</a>
+        <a href="#">Support</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Feature Account Popup -->
+<div class="feature-popup-overlay" id="featurePopup">
+  <div class="feature-popup">
+    <h3>Create your company account</h3>
+
+    <p>
+      Create your company account to access this VentrixCarros feature.
+    </p>
+
+    <div class="feature-popup-actions">
+      <button class="feature-popup-close" id="featurePopupClose">
+        Cancel
+      </button>
+
+      <a href="signup.html" class="feature-popup-signup">
+        Create account
+      </a>
+    </div>
+  </div>
+</div>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      const loadingScreen = document.getElementById("loadingScreen");
+      const progressFill = document.getElementById("progressFill");
+      const loadingPercent = document.getElementById("loadingPercent");
+      const loadingStatus = document.getElementById("loadingStatus");
+
+      const messages = [
+        "Initialising platform",
+        "Loading recruitment modules",
+        "Preparing AI screening",
+        "Connecting dashboard",
+        "Almost ready"
+      ];
+
+      let progress = 0;
+      let messageIndex = 0;
+
+      const loadingInterval = setInterval(() => {
+        progress += Math.random() * 12 + 6;
+
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(loadingInterval);
+
+          loadingStatus.textContent = "Welcome to VentrixCarros";
+
+          setTimeout(() => {
+            loadingScreen.classList.add("hidden");
+          }, 700);
+        }
+
+        progressFill.style.width = progress + "%";
+        loadingPercent.textContent = Math.floor(progress) + "%";
+
+        const nextMessage = Math.floor(progress / 20);
+
+        if (nextMessage < messages.length && nextMessage !== messageIndex) {
+          messageIndex = nextMessage;
+          loadingStatus.textContent = messages[messageIndex];
+        }
+      }, 260);
+    });
+  </script>
+
+  <!-- Ventrix AI Chatbot -->
+<div class="ventrix-chatbot">
+
+  <button class="chatbot-button" id="chatbotButton" aria-label="Open Ventrix AI">
+    <span class="chatbot-icon">✦</span>
+  </button>
+
+  <div class="chatbot-window" id="chatbotWindow">
+
+    <div class="chatbot-header">
+      <div class="chatbot-brand">
+        <div class="chatbot-avatar">V</div>
+        <div>
+          <strong>Ventrix AI</strong>
+          <span>Recruitment Assistant</span>
+        </div>
+      </div>
+
+      <button class="chatbot-close" id="chatbotClose">×</button>
+    </div>
+
+    <div class="chatbot-messages" id="chatbotMessages">
+      <div class="bot-message">
+        👋 Hi! I'm Ventrix AI.<br>
+        How can I help you today?
+      </div>
+
+      <div class="chatbot-options">
+        <button onclick="botReply('Find Jobs')">🔎 Find Jobs</button>
+        <button onclick="botReply('My Application')">📄 My Application</button>
+        <button onclick="botReply('AI Recruitment')">🤖 AI Recruitment</button>
+        <button onclick="botReply('Talk to Us')">💬 Talk to Us</button>
+      </div>
+    </div>
+
+    <div class="chatbot-input-area">
+      <input type="text" id="chatbotInput" placeholder="Type your message...">
+      <button id="chatbotSend">➤</button>
+    </div>
+
+  </div>
+</div>
+
+
+  <script>
+const chatbotButton = document.getElementById("chatbotButton");
+const chatbotWindow = document.getElementById("chatbotWindow");
+const chatbotClose = document.getElementById("chatbotClose");
+const chatbotInput = document.getElementById("chatbotInput");
+const chatbotSend = document.getElementById("chatbotSend");
+const chatbotMessages = document.getElementById("chatbotMessages");
+
+chatbotButton.addEventListener("click", function () {
+  chatbotWindow.classList.toggle("open");
+});
+
+chatbotClose.addEventListener("click", function () {
+  chatbotWindow.classList.remove("open");
+});
+
+function addUserMessage(text) {
+  const message = document.createElement("div");
+  message.className = "user-message";
+  message.textContent = text;
+  chatbotMessages.appendChild(message);
+  chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+}
+
+function addBotMessage(text) {
+  const message = document.createElement("div");
+  message.className = "bot-message";
+  message.innerHTML = text;
+  chatbotMessages.appendChild(message);
+  chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+}
+
+function getBotResponse(text) {
+  const message = text.toLowerCase();
+
+  if (message.includes("hello") || message.includes("hi") || message.includes("hey")) {
+    return "👋 Hello! Welcome to VentrixCarros. How can I help you today?";
+  }
+
+  if (message.includes("job") || message.includes("jobs") || message.includes("vacancy")) {
+    return "🔎 VentrixCarros helps you discover job opportunities that match your skills and experience.";
+  }
+
+  if (message.includes("apply") || message.includes("application")) {
+    return "📄 You can submit your application through the relevant job opportunity and track your progress.";
+  }
+
+  if (message.includes("ai") || message.includes("recruitment") || message.includes("screening")) {
+    return "🤖 Ventrix AI supports candidate screening, recruitment workflows and hiring insights.";
+  }
+
+  if (message.includes("interview")) {
+    return "🎤 Interviews can be managed through the VentrixCarros recruitment workflow.";
+  }
+
+  if (message.includes("candidate")) {
+    return "👥 Candidate profiles help recruitment teams review skills, experience and application information.";
+  }
+
+  if (message.includes("dashboard")) {
+    return "📊 The company dashboard gives recruiters an overview of applications, candidates and interviews.";
+  }
+
+  if (message.includes("price") || message.includes("pricing") || message.includes("cost")) {
+    return "💳 You can view pricing options from the Pricing section of the website.";
+  }
+
+  if (message.includes("contact") || message.includes("support") || message.includes("help")) {
+    return "💬 I'm here to help! You can also use the contact options on the VentrixCarros website.";
+  }
+
+  if (message.includes("thank") || message.includes("thanks")) {
+    return "😊 You're welcome! I'm always here if you need help.";
+  }
+  if (
+  message.includes("create account") ||
+  message.includes("create an account") ||
+  message.includes("signup") ||
+  message.includes("sign up") ||
+  message.includes("register") ||
+  message.includes("registration") ||
+  message.includes("new account")
+) {
+  return "👤 To create your VentrixCarros company account, click the <strong>Create company account</strong> button on the homepage. You will be taken to the signup page where you can enter your company details and create your account.";
+}
+
+if (
+  message.includes("login") ||
+  message.includes("log in") ||
+  message.includes("sign in")
+) {
+  return "🔐 If you already have a VentrixCarros account, click <strong>Log in</strong> and enter your account credentials.";
+}
+
+  return "💡 I can help you with jobs, applications, candidates, AI recruitment, interviews, pricing and VentrixCarros information.";
+}
+
+function botReply(option) {
+  addUserMessage(option);
+
+  setTimeout(function () {
+    addBotMessage(getBotResponse(option));
+  }, 500);
+}
+
+function sendMessage() {
+  const text = chatbotInput.value.trim();
+
+  if (text === "") {
+    return;
+  }
+
+  addUserMessage(text);
+  chatbotInput.value = "";
+
+  setTimeout(function () {
+    addBotMessage(getBotResponse(text));
+  }, 500);
+}
+
+chatbotSend.addEventListener("click", sendMessage);
+
+chatbotInput.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    sendMessage();
+  }
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const featureCards = document.querySelectorAll(".feature-card");
+  const featurePopup = document.getElementById("featurePopup");
+  const featurePopupClose = document.getElementById("featurePopupClose");
+
+  featureCards.forEach(function (card) {
+    card.addEventListener("click", function () {
+      featurePopup.classList.add("show");
+    });
+  });
+
+  featurePopupClose.addEventListener("click", function () {
+    featurePopup.classList.remove("show");
+  });
+
+  featurePopup.addEventListener("click", function (event) {
+    if (event.target === featurePopup) {
+      featurePopup.classList.remove("show");
+    }
+  });
+
+});
+</script>
+
+</body>
+</html>

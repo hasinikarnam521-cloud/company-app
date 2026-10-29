@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Support — VentrixCarros Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --navy: #050a30;
+      --blue: #2c83f8;
+      --royal: #274cdc;
+      --white: #fff;
+      --line: #e0e4f5;
+      --muted: #5b6b85;
+      --bg: #f7f9ff;
+      --green: #059669;
+      --orange: #d97706;
+      --red: #dc2626;
+      --radius: 20px;
+      --shadow: 0 18px 50px rgba(5, 10, 48, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      color: var(--navy);
+      font-family: "Inter", sans-serif;
+      background: var(--bg);
+      display: grid;
+      grid-template-columns: 250px 1fr;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 22px 16px;
+      overflow-y: auto;
+      background: var(--white);
+      border-right: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px;
+      margin-bottom: 22px;
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+    }
+
+    .brand img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+
+    .admin-label {
+      display: block;
+      color: var(--muted);
+      font-family: "Inter", sans-serif;
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      color: var(--royal);
+      background: rgba(44, 131, 248, 0.1);
+    }
+
+    .nav-section {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .nav-section-title {
+      padding: 6px 12px;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .main-content {
+      min-width: 0;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      padding: 14px 0;
+      background: rgba(247, 249, 255, 0.94);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .container {
+      width: min(1280px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .topbar-inner,
+    .topbar-left,
+    .topbar-right,
+    .page-head,
+    .actions,
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .topbar-left {
+      justify-content: flex-start;
+    }
+
+    .back-btn,
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--white);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .btn-primary {
+      color: var(--white);
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--blue), var(--royal));
+    }
+
+    .btn:hover,
+    .back-btn:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .btn-primary:hover {
+      color: var(--white);
+    }
+
+    .search {
+      width: min(380px, 100%);
+      padding: 10px 15px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      outline: none;
+    }
+
+    .search:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(44, 131, 248, 0.12);
+    }
+
+    .avatar {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--white);
+      background: linear-gradient(135deg, var(--blue), var(--royal));
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .page-wrap {
+      padding: 30px 0 60px;
+    }
+
+    .page-head {
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    h1,
+    h2 {
+      font-family: "Sora", sans-serif;
+    }
+
+    h1 {
+      margin-bottom: 4px;
+      font-size: 28px;
+    }
+
+    .page-sub,
+    .panel-sub {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .actions {
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .card,
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .card {
+      padding: 18px;
+    }
+
+    .kpi-label {
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .kpi-value {
+      font-family: "Sora", sans-serif;
+      font-size: 28px;
+    }
+
+    .panel {
+      padding: 20px;
+    }
+
+    .panel-head {
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .panel-head h2 {
+      margin-bottom: 3px;
+      font-size: 18px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th,
+    td {
+      padding: 12px 10px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .ticket-title {
+      display: block;
+      font-weight: 700;
+    }
+
+    .ticket-sub {
+      display: block;
+      max-width: 280px;
+      color: var(--muted);
+      font-size: 11px;
+      overflow-wrap: anywhere;
+    }
+
+    .pill {
+      display: inline-flex;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .priority-high {
+      color: var(--red);
+      background: rgba(220, 38, 38, 0.1);
+    }
+
+    .priority-medium {
+      color: var(--orange);
+      background: rgba(217, 119, 6, 0.1);
+    }
+
+    .priority-low {
+      color: var(--green);
+      background: rgba(5, 150, 105, 0.1);
+    }
+
+    .status-open {
+      color: var(--red);
+      background: rgba(220, 38, 38, 0.1);
+    }
+
+    .status-in_progress {
+      color: var(--blue);
+      background: rgba(44, 131, 248, 0.1);
+    }
+
+    .status-resolved {
+      color: var(--green);
+      background: rgba(5, 150, 105, 0.1);
+    }
+
+    .row-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .small-btn {
+      padding: 7px 11px;
+      font-size: 12px;
+    }
+
+    @media (max-width: 1000px) {
+      body {
+        display: block;
+      }
+
+      .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .container {
+        width: min(100% - 24px, 1280px);
+      }
+
+      .nav-list {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar-inner {
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .topbar-right,
+      .search {
+        width: 100%;
+      }
+
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .page-head {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <img src="ventrix-logo-mark.png" alt="VentrixCarros logo" />
+      <div>
+        <span>VENTRIXCARROS</span>
+        <span class="admin-label">Admin console</span>
+      </div>
+    </div>
+
+    <nav class="nav-list">
+      <a href="admin-dashboard.html" class="nav-item">🛡️ Admin Dashboard</a>
+      <a href="admin-companies.html" class="nav-item">🏢 Companies</a>
+      <a href="admin-users.html" class="nav-item">👤 Users</a>
+      <a href="admin-subscriptions.html" class="nav-item">💳 Subscriptions</a>
+      <a href="admin-jobs.html" class="nav-item">💼 Jobs</a>
+      <a href="admin-support.html" class="nav-item active">🎧 Support</a>
+      <a href="admin-analytics.html" class="nav-item">📊 Platform Analytics</a>
+
+      <div class="nav-section">
+        <div class="nav-section-title">System</div>
+        <a href="admin-settings.html" class="nav-item">⚙️ Settings</a>
+        <a href="admin-logs.html" class="nav-item">🧾 Activity Logs</a>
+        <a href="index.html" class="nav-item" id="logoutLink">🚪 Logout</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="topbar-left">
+          <a href="index.html" class="back-btn">← Back</a>
+          <strong>Platform Admin</strong>
+        </div>
+
+        <div class="topbar-right">
+          <input
+            id="supportSearch"
+            class="search"
+            type="search"
+            placeholder="Search tickets, companies, or issues..."
+          />
+          <div class="avatar">AD</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-wrap">
+      <div class="container">
+        <section class="page-head">
+          <div>
+            <h1>Support</h1>
+            <p class="page-sub">View and manage customer support tickets.</p>
+          </div>
+
+          <div class="actions">
+            <button id="exportButton" class="btn" type="button">
+              ⬇ Export tickets
+            </button>
+            <button id="newTicketButton" class="btn btn-primary" type="button">
+              + Create ticket
+            </button>
+          </div>
+        </section>
+
+        <section class="kpi-grid">
+          <div class="card">
+            <div class="kpi-label">Total tickets</div>
+            <div class="kpi-value" id="totalTickets">0</div>
+          </div>
+          <div class="card">
+            <div class="kpi-label">Open tickets</div>
+            <div class="kpi-value" id="openTickets">0</div>
+          </div>
+          <div class="card">
+            <div class="kpi-label">In progress</div>
+            <div class="kpi-value" id="inProgressTickets">0</div>
+          </div>
+          <div class="card">
+            <div class="kpi-label">Resolved</div>
+            <div class="kpi-value" id="resolvedTickets">0</div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Support tickets</h2>
+              <p class="panel-sub">Tickets stored in the database.</p>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Ticket</th>
+                  <th>Company</th>
+                  <th>Priority</th>
+                  <th>Status</th>
+                  <th>Created</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ticketRows">
+                <tr><td colspan="6">Loading tickets...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const API_BASE_URL = "http://localhost:5000/api";
+    const token = localStorage.getItem("ventrixcarrosToken");
+    const ticketRows = document.getElementById("ticketRows");
+    const supportSearch = document.getElementById("supportSearch");
+    let allTickets = [];
+
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (character) => {
+        const replacements = {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;",
+        };
+        return replacements[character];
+      });
+    }
+
+    function formatDate(value) {
+      if (!value) return "—";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "—";
+      return date.toLocaleString("en-IN");
+    }
+
+    function displayStatus(status) {
+      return status === "in_progress"
+        ? "In progress"
+        : status.charAt(0).toUpperCase() + status.slice(1);
+    }
+
+    function showMessage(message) {
+      ticketRows.innerHTML =
+        '<tr><td colspan="6">' + escapeHTML(message) + "</td></tr>";
+    }
+
+    function renderTickets(tickets) {
+      if (!tickets.length) {
+        showMessage("No support tickets found.");
+        return;
+      }
+
+      ticketRows.innerHTML = tickets.map((ticket) => {
+        const priority = ticket.priority || "medium";
+        const status = ticket.status || "open";
+
+        return `
+          <tr>
+            <td>
+              <span class="ticket-title">
+                #SUP-${Number(ticket.id)} · ${escapeHTML(ticket.subject)}
+              </span>
+              <span class="ticket-sub">
+                ${escapeHTML(ticket.description)}
+              </span>
+            </td>
+            <td>
+              ${escapeHTML(ticket.company_name || "—")}
+              <span class="ticket-sub">${escapeHTML(ticket.contact_email || "")}</span>
+            </td>
+            <td>
+              <span class="pill priority-${escapeHTML(priority)}">
+                ${escapeHTML(priority)}
+              </span>
+            </td>
+            <td>
+              <span class="pill status-${escapeHTML(status)}">
+                ${escapeHTML(displayStatus(status))}
+              </span>
+            </td>
+            <td>${escapeHTML(formatDate(ticket.created_at))}</td>
+            <td>
+              <div class="row-actions">
+                <button class="btn small-btn details-ticket" data-id="${Number(ticket.id)}" type="button">
+                  Details
+                </button>
+                <button class="btn small-btn edit-ticket" data-id="${Number(ticket.id)}" type="button">
+                  Update
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function updateStats(stats) {
+      document.getElementById("totalTickets").textContent = stats.total || 0;
+      document.getElementById("openTickets").textContent = stats.open || 0;
+      document.getElementById("inProgressTickets").textContent =
+        stats.in_progress || 0;
+      document.getElementById("resolvedTickets").textContent =
+        stats.resolved || 0;
+    }
+
+    function filterTickets() {
+      const query = supportSearch.value.toLowerCase().trim();
+
+      const filtered = allTickets.filter((ticket) => {
+        return [
+          ticket.id,
+          ticket.subject,
+          ticket.description,
+          ticket.company_name,
+          ticket.contact_email,
+          ticket.priority,
+          ticket.status,
+        ]
+          .join(" ")
+          .toLowerCase()
+          .includes(query);
+      });
+
+      renderTickets(filtered);
+    }
+
+    async function apiRequest(path, options = {}) {
+      const response = await fetch(API_BASE_URL + path, {
+        method: options.method || "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+          ...(options.headers || {}),
+        },
+        body: options.body,
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(data.message || "The request failed.");
+      }
+
+      return data;
+    }
+
+    async function loadTickets() {
+      if (!token) {
+        showMessage("Please log in again. Your login token was not found.");
+        return;
+      }
+
+      try {
+        const data = await apiRequest("/admin/support");
+        allTickets = Array.isArray(data.tickets) ? data.tickets : [];
+        updateStats(data.stats || {});
+        filterTickets();
+      } catch (error) {
+        showMessage(error.message || "Could not load support tickets.");
+      }
+    }
+
+    async function createTicket() {
+      const subject = prompt("Ticket subject:");
+      if (!subject || !subject.trim()) return;
+
+      const description = prompt("Describe the issue:");
+      if (!description || !description.trim()) return;
+
+      const companyName = prompt("Company name (optional):") || "";
+      const contactEmail = prompt("Contact email (optional):") || "";
+      const priority = (
+        prompt("Priority: low, medium, or high", "medium") || ""
+      ).trim().toLowerCase();
+
+      if (!["low", "medium", "high"].includes(priority)) {
+        alert("Priority must be low, medium, or high.");
+        return;
+      }
+
+      if (
+        contactEmail &&
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail.trim())
+      ) {
+        alert("Enter a valid email address, or leave it blank.");
+        return;
+      }
+
+      try {
+        await apiRequest("/admin/support", {
+          method: "POST",
+          body: JSON.stringify({
+            subject: subject.trim(),
+            description: description.trim(),
+            company_name: companyName.trim(),
+            contact_email: contactEmail.trim(),
+            priority,
+          }),
+        });
+
+        await loadTickets();
+        alert("Support ticket created.");
+      } catch (error) {
+        alert(error.message);
+      }
+    }
+
+    async function updateTicket(id) {
+      const ticket = allTickets.find((item) => String(item.id) === String(id));
+      if (!ticket) return;
+
+      const status = (
+        prompt("Status: open, in_progress, or resolved", ticket.status) || ""
+      ).trim().toLowerCase();
+
+      if (!status) return;
+
+      if (!["open", "in_progress", "resolved"].includes(status)) {
+        alert("Status must be open, in_progress, or resolved.");
+        return;
+      }
+
+      const priority = (
+        prompt("Priority: low, medium, or high", ticket.priority) || ""
+      ).trim().toLowerCase();
+
+      if (!priority) return;
+
+      if (!["low", "medium", "high"].includes(priority)) {
+        alert("Priority must be low, medium, or high.");
+        return;
+      }
+
+      try {
+        await apiRequest("/admin/support/" + id, {
+          method: "PATCH",
+          body: JSON.stringify({ status, priority }),
+        });
+
+        await loadTickets();
+        alert("Support ticket updated.");
+      } catch (error) {
+        alert(error.message);
+      }
+    }
+
+    function exportTickets() {
+      const csvRows = [
+        ["Ticket", "Subject", "Description", "Company", "Email", "Priority", "Status", "Created"],
+        ...allTickets.map((ticket) => [
+          "SUP-" + ticket.id,
+          ticket.subject || "",
+          ticket.description || "",
+          ticket.company_name || "",
+          ticket.contact_email || "",
+          ticket.priority || "",
+          ticket.status || "",
+          formatDate(ticket.created_at),
+        ]),
+      ];
+
+      const csv = csvRows
+        .map((row) =>
+          row.map((value) => `"${String(value).replace(/"/g, '""')}"`).join(",")
+        )
+        .join("\r\n");
+
+      const url = URL.createObjectURL(
+        new Blob([csv], { type: "text/csv;charset=utf-8;" })
+      );
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "ventrixcarros-support-tickets.csv";
+      link.click();
+
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    ticketRows.addEventListener("click", (event) => {
+      const detailsButton = event.target.closest(".details-ticket");
+      const updateButton = event.target.closest(".edit-ticket");
+
+      if (detailsButton) {
+        const ticket = allTickets.find(
+          (item) => String(item.id) === detailsButton.dataset.id
+        );
+
+        if (ticket) {
+          alert(
+            "Ticket: SUP-" + ticket.id +
+            "\nSubject: " + ticket.subject +
+            "\nDescription: " + ticket.description +
+            "\nCompany: " + (ticket.company_name || "—") +
+            "\nEmail: " + (ticket.contact_email || "—") +
+            "\nPriority: " + ticket.priority +
+            "\nStatus: " + displayStatus(ticket.status)
+          );
+        }
+      }
+
+      if (updateButton) {
+        updateTicket(updateButton.dataset.id);
+      }
+    });
+
+    supportSearch.addEventListener("input", filterTickets);
+    document.getElementById("newTicketButton").addEventListener("click", createTicket);
+    document.getElementById("exportButton").addEventListener("click", exportTickets);
+
+    document.getElementById("logoutLink").addEventListener("click", () => {
+      localStorage.removeItem("ventrixcarrosToken");
+      localStorage.removeItem("ventrixcarrosUser");
+    });
+
+    loadTickets();
+  </script>
+</body>
+</html>

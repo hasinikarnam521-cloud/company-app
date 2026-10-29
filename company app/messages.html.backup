@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Messages — VentrixCarros</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --deep-navy: #050a30;
+      --navy: #070d3f;
+      --electric-blue: #2c83f8;
+      --royal-blue: #274cdc;
+      --vivid-blue: #1c19b8;
+      --white: #ffffff;
+      --light-blue: #e0e4f5;
+
+      --ink: var(--deep-navy);
+      --muted: #5b6b85;
+      --line: var(--light-blue);
+      --bg: #f7f9ff;
+      --surface: var(--white);
+
+      --radius: 24px;
+      --shadow: 0 24px 70px rgba(5, 10, 48, 0.10);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 600px at 50% -20%, rgba(44, 131, 248, 0.08), transparent 70%),
+        var(--bg);
+      line-height: 1.65;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1200px, 100% - 40px);
+      margin-inline: auto;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      background: var(--white);
+      border-right: 1px solid var(--line);
+      padding: 20px 16px;
+      overflow-y: auto;
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+      padding: 10px 12px;
+      margin-bottom: 18px;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: var(--white);
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      box-shadow: 0 10px 28px rgba(44, 131, 248, 0.30);
+      font-size: 18px;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      transition: 0.2s ease;
+      cursor: pointer;
+    }
+
+    .nav-item:hover {
+      background: rgba(44, 131, 248, 0.06);
+      color: var(--electric-blue);
+    }
+
+    .nav-item.active {
+      background: linear-gradient(135deg, rgba(44, 131, 248, 0.12), rgba(39, 76, 220, 0.12));
+      color: var(--royal-blue);
+      font-weight: 600;
+    }
+
+    .nav-icon {
+      width: 22px;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .nav-section {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .nav-section-title {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      padding: 6px 12px;
+      margin-bottom: 6px;
+    }
+
+    /* Main content */
+    .main-content {
+      min-width: 0;
+    }
+
+    /* Top header */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: rgba(247, 249, 255, 0.85);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 0;
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--white);
+      color: var(--deep-navy);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: 0.2s ease;
+      text-decoration: none;
+    }
+
+    .back-btn:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+      transform: translateX(-2px);
+    }
+
+    .page-title {
+      font-family: "Sora", sans-serif;
+      font-size: 20px;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+    }
+
+    .search-wrap {
+      flex: 1;
+      max-width: 420px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 11px 16px 11px 38px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--deep-navy);
+      background: var(--white);
+      transition: 0.2s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 0 4px rgba(44, 131, 248, 0.12);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: var(--white);
+      display: grid;
+      place-items: center;
+      font-size: 17px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+      transform: translateY(-2px);
+    }
+
+    .avatar-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      color: var(--white);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(44, 131, 248, 0.25);
+    }
+
+    /* Page content */
+    .page-wrap {
+      padding: 28px 0 60px;
+    }
+
+    .page-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .page-title-large {
+      font-family: "Sora", sans-serif;
+      font-size: 26px;
+      letter-spacing: -1px;
+      color: var(--deep-navy);
+    }
+
+    .page-sub {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .actions-right {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      border-radius: 999px;
+      padding: 11px 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.25s ease;
+      font-family: inherit;
+      font-size: 13px;
+    }
+
+    .btn-primary {
+      color: var(--white);
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      box-shadow: 0 14px 40px rgba(44, 131, 248, 0.30);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 55px rgba(39, 76, 220, 0.35);
+    }
+
+    .btn-outline {
+      background: var(--white);
+      border: 1px solid var(--line);
+      color: var(--deep-navy);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+      transform: translateY(-2px);
+    }
+
+    /* Messages layout */
+    .messages-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .conversations-panel,
+    .thread-panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      min-height: 520px;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .panel-title {
+      font-family: "Sora", sans-serif;
+      font-size: 18px;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .filter-tab {
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid var(--line);
+      background: var(--white);
+      color: var(--muted);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .filter-tab.active {
+      background: linear-gradient(135deg, rgba(44, 131, 248, 0.12), rgba(39, 76, 220, 0.12));
+      border-color: rgba(44, 131, 248, 0.35);
+      color: var(--royal-blue);
+    }
+
+    /* Conversations list */
+    .conversations-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .conversation-card {
+      display: grid;
+      grid-template-columns: 44px 1fr auto;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--white);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .conversation-card:hover {
+      border-color: var(--electric-blue);
+      box-shadow: 0 10px 30px rgba(5, 10, 48, 0.06);
+    }
+
+    .conversation-card.active {
+      border-color: var(--royal-blue);
+      background: linear-gradient(135deg, rgba(44, 131, 248, 0.06), rgba(39, 76, 220, 0.06));
+    }
+
+    .conv-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      color: var(--white);
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .conv-info {
+      min-width: 0;
+    }
+
+    .conv-name-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .conv-name {
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--deep-navy);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .conv-time {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .conv-preview {
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .unread-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--electric-blue);
+      box-shadow: 0 0 0 2px rgba(44, 131, 248, 0.25);
+    }
+
+    /* Thread */
+    .thread-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 14px;
+    }
+
+    .thread-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      color: var(--white);
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .thread-info strong {
+      display: block;
+      font-size: 14px;
+      color: var(--deep-navy);
+      margin-bottom: 2px;
+    }
+
+    .thread-info span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .thread-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 8px;
+    }
+
+    .messages-list {
+      display: grid;
+      gap: 12px;
+      max-height: 360px;
+      overflow-y: auto;
+      padding-right: 6px;
+      margin-bottom: 14px;
+    }
+
+    .message-bubble {
+      max-width: 80%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .message-incoming {
+      align-self: start;
+      background: var(--white);
+      border: 1px solid var(--line);
+      color: var(--deep-navy);
+    }
+
+    .message-outgoing {
+      align-self: end;
+      margin-left: auto;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      color: var(--white);
+      border: none;
+    }
+
+    .message-meta {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .message-outgoing .message-meta {
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    /* Compose area */
+    .compose-box {
+      display: grid;
+      gap: 10px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .compose-input {
+      width: 100%;
+      min-height: 80px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--deep-navy);
+      background: var(--white);
+      resize: vertical;
+      transition: 0.2s;
+    }
+
+    .compose-input:focus {
+      outline: none;
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 0 4px rgba(44, 131, 248, 0.12);
+    }
+
+    .compose-tools {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .ai-tools {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-sm {
+      padding: 7px 12px;
+      font-size: 12px;
+    }
+
+    /* Animations */
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: revealUp 0.65s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    }
+
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .delay-1 {
+      animation-delay: 0.06s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.12s;
+    }
+
+    .delay-3 {
+      animation-delay: 0.18s;
+    }
+
+    /* Responsive */
+    @media (max-width: 1000px) {
+      body {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .messages-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .conversations-panel {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .nav-list {
+        grid-template-columns: 1fr;
+      }
+
+      .search-wrap {
+        order: 3;
+        max-width: 100%;
+        margin: 10px 0 0;
+        width: 100%;
+      }
+
+      .topbar-inner {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark">V</div>
+      <span>VENTRIXCARROS</span>
+    </div>
+
+    <nav class="nav-list">
+      <div class="nav-item">
+        <span class="nav-icon">🏠</span>
+        Dashboard
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">🤖</span>
+        AI Recruitment
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">💼</span>
+        Jobs
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">👥</span>
+        Candidates
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">📋</span>
+        Applications
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">⭐</span>
+        Shortlisted
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">🎤</span>
+        Interviews
+      </div>
+      <div class="nav-item active">
+        <span class="nav-icon">💬</span>
+        Messages
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">📊</span>
+        Analytics
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Account</div>
+        <div class="nav-item">
+          <span class="nav-icon">💳</span>
+          Subscription
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon">🏢</span>
+          Company Profile
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon">⚙️</span>
+          Settings
+        </div>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <div class="main-content">
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="topbar-left">
+          <a href="dashboard.html" class="back-btn">
+            ← Back
+          </a>
+          <div class="page-title">Messages</div>
+        </div>
+
+        <div class="search-wrap">
+          <span class="search-icon">🔎</span>
+          <input
+            class="search-input"
+            type="text"
+            placeholder="Search messages..."
+          />
+        </div>
+
+        <div class="nav-right">
+          <button class="icon-btn" title="Notifications">🔔</button>
+          <div class="avatar-btn" title="Profile">VC</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page content -->
+    <main class="page-wrap">
+      <div class="container">
+        <!-- Page head -->
+        <div class="page-head reveal-up">
+          <div>
+            <h1 class="page-title-large">Messages</h1>
+            <p class="page-sub">
+              Communicate with candidates and team, with AI assistance for replies and summaries.
+            </p>
+          </div>
+
+          <div class="actions-right">
+            <button class="btn btn-outline">🏷️ Manage labels</button>
+            <button class="btn btn-primary">✉️ New message</button>
+          </div>
+        </div>
+
+        <!-- Messages grid -->
+        <div class="messages-grid reveal-up delay-1">
+          <!-- Conversations list -->
+          <section class="conversations-panel">
+            <div class="panel-head">
+              <h2 class="panel-title">Conversations</h2>
+              <button class="btn btn-outline btn-sm">⚙️ Settings</button>
+            </div>
+
+            <div class="filter-tabs">
+              <div class="filter-tab active">All</div>
+              <div class="filter-tab">Unread</div>
+              <div class="filter-tab">Flagged</div>
+            </div>
+
+            <div class="conversations-list">
+              <div class="conversation-card active">
+                <div class="conv-avatar">RS</div>
+                <div class="conv-info">
+                  <div class="conv-name-row">
+                    <div class="conv-name">Rahul Sharma</div>
+                    <div class="conv-time">10:42 AM</div>
+                  </div>
+                  <div class="conv-preview">
+                    Thanks for sharing the interview details. I’ll be there on time.
+                  </div>
+                </div>
+                <div class="unread-dot"></div>
+              </div>
+
+              <div class="conversation-card">
+                <div class="conv-avatar">PN</div>
+                <div class="conv-info">
+                  <div class="conv-name-row">
+                    <div class="conv-name">Priya Nair</div>
+                    <div class="conv-time">Yesterday</div>
+                  </div>
+                  <div class="conv-preview">
+                    Could we reschedule the interview to next week?
+                  </div>
+                </div>
+              </div>
+
+              <div class="conversation-card">
+                <div class="conv-avatar">AM</div>
+                <div class="conv-info">
+                  <div class="conv-name-row">
+                    <div class="conv-name">Arjun Mehta</div>
+                    <div class="conv-time">Oct 5</div>
+                  </div>
+                  <div class="conv-preview">
+                    I’ve attached my updated resume as requested.
+                  </div>
+                </div>
+              </div>
+
+              <div class="conversation-card">
+                <div class="conv-avatar">SK</div>
+                <div class="conv-info">
+                  <div class="conv-name-row">
+                    <div class="conv-name">Sneha Kapoor</div>
+                    <div class="conv-time">Oct 3</div>
+                  </div>
+                  <div class="conv-preview">
+                    Is the role still open? I’m very interested in this opportunity.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Thread + compose -->
+          <section class="thread-panel">
+            <div class="panel-head">
+              <h2 class="panel-title">Thread</h2>
+              <div class="ai-tools">
+                <button class="btn btn-outline btn-sm">🧠 Summarize thread</button>
+                <button class="btn btn-outline btn-sm">🏷️ Flag</button>
+              </div>
+            </div>
+
+            <div class="thread-header">
+              <div class="thread-avatar">RS</div>
+              <div class="thread-info">
+                <strong>Rahul Sharma</strong>
+                <span>Frontend Developer • rahul.sharma@example.com</span>
+              </div>
+              <div class="thread-actions">
+                <button class="btn btn-outline btn-sm">📄 View profile</button>
+                <button class="btn btn-outline btn-sm">🗑️ Delete</button>
+              </div>
+            </div>
+
+            <div class="messages-list">
+              <div class="message-bubble message-incoming">
+                Hi, could you please share the interview schedule and the name of the interviewer?
+                <div class="message-meta">Oct 7 • 9:15 AM</div>
+              </div>
+
+              <div class="message-bubble message-outgoing">
+                Hi Rahul, sure. Your interview is on Oct 10 at 2:00 PM with Amit Verma (Senior Frontend Engineer).
+                <div class="message-meta">Oct 7 • 9:30 AM</div>
+              </div>
+
+              <div class="message-bubble message-incoming">
+                Thanks for sharing the interview details. I’ll be there on time.
+                <div class="message-meta">Oct 7 • 10:42 AM</div>
+              </div>
+            </div>
+
+            <div class="compose-box">
+              <textarea
+                class="compose-input"
+                placeholder="Write your reply..."
+              ></textarea>
+
+              <div class="compose-tools">
+                <div class="ai-tools">
+                  <button class="btn btn-outline btn-sm">✨ Draft reply</button>
+                  <button class="btn btn-outline btn-sm">🎯 Tone check</button>
+                  <button class="btn btn-outline btn-sm">💡 Suggest next step</button>
+                </div>
+
+                <button class="btn btn-primary btn-sm">Send</button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Highlight active nav item
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+
+    // Simple conversation switcher (demo)
+    const conversationCards = document.querySelectorAll('.conversation-card');
+    conversationCards.forEach(card => {
+      card.addEventListener('click', () => {
+        conversationCards.forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        // In a real app, load the corresponding thread here.
+      });
+    });
+
+    // Demo: wire AI action buttons
+    document.querySelectorAll('.ai-tools .btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const action = e.target.textContent.trim();
+        console.log('AI action:', action);
+        alert(`AI action: ${action}\n\n(Connect to your AI backend to implement.)`);
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Candidates — VentrixCarros</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --deep-navy: #050a30;
+      --navy: #070d3f;
+      --electric-blue: #2c83f8;
+      --royal-blue: #274cdc;
+      --vivid-blue: #1c19b8;
+      --white: #ffffff;
+      --light-blue: #e0e4f5;
+
+      --ink: var(--deep-navy);
+      --muted: #5b6b85;
+      --line: var(--light-blue);
+      --bg: #f7f9ff;
+      --surface: var(--white);
+
+      --radius: 24px;
+      --shadow: 0 24px 70px rgba(5, 10, 48, 0.10);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 600px at 50% -20%, rgba(44, 131, 248, 0.08), transparent 70%),
+        var(--bg);
+      line-height: 1.65;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1200px, 100% - 40px);
+      margin-inline: auto;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      background: var(--white);
+      border-right: 1px solid var(--line);
+      padding: 20px 16px;
+      overflow-y: auto;
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+      padding: 10px 12px;
+      margin-bottom: 18px;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: var(--white);
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      box-shadow: 0 10px 28px rgba(44, 131, 248, 0.30);
+      font-size: 18px;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      transition: 0.2s ease;
+      cursor: pointer;
+    }
+
+    .nav-item:hover {
+      background: rgba(44, 131, 248, 0.06);
+      color: var(--electric-blue);
+    }
+
+    .nav-item.active {
+      background: linear-gradient(135deg, rgba(44, 131, 248, 0.12), rgba(39, 76, 220, 0.12));
+      color: var(--royal-blue);
+      font-weight: 600;
+    }
+
+    .nav-icon {
+      width: 22px;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .nav-section {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .nav-section-title {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      padding: 6px 12px;
+      margin-bottom: 6px;
+    }
+
+    /* Main content */
+    .main-content {
+      min-width: 0;
+    }
+
+    /* Top header */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: rgba(247, 249, 255, 0.85);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 0;
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--white);
+      color: var(--deep-navy);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: 0.2s ease;
+      text-decoration: none;
+    }
+
+    .back-btn:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+      transform: translateX(-2px);
+    }
+
+    .page-title {
+      font-family: "Sora", sans-serif;
+      font-size: 20px;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+    }
+
+    .search-wrap {
+      flex: 1;
+      max-width: 420px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 11px 16px 11px 38px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--deep-navy);
+      background: var(--white);
+      transition: 0.2s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 0 4px rgba(44, 131, 248, 0.12);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: var(--white);
+      display: grid;
+      place-items: center;
+      font-size: 17px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+      transform: translateY(-2px);
+    }
+
+    .avatar-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      color: var(--white);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(44, 131, 248, 0.25);
+    }
+
+    /* Page content */
+    .page-wrap {
+      padding: 28px 0 60px;
+    }
+
+    .page-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .page-title-large {
+      font-family: "Sora", sans-serif;
+      font-size: 26px;
+      letter-spacing: -1px;
+      color: var(--deep-navy);
+    }
+
+    .page-sub {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .actions-right {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      border-radius: 999px;
+      padding: 11px 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.25s ease;
+      font-family: inherit;
+      font-size: 13px;
+    }
+
+    .btn-primary {
+      color: var(--white);
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      box-shadow: 0 14px 40px rgba(44, 131, 248, 0.30);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 55px rgba(39, 76, 220, 0.35);
+    }
+
+    .btn-outline {
+      background: var(--white);
+      border: 1px solid var(--line);
+      color: var(--deep-navy);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+      transform: translateY(-2px);
+    }
+
+    /* Filters bar */
+    .filters-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .filter-input,
+    .filter-select {
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--deep-navy);
+      background: var(--white);
+      transition: 0.2s ease;
+    }
+
+    .filter-input {
+      width: 220px;
+    }
+
+    .filter-input:focus,
+    .filter-select:focus {
+      outline: none;
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 0 4px rgba(44, 131, 248, 0.12);
+    }
+
+    .filter-select {
+      min-width: 150px;
+    }
+
+    /* Candidates panel */
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .table th,
+    .table td {
+      text-align: left;
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .table th {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      font-weight: 600;
+    }
+
+    .candidate-name {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 220px;
+    }
+
+    .candidate-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      color: var(--white);
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .candidate-info strong {
+      display: block;
+      font-size: 13px;
+      color: var(--deep-navy);
+      margin-bottom: 3px;
+    }
+
+    .candidate-info span {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .score-pill {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: "Sora", sans-serif;
+    }
+
+    .score-high {
+      background: rgba(5, 150, 105, 0.10);
+      color: #059669;
+      border: 1px solid rgba(5, 150, 105, 0.25);
+    }
+
+    .score-medium {
+      background: rgba(44, 131, 248, 0.10);
+      color: var(--electric-blue);
+      border: 1px solid rgba(44, 131, 248, 0.25);
+    }
+
+    .score-low {
+      background: rgba(220, 38, 38, 0.10);
+      color: #dc2626;
+      border: 1px solid rgba(220, 38, 38, 0.25);
+    }
+
+    .skills-cell {
+      min-width: 180px;
+    }
+
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .skill-tag {
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(44, 131, 248, 0.06);
+      color: var(--royal-blue);
+      border: 1px solid rgba(44, 131, 248, 0.18);
+    }
+
+    .status-pill {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .status-new {
+      background: rgba(44, 131, 248, 0.10);
+      color: var(--electric-blue);
+      border: 1px solid rgba(44, 131, 248, 0.25);
+    }
+
+    .status-screened {
+      background: rgba(5, 150, 105, 0.10);
+      color: #059669;
+      border: 1px solid rgba(5, 150, 105, 0.25);
+    }
+
+    .status-interview {
+      background: rgba(245, 158, 11, 0.10);
+      color: #d97706;
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+
+    .status-rejected {
+      background: rgba(100, 116, 139, 0.10);
+      color: #64748b;
+      border: 1px solid rgba(100, 116, 139, 0.25);
+    }
+
+    .ai-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-sm {
+      padding: 7px 12px;
+      font-size: 12px;
+    }
+
+    /* Bulk actions bar */
+    .bulk-bar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      border-radius: 14px;
+      background: rgba(44, 131, 248, 0.06);
+      border: 1px solid rgba(44, 131, 248, 0.20);
+    }
+
+    .bulk-bar.visible {
+      display: flex;
+    }
+
+    .bulk-text {
+      font-size: 13px;
+      color: var(--royal-blue);
+      font-weight: 600;
+    }
+
+    .bulk-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Animations */
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: revealUp 0.65s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    }
+
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .delay-1 {
+      animation-delay: 0.06s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.12s;
+    }
+
+    .delay-3 {
+      animation-delay: 0.18s;
+    }
+
+    /* Responsive */
+    @media (max-width: 1000px) {
+      body {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .nav-list {
+        grid-template-columns: 1fr;
+      }
+
+      .filters-bar {
+        flex-direction: column;
+      }
+
+      .filter-input,
+      .filter-select {
+        width: 100%;
+      }
+
+      .search-wrap {
+        order: 3;
+        max-width: 100%;
+        margin: 10px 0 0;
+        width: 100%;
+      }
+
+      .topbar-inner {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark">V</div>
+      <span>VENTRIXCARROS</span>
+    </div>
+
+    <nav class="nav-list">
+      <div class="nav-item">
+        <span class="nav-icon">🏠</span>
+        Dashboard
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">🤖</span>
+        AI Recruitment
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">💼</span>
+        Jobs
+      </div>
+      <div class="nav-item active">
+        <span class="nav-icon">👥</span>
+        Candidates
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">📋</span>
+        Applications
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">⭐</span>
+        Shortlisted
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">🎤</span>
+        Interviews
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">💬</span>
+        Messages
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">📊</span>
+        Analytics
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Account</div>
+        <div class="nav-item">
+          <span class="nav-icon">💳</span>
+          Subscription
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon">🏢</span>
+          Company Profile
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon">⚙️</span>
+          Settings
+        </div>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <div class="main-content">
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="topbar-left">
+          <a href="dashboard.html" class="back-btn">
+            ← Back
+          </a>
+          <div class="page-title">Candidates</div>
+        </div>
+
+        <div class="search-wrap">
+          <span class="search-icon">🔎</span>
+          <input
+            class="search-input"
+            type="text"
+            placeholder="Search candidates..."
+          />
+        </div>
+
+        <div class="nav-right">
+          <button class="icon-btn" title="Notifications">🔔</button>
+          <div class="avatar-btn" title="Profile">VC</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page content -->
+    <main class="page-wrap">
+      <div class="container">
+        <!-- Page head -->
+        <div class="page-head reveal-up">
+          <div>
+            <h1 class="page-title-large">Candidates</h1>
+            <p class="page-sub">
+              Browse, filter, and evaluate candidates with AI-powered insights.
+            </p>
+          </div>
+
+          <div class="actions-right">
+            <button class="btn btn-outline">📥 Export list</button>
+            <button class="btn btn-primary">➕ Add candidate</button>
+          </div>
+        </div>
+
+        <!-- Bulk actions bar -->
+        <div class="bulk-bar" id="bulkBar">
+          <div class="bulk-text" id="bulkText">0 candidates selected</div>
+          <div class="bulk-actions">
+            <button class="btn btn-outline btn-sm">🤖 Re-score with AI</button>
+            <button class="btn btn-outline btn-sm">💡 Suggest roles</button>
+            <button class="btn btn-outline btn-sm">🧩 Skill gap analysis</button>
+            <button class="btn btn-primary btn-sm">⭐ Shortlist</button>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters-bar reveal-up delay-1">
+          <input
+            class="filter-input"
+            type="text"
+            placeholder="Search by name, skills, or current company..."
+          />
+          <select class="filter-select">
+            <option>All roles</option>
+            <option>Frontend Developer</option>
+            <option>Backend Engineer</option>
+            <option>AI Engineer</option>
+            <option>Product Designer</option>
+          </select>
+          <select class="filter-select">
+            <option>All experience</option>
+            <option>0–1 yrs</option>
+            <option>2–4 yrs</option>
+            <option>5+ yrs</option>
+          </select>
+          <select class="filter-select">
+            <option>All locations</option>
+            <option>Remote</option>
+            <option>Bengaluru</option>
+            <option>Delhi NCR</option>
+            <option>Hyderabad</option>
+          </select>
+          <select class="filter-select">
+            <option>All statuses</option>
+            <option>New</option>
+            <option>Screened</option>
+            <option>Interview</option>
+            <option>Rejected</option>
+          </select>
+        </div>
+
+        <!-- Candidates panel -->
+        <section class="panel reveal-up delay-2">
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th style="width: 40px;">
+                    <input type="checkbox" id="selectAll" />
+                  </th>
+                  <th>Candidate</th>
+                  <th>Role</th>
+                  <th>Experience</th>
+                  <th>Location</th>
+                  <th class="skills-cell">Skills</th>
+                  <th>AI score</th>
+                  <th>Status</th>
+                  <th>AI actions</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <input type="checkbox" class="row-checkbox" />
+                  </td>
+                  <td>
+                    <div class="candidate-name">
+                      <div class="candidate-avatar">RS</div>
+                      <div class="candidate-info">
+                        <strong>Rahul Sharma</strong>
+                        <span>Ex: TechNest • 3 yrs</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>Frontend Developer</td>
+                  <td>3 yrs</td>
+                  <td>Remote</td>
+                  <td class="skills-cell">
+                    <div class="skills-list">
+                      <span class="skill-tag">React</span>
+                      <span class="skill-tag">TypeScript</span>
+                      <span class="skill-tag">CSS</span>
+                    </div>
+                  </td>
+                  <td><span class="score-pill score-high">92%</span></td>
+                  <td><span class="status-pill status-screened">Screened</span></td>
+                  <td>
+                    <div class="ai-actions">
+                      <button class="btn btn-outline btn-sm">🤖 Re-score</button>
+                      <button class="btn btn-outline btn-sm">💡 Suggest roles</button>
+                      <button class="btn btn-outline btn-sm">🧩 Skill gap</button>
+                    </div>
+                  </td>
+                  <td>
+                    <button class="btn btn-outline btn-sm">View</button>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <input type="checkbox" class="row-checkbox" />
+                  </td>
+                  <td>
+                    <div class="candidate-name">
+                      <div class="candidate-avatar">PN</div>
+                      <div class="candidate-info">
+                        <strong>Priya Nair</strong>
+                        <span>Ex: AI Labs • 5 yrs</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>AI Engineer</td>
+                  <td>5 yrs</td>
+                  <td>Bengaluru</td>
+                  <td class="skills-cell">
+                    <div class="skills-list">
+                      <span class="skill-tag">Python</span>
+                      <span class="skill-tag">LLMs</span>
+                      <span class="skill-tag">PyTorch</span>
+                    </div>
+                  </td>
+                  <td><span class="score-pill score-high">89%</span></td>
+                  <td><span class="status-pill status-interview">Interview</span></td>
+                  <td>
+                    <div class="ai-actions">
+                      <button class="btn btn-outline btn-sm">🤖 Re-score</button>
+                      <button class="btn btn-outline btn-sm">💡 Suggest roles</button>
+                      <button class="btn btn-outline btn-sm">🧩 Skill gap</button>
+                    </div>
+                  </td>
+                  <td>
+                    <button class="btn btn-outline btn-sm">View</button>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <input type="checkbox" class="row-checkbox" />
+                  </td>
+                  <td>
+                    <div class="candidate-name">
+                      <div class="candidate-avatar">AM</div>
+                      <div class="candidate-info">
+                        <strong>Arjun Mehta</strong>
+                        <span>Ex: StartupHub • 2 yrs</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>Frontend Developer</td>
+                  <td>2 yrs</td>
+                  <td>Delhi NCR</td>
+                  <td class="skills-cell">
+                    <div class="skills-list">
+                      <span class="skill-tag">React</span>
+                      <span class="skill-tag">JavaScript</span>
+                      <span class="skill-tag">HTML/CSS</span>
+                    </div>
+                  </td>
+                  <td><span class="score-pill score-medium">78%</span></td>
+                  <td><span class="status-pill status-new">New</span></td>
+                  <td>
+                    <div class="ai-actions">
+                      <button class="btn btn-outline btn-sm">🤖 Re-score</button>
+                      <button class="btn btn-outline btn-sm">💡 Suggest roles</button>
+                      <button class="btn btn-outline btn-sm">🧩 Skill gap</button>
+                    </div>
+                  </td>
+                  <td>
+                    <button class="btn btn-outline btn-sm">View</button>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <input type="checkbox" class="row-checkbox" />
+                  </td>
+                  <td>
+                    <div class="candidate-name">
+                      <div class="candidate-avatar">SK</div>
+                      <div class="candidate-info">
+                        <strong>Sneha Kapoor</strong>
+                        <span>Ex: CloudCo • 4 yrs</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>Backend Engineer</td>
+                  <td>4 yrs</td>
+                  <td>Hyderabad</td>
+                  <td class="skills-cell">
+                    <div class="skills-list">
+                      <span class="skill-tag">Node.js</span>
+                      <span class="skill-tag">PostgreSQL</span>
+                      <span class="skill-tag">AWS</span>
+                    </div>
+                  </td>
+                  <td><span class="score-pill score-medium">74%</span></td>
+                  <td><span class="status-pill status-new">New</span></td>
+                  <td>
+                    <div class="ai-actions">
+                      <button class="btn btn-outline btn-sm">🤖 Re-score</button>
+                      <button class="btn btn-outline btn-sm">💡 Suggest roles</button>
+                      <button class="btn btn-outline btn-sm">🧩 Skill gap</button>
+                    </div>
+                  </td>
+                  <td>
+                    <button class="btn btn-outline btn-sm">View</button>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <input type="checkbox" class="row-checkbox" />
+                  </td>
+                  <td>
+                    <div class="candidate-name">
+                      <div class="candidate-avatar">VD</div>
+                      <div class="candidate-info">
+                        <strong>Vikram Desai</strong>
+                        <span>Ex: DataX • 6 yrs</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>AI Engineer</td>
+                  <td>6 yrs</td>
+                  <td>Remote</td>
+                  <td class="skills-cell">
+                    <div class="skills-list">
+                      <span class="skill-tag">Python</span>
+                      <span class="skill-tag">TensorFlow</span>
+                      <span class="skill-tag">MLOps</span>
+                    </div>
+                  </td>
+                  <td><span class="score-pill score-low">61%</span></td>
+                  <td><span class="status-pill status-rejected">Rejected</span></td>
+                  <td>
+                    <div class="ai-actions">
+                      <button class="btn btn-outline btn-sm">🤖 Re-score</button>
+                      <button class="btn btn-outline btn-sm">💡 Suggest roles</button>
+                      <button class="btn btn-outline btn-sm">🧩 Skill gap</button>
+                    </div>
+                  </td>
+                  <td>
+                    <button class="btn btn-outline btn-sm">View</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Highlight active nav item
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+
+    // Bulk selection logic
+    const selectAll = document.getElementById('selectAll');
+    const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+    const bulkBar = document.getElementById('bulkBar');
+    const bulkText = document.getElementById('bulkText');
+
+    function updateBulkBar() {
+      const checked = document.querySelectorAll('.row-checkbox:checked').length;
+      if (checked > 0) {
+        bulkBar.classList.add('visible');
+        bulkText.textContent = `${checked} candidate${checked > 1 ? 's' : ''} selected`;
+      } else {
+        bulkBar.classList.remove('visible');
+      }
+    }
+
+    selectAll.addEventListener('change', () => {
+      rowCheckboxes.forEach(cb => (cb.checked = selectAll.checked));
+      updateBulkBar();
+    });
+
+    rowCheckboxes.forEach(cb => {
+      cb.addEventListener('change', updateBulkBar);
+    });
+
+    // Demo: wire AI action buttons
+    document.querySelectorAll('.ai-actions .btn, .bulk-actions .btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const action = e.target.textContent.trim();
+        const selected = document.querySelectorAll('.row-checkbox:checked');
+        if (selected.length === 0) {
+          alert('Select one or more candidates first.');
+          return;
+        }
+        const names = Array.from(selected)
+          .map(cb => cb.closest('tr').querySelector('.candidate-info strong').textContent)
+          .join(', ');
+
+        console.log(`Action: ${action}\nCandidates: ${names}`);
+        alert(`Action: ${action}\nCandidates: ${names}\n\n(Connect to your AI backend to implement.)`);
+      });
+    });
+  </script>
+</body>
+</html>

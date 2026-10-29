@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta
+    name="description"
+    content="VentrixCarros admin panel for managing users, jobs, interviews, and hiring."
+  />
+
+  <title>Admin Panel | VentrixCarros</title>
+
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --dark: #111827;
+      --text: #344054;
+      --muted: #667085;
+      --white: #ffffff;
+      --surface: #f8fafc;
+      --light-blue: #eff6ff;
+      --border: #e4e7ec;
+      --green: #16a34a;
+      --orange: #ea580c;
+      --red: #dc2626;
+      --purple: #7c3aed;
+      --radius: 14px;
+      --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--surface);
+      color: var(--text);
+      font-family:
+        Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .admin-layout {
+      display: grid;
+      grid-template-columns: 270px 1fr;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: var(--dark);
+      color: #aeb9ca;
+      padding: 28px 20px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    .sidebar-logo {
+      display: block;
+      margin-bottom: 32px;
+    }
+
+    .sidebar-logo-image {
+      display: block;
+      width: 180px;
+      max-width: 100%;
+      height: 55px;
+      object-fit: contain;
+    }
+
+    .sidebar-menu {
+      display: grid;
+      gap: 8px;
+      list-style: none;
+    }
+
+    .sidebar-link {
+      align-items: center;
+      border-radius: 10px;
+      color: #aeb9ca;
+      display: flex;
+      font-size: 0.88rem;
+      font-weight: 700;
+      gap: 12px;
+      padding: 12px 14px;
+      transition:
+        background 0.2s ease,
+        color 0.2s ease;
+    }
+
+    .sidebar-link:hover,
+    .sidebar-link.active {
+      background: rgba(37, 99, 235, 0.18);
+      color: var(--white);
+    }
+
+    .sidebar-link.active {
+      border-left: 3px solid var(--primary);
+    }
+
+    .sidebar-icon {
+      font-size: 1.05rem;
+      text-align: center;
+      width: 22px;
+    }
+
+    /* Main */
+    .admin-main {
+      padding: 30px;
+    }
+
+    .admin-header {
+      align-items: center;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 25px;
+      padding: 18px 24px;
+    }
+
+    .admin-header h1 {
+      color: var(--dark);
+      font-size: 1.5rem;
+      letter-spacing: -0.04em;
+    }
+
+    .admin-header p {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .admin-user {
+      align-items: center;
+      display: flex;
+      gap: 12px;
+    }
+
+    .admin-avatar {
+      align-items: center;
+      background: var(--light-blue);
+      border-radius: 50%;
+      color: var(--primary);
+      display: flex;
+      font-weight: 800;
+      height: 44px;
+      justify-content: center;
+      width: 44px;
+    }
+
+    .admin-user strong {
+      color: var(--dark);
+      display: block;
+      font-size: 0.86rem;
+    }
+
+    .admin-user small {
+      color: var(--muted);
+      font-size: 0.72rem;
+    }
+
+    /* Filters */
+    .filter-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 25px;
+      padding: 20px 24px;
+    }
+
+    .filter-card h2 {
+      color: var(--dark);
+      font-size: 1.05rem;
+      margin-bottom: 15px;
+    }
+
+    .filters {
+      align-items: end;
+      display: grid;
+      gap: 15px;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .filter-group {
+      display: grid;
+      gap: 7px;
+    }
+
+    .filter-label {
+      color: var(--dark);
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .filter-input,
+    .filter-select {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      color: var(--dark);
+      min-height: 42px;
+      outline: none;
+      padding: 9px 12px;
+      width: 100%;
+    }
+
+    .filter-input:focus,
+    .filter-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .filter-button {
+      background: var(--primary);
+      border: 0;
+      border-radius: 9px;
+      color: var(--white);
+      font-size: 0.8rem;
+      font-weight: 800;
+      min-height: 42px;
+      padding: 9px 16px;
+    }
+
+    .filter-button:hover {
+      background: var(--primary-dark);
+    }
+
+    .reset-button {
+      background: var(--white);
+      border: 1px solid var(--border);
+      color: var(--primary);
+    }
+
+    .reset-button:hover {
+      background: var(--light-blue);
+    }
+
+    /* Stats */
+    .stats-grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(4, 1fr);
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    .stat-icon {
+      align-items: center;
+      border-radius: 10px;
+      display: flex;
+      font-size: 1.15rem;
+      height: 42px;
+      justify-content: center;
+      margin-bottom: 15px;
+      width: 42px;
+    }
+
+    .blue-icon {
+      background: var(--light-blue);
+      color: var(--primary);
+    }
+
+    .green-icon {
+      background: #dcfce7;
+      color: var(--green);
+    }
+
+    .orange-icon {
+      background: #ffedd5;
+      color: var(--orange);
+    }
+
+    .purple-icon {
+      background: #ede9fe;
+      color: var(--purple);
+    }
+
+    .red-icon {
+      background: #fef2f2;
+      color: var(--red);
+    }
+
+    .stat-card h3 {
+      color: var(--dark);
+      font-size: 1.7rem;
+      letter-spacing: -0.04em;
+    }
+
+    .stat-card p {
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin-top: 4px;
+    }
+
+    /* Panels */
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 25px;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      padding: 20px 24px;
+    }
+
+    .panel-header h2 {
+      color: var(--dark);
+      font-size: 1.1rem;
+    }
+
+    .panel-header p {
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .panel-action {
+      background: var(--primary);
+      border: 0;
+      border-radius: 8px;
+      color: var(--white);
+      font-size: 0.78rem;
+      font-weight: 800;
+      min-height: 40px;
+      padding: 9px 15px;
+    }
+
+    .panel-action:hover {
+      background: var(--primary-dark);
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      border-collapse: collapse;
+      min-width: 760px;
+      width: 100%;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--border);
+      font-size: 0.82rem;
+      padding: 15px 24px;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    th {
+      background: var(--surface);
+      color: var(--dark);
+      font-weight: 800;
+    }
+
+    td {
+      color: var(--text);
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .status {
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 5px 10px;
+    }
+
+    .status-active {
+      background: #f0fdf4;
+      color: var(--green);
+    }
+
+    .status-pending {
+      background: #fff7ed;
+      color: var(--orange);
+    }
+
+    .status-rejected {
+      background: #fef2f2;
+      color: var(--red);
+    }
+
+    .status-hired {
+      background: #ede9fe;
+      color: var(--purple);
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .small-button {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      color: var(--primary);
+      font-size: 0.72rem;
+      font-weight: 800;
+      min-height: 34px;
+      padding: 6px 11px;
+    }
+
+    .small-button:hover {
+      background: var(--light-blue);
+    }
+
+    .danger-button {
+      color: var(--red);
+    }
+
+    .danger-button:hover {
+      background: #fef2f2;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .filters {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .admin-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        height: auto;
+        position: relative;
+      }
+
+      .sidebar-menu {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .admin-main {
+        padding: 20px;
+      }
+
+      .admin-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 560px) {
+      .filters,
+      .stats-grid,
+      .sidebar-menu {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="admin-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <a href="index.html" class="sidebar-logo" aria-label="VentrixCarros home">
+        <img
+          src="./logo.jpg"
+          alt="VentrixCarros logo"
+          class="sidebar-logo-image"
+          onerror="this.style.display='none'"
+        />
+      </a>
+
+      <ul class="sidebar-menu">
+        <li>
+          <a href="#dashboard" class="sidebar-link active">
+            <span class="sidebar-icon">▤</span>
+            Dashboard
+          </a>
+        </li>
+
+        <li>
+          <a href="#users" class="sidebar-link">
+            <span class="sidebar-icon">◉</span>
+            Users
+          </a>
+        </li>
+
+        <li>
+          <a href="#jobs" class="sidebar-link">
+            <span class="sidebar-icon">⌕</span>
+            Jobs
+          </a>
+        </li>
+
+        <li>
+          <a href="#interviews" class="sidebar-link">
+            <span class="sidebar-icon">◉</span>
+            Interviews
+          </a>
+        </li>
+
+        <li>
+          <a href="#applications" class="sidebar-link">
+            <span class="sidebar-icon">▤</span>
+            Applications
+          </a>
+        </li>
+
+        <li>
+          <a href="index.html" class="sidebar-link">
+            <span class="sidebar-icon">↗</span>
+            View website
+          </a>
+        </li>
+
+        <li>
+          <a href="login.html" class="sidebar-link">
+            <span class="sidebar-icon">⏻</span>
+            Log out
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main -->
+    <main class="admin-main">
+
+      <header class="admin-header">
+        <div>
+          <h1>Admin dashboard</h1>
+          <p>Track users, jobs, interviews, applications, and hiring results.</p>
+        </div>
+
+        <div class="admin-user">
+          <div class="admin-avatar">A</div>
+          <div>
+            <strong>Admin</strong>
+            <small>admin@ventrixcarros.com</small>
+          </div>
+        </div>
+      </header>
+
+      <!-- Filters -->
+      <section class="filter-card">
+        <h2>Filter dashboard data</h2>
+
+        <form class="filters" id="filterForm">
+          <div class="filter-group">
+            <label class="filter-label" for="dateRange">
+              Date range
+            </label>
+
+            <select class="filter-select" id="dateRange">
+              <option value="all">All time</option>
+              <option value="today">Today</option>
+              <option value="7">Last 7 days</option>
+              <option value="30">Last 30 days</option>
+              <option value="90">Last 90 days</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label" for="userRole">
+              User role
+            </label>
+
+            <select class="filter-select" id="userRole">
+              <option value="all">All users</option>
+              <option value="job-seeker">Job seekers</option>
+              <option value="employer">Employers</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label" for="jobStatus">
+              Job status
+            </label>
+
+            <select class="filter-select" id="jobStatus">
+              <option value="all">All jobs</option>
+              <option value="active">Active jobs</option>
+              <option value="pending">Pending jobs</option>
+              <option value="closed">Closed jobs</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label" for="applicationStatus">
+              Application status
+            </label>
+
+            <select class="filter-select" id="applicationStatus">
+              <option value="all">All applications</option>
+              <option value="applied">Applied</option>
+              <option value="interview">Interview</option>
+              <option value="hired">Hired</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label" for="searchText">
+              Search
+            </label>
+
+            <input
+              class="filter-input"
+              id="searchText"
+              type="search"
+              placeholder="Search user, job, or company..."
+            />
+          </div>
+
+          <div class="filter-group">
+            <button class="filter-button" type="submit">
+              Apply filters
+            </button>
+          </div>
+
+          <div class="filter-group">
+            <button class="filter-button reset-button" type="button" id="resetFilters">
+              Reset filters
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Dashboard statistics -->
+      <section class="stats-grid" id="dashboard">
+        <article class="stat-card">
+          <div class="stat-icon blue-icon">◉</div>
+          <h3 id="totalUsers">1,248</h3>
+          <p>Total users on website</p>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-icon blue-icon">◉</div>
+          <h3 id="jobSeekers">1,036</h3>
+          <p>Job seekers</p>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-icon purple-icon">⌕</div>
+          <h3 id="employers">212</h3>
+          <p>Employers</p>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-icon green-icon">⌕</div>
+          <h3 id="activeJobs">356</h3>
+          <p>Active jobs</p>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-icon orange-icon">▤</div>
+          <h3 id="totalApplications">892</h3>
+          <p>Total applications</p>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-icon blue-icon">◉</div>
+          <h3 id="interviewCount">218</h3>
+          <p>Candidates got interviews</p>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-icon purple-icon">✓</div>
+          <h3 id="hiredCount">76</h3>
+          <p>Candidates got jobs</p>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-icon red-icon">✕</div>
+          <h3 id="rejectedCount">312</h3>
+          <p>Rejected applications</p>
+        </article>
+      </section>
+
+      <!-- Users -->
+      <section class="panel" id="users">
+        <div class="panel-header">
+          <div>
+            <h2>Website users</h2>
+            <p>Manage job seekers and employers.</p>
+          </div>
+
+          <button class="panel-action" type="button">
+            Add user
+          </button>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Joined</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>Alex Kumar</td>
+                <td>alex@example.com</td>
+                <td>Job seeker</td>
+                <td>17 Oct 2026</td>
+                <td><span class="status status-active">Active</span></td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="small-button" type="button">View</button>
+                    <button class="small-button danger-button" type="button">Delete</button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td>Priya Sharma</td>
+                <td>priya@example.com</td>
+                <td>Employer</td>
+                <td>15 Oct 2026</td>
+                <td><span class="status status-active">Active</span></td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="small-button" type="button">View</button>
+                    <button class="small-button danger-button" type="button">Delete</button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td>Rahul Verma</td>
+                <td>rahul@example.com</td>
+                <td>Job seeker</td>
+                <td>12 Oct 2026</td>
+                <td><span class="status status-pending">Pending</span></td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="small-button" type="button">View</button>
+                    <button class="small-button danger-button" type="button">Delete</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Jobs -->
+      <section class="panel" id="jobs">
+        <div class="panel-header">
+          <div>
+            <h2>Job postings</h2>
+            <p>Review, approve, edit, or remove job listings.</p>
+          </div>
+
+          <button class="panel-action" type="button">
+            Add job
+          </button>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Job title</th>
+                <th>Company</th>
+                <th>Location</th>
+                <th>Salary</th>
+                <th>Applications</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>Frontend Developer</td>
+                <td>TechNova Solutions</td>
+                <td>Remote</td>
+                <td>₹6–10 LPA</td>
+                <td>48</td>
+                <td><span class="status status-active">Active</span></td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="small-button" type="button">Edit</button>
+                    <button class="small-button danger-button" type="button">Delete</button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td>Product Designer</td>
+                <td>Creative Labs</td>
+                <td>Bengaluru</td>
+                <td>₹25K/month</td>
+                <td>32</td>
+                <td><span class="status status-pending">Pending</span></td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="small-button" type="button">Approve</button>
+                    <button class="small-button danger-button" type="button">Reject</button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td>Data Analyst</td>
+                <td>GrowthBase</td>
+                <td>Hyderabad</td>
+                <td>₹7–12 LPA</td>
+                <td>61</td>
+                <td><span class="status status-active">Active</span></td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="small-button" type="button">Edit</button>
+                    <button class="small-button danger-button" type="button">Delete</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Interviews -->
+      <section class="panel" id="interviews">
+        <div class="panel-header">
+          <div>
+            <h2>Interviews</h2>
+            <p>Candidates who reached the interview stage.</p>
+          </div>
+
+          <button class="panel-action" type="button">
+            Schedule interview
+          </button>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Candidate</th>
+                <th>Job title</th>
+                <th>Company</th>
+                <th>Interview date</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>Alex Kumar</td>
+                <td>Frontend Developer</td>
+                <td>TechNova Solutions</td>
+                <td>20 Oct 2026</td>
+                <td><span class="status status-pending">Scheduled</span></td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="small-button" type="button">View</button>
+                    <button class="small-button" type="button">Update</button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td>Sneha Patel</td>
+                <td>Product Designer</td>
+                <td>Creative Labs</td>
+                <td>18 Oct 2026</td>
+                <td><span class="status status-active">Completed</span></td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="small-button" type="button">View</button>
+                    <button class="small-button" type="button">Update</button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td>Rohan Mehta</td>
+                <td>Data Analyst</td>
+                <td>GrowthBase</td>
+                <td>14 Oct 2026</td>
+                <td><span class="status status-rejected">Not selected</span></td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="small-button" type="button">View</button>
+                    <button class="small-button" type="button">Update</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Applications -->
+      <section class="panel" id="applications">
+        <div class="panel-header">
+          <div>
+            <h2>Job applications</h2>
+            <p>Track applied, interviewed, hired, and rejected candidates.</p>
+          </div>
+
+          <button class="panel-action" type="button">
+            Export CSV
+          </button>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Candidate</th>
+                <th>Job title</th>
+                <th>Company</th>
+                <th>Applied date</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>Alex Kumar</td>
+                <td>Frontend Developer</td>
+                <td>TechNova Solutions</td>
+                <td>17 Oct 2026</td>
+                <td><span class="status status-pending">Interview</span></td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="small-button" type="button">View</button>
+                    <button class="small-button" type="button">Update</button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td>Sneha Patel</td>
+                <td>Product Designer</td>
+                <td>Creative Labs</td>
+                <td>16 Oct 2026</td>
+                <td><span class="status status-hired">Hired</span></td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="small-button" type="button">View</button>
+                    <button class="small-button" type="button">Update</button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td>Rohan Mehta</td>
+                <td>Data Analyst</td>
+                <td>GrowthBase</td>
+                <td>15 Oct 2026</td>
+                <td><span class="status status-rejected">Rejected</span></td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="small-button" type="button">View</button>
+                    <button class="small-button" type="button">Update</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    const filterForm = document.getElementById("filterForm");
+    const resetFilters = document.getElementById("resetFilters");
+
+
+    filterForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+
+      // Connect these filters to your backend API later.
+      // Example:
+      // fetch("/api/admin/stats?range=30&role=job-seeker")
+      alert("Filters applied. Connect this to your backend to load live data.");
+    });
+
+
+    resetFilters.addEventListener("click", function() {
+      filterForm.reset();
+    });
+  </script>
+
+</body>
+</html>

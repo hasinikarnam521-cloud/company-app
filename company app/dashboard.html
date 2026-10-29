@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Company Dashboard — VentrixCarros</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --deep-navy: #050a30;
+      --navy: #070d3f;
+      --electric-blue: #2c83f8;
+      --royal-blue: #274cdc;
+      --vivid-blue: #1c19b8;
+      --white: #ffffff;
+      --light-blue: #e0e4f5;
+      --ink: var(--deep-navy);
+      --muted: #5b6b85;
+      --line: var(--light-blue);
+      --bg: #f7f9ff;
+      --surface: var(--white);
+      --radius: 24px;
+      --shadow: 0 24px 70px rgba(5, 10, 48, 0.10);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 600px at 50% -20%, rgba(44, 131, 248, 0.08), transparent 70%),
+        var(--bg);
+      line-height: 1.65;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1200px, 100% - 40px);
+      margin-inline: auto;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      background: var(--white);
+      border-right: 1px solid var(--line);
+      padding: 20px 16px;
+      overflow-y: auto;
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+      padding: 10px 12px;
+      margin-bottom: 18px;
+    }
+
+    .sidebar-brand img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      transition: 0.2s ease;
+      cursor: pointer;
+    }
+
+    .nav-item:hover {
+      background: rgba(44, 131, 248, 0.06);
+      color: var(--electric-blue);
+    }
+
+    .nav-item.active {
+      background: linear-gradient(
+        135deg,
+        rgba(44, 131, 248, 0.12),
+        rgba(39, 76, 220, 0.12)
+      );
+      color: var(--royal-blue);
+      font-weight: 600;
+    }
+
+    .nav-icon {
+      width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-icon svg {
+      width: 19px;
+      height: 19px;
+      display: block;
+    }
+
+    .nav-section {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .nav-section-title {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      padding: 6px 12px;
+      margin-bottom: 6px;
+    }
+
+    .notification-panel {
+      position: fixed;
+      top: 82px;
+      right: 30px;
+      width: 360px;
+      max-width: calc(100vw - 30px);
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 20px 55px rgba(5, 10, 48, 0.18);
+      overflow: hidden;
+      z-index: 100;
+      display: none;
+    }
+
+    .notification-panel.show {
+      display: block;
+    }
+
+    .notification-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .notification-header strong {
+      color: var(--deep-navy);
+      font-family: "Sora", sans-serif;
+      font-size: 15px;
+    }
+
+    .notification-header button {
+      border: none;
+      background: transparent;
+      color: var(--electric-blue);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .notification-item {
+      display: flex;
+      gap: 12px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      transition: background 0.2s ease;
+    }
+
+    .notification-item:hover {
+      background: rgba(44, 131, 248, 0.04);
+    }
+
+    .notification-item.unread {
+      background: rgba(44, 131, 248, 0.06);
+    }
+
+    .notification-icon {
+      width: 36px;
+      height: 36px;
+      flex: 0 0 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      background: rgba(44, 131, 248, 0.10);
+    }
+
+    .notification-item strong {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--deep-navy);
+      font-size: 12px;
+    }
+
+    .notification-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .notification-item small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .notification-empty {
+      display: none;
+      padding: 28px 18px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .main-content {
+      min-width: 0;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: rgba(247, 249, 255, 0.85);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 0;
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--white);
+      color: var(--deep-navy);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .back-btn:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+      transform: translateX(-2px);
+    }
+
+    .page-title {
+      font-family: "Sora", sans-serif;
+      font-size: 20px;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+    }
+
+    .search-wrap {
+      flex: 1;
+      max-width: 420px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 11px 16px 11px 38px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--deep-navy);
+      background: var(--white);
+      transition: 0.2s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 0 4px rgba(44, 131, 248, 0.12);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: var(--white);
+      display: grid;
+      place-items: center;
+      font-size: 17px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+      transform: translateY(-2px);
+    }
+
+    .avatar-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      color: var(--white);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(44, 131, 248, 0.25);
+      border: none;
+    }
+
+    .profile-wrap {
+      position: relative;
+    }
+
+    .profile-panel {
+      position: fixed;
+      top: 82px;
+      right: 30px;
+      width: 280px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 20px 55px rgba(5, 10, 48, 0.18);
+      overflow: hidden;
+      z-index: 100;
+      display: none;
+    }
+
+    .profile-panel.show {
+      display: block;
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px;
+    }
+
+    .profile-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .profile-header strong {
+      display: block;
+      color: var(--deep-navy);
+      font-size: 13px;
+    }
+
+    .profile-header span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .profile-divider {
+      height: 1px;
+      background: var(--line);
+    }
+
+    .profile-item {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 13px 18px;
+      color: var(--deep-navy);
+      font-size: 12px;
+      font-weight: 500;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .profile-item span {
+      width: 22px;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    .profile-item:hover {
+      background: rgba(44, 131, 248, 0.06);
+      color: var(--electric-blue);
+    }
+
+    .profile-logout {
+      border-top: 1px solid var(--line);
+      color: #dc2626;
+    }
+
+    .profile-logout:hover {
+      background: rgba(220, 38, 38, 0.05);
+      color: #dc2626;
+    }
+
+    .dashboard-wrap {
+      padding: 28px 0 60px;
+    }
+
+    .dashboard-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .dashboard-title {
+      font-family: "Sora", sans-serif;
+      font-size: 26px;
+      letter-spacing: -1px;
+      color: var(--deep-navy);
+    }
+
+    .dashboard-sub {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .quick-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      border-radius: 999px;
+      padding: 11px 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.25s ease;
+      font-family: inherit;
+      font-size: 13px;
+    }
+
+    .plus-icon {
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      color: #ffffff;
+      background: #2c83f8;
+      border: 1px solid #2c83f8;
+      padding: 13px 22px;
+      font-weight: 700;
+      box-shadow: 0 10px 28px rgba(44, 131, 248, 0.25);
+    }
+
+    .btn-primary:hover {
+      background: #274cdc;
+      border-color: #274cdc;
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 14px 34px rgba(39, 76, 220, 0.30);
+    }
+
+    .btn-outline {
+      background: var(--white);
+      border: 1px solid var(--line);
+      color: var(--deep-navy);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+      transform: translateY(-2px);
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 28px 80px rgba(5, 10, 48, 0.12);
+    }
+
+    .kpi-label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      margin-bottom: 8px;
+    }
+
+    .kpi-value {
+      font-family: "Sora", sans-serif;
+      font-size: 28px;
+      letter-spacing: -1px;
+      color: var(--deep-navy);
+      margin-bottom: 6px;
+    }
+
+    .kpi-delta {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .delta-up {
+      color: #059669;
+    }
+
+    .delta-down {
+      color: #dc2626;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .panel-title {
+      font-family: "Sora", sans-serif;
+      font-size: 18px;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+    }
+
+    .panel-sub {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(44, 131, 248, 0.08);
+      border: 1px solid rgba(44, 131, 248, 0.25);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--royal-blue);
+    }
+
+    .insights-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .insight-card {
+      display: flex;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--white);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .insight-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 45px rgba(5, 10, 48, 0.08);
+    }
+
+    .insight-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      font-size: 17px;
+      color: var(--white);
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      box-shadow: 0 8px 20px rgba(44, 131, 248, 0.25);
+      flex: 0 0 38px;
+    }
+
+    .insight-text strong {
+      display: block;
+      font-size: 13px;
+      color: var(--deep-navy);
+      margin-bottom: 4px;
+    }
+
+    .insight-text span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .table th,
+    .table td {
+      text-align: left;
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .table th {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      font-weight: 600;
+    }
+
+    .candidate-name {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .candidate-link {
+      display: block;
+      font-weight: 600;
+      color: var(--deep-navy);
+      transition: 0.2s ease;
+    }
+
+    .candidate-link:hover {
+      color: var(--electric-blue);
+    }
+
+    .candidate-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      color: var(--white);
+      display: grid;
+      place-items: center;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .score-pill {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: "Sora", sans-serif;
+    }
+
+    .score-high {
+      background: rgba(5, 150, 105, 0.10);
+      color: #059669;
+      border: 1px solid rgba(5, 150, 105, 0.25);
+    }
+
+    .score-medium {
+      background: rgba(44, 131, 248, 0.10);
+      color: var(--electric-blue);
+      border: 1px solid rgba(44, 131, 248, 0.25);
+    }
+
+    .score-low {
+      background: rgba(220, 38, 38, 0.10);
+      color: #dc2626;
+      border: 1px solid rgba(220, 38, 38, 0.25);
+    }
+
+    .status-pill {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .status-new {
+      background: rgba(44, 131, 248, 0.10);
+      color: var(--electric-blue);
+      border: 1px solid rgba(44, 131, 248, 0.25);
+    }
+
+    .status-screened {
+      background: rgba(5, 150, 105, 0.10);
+      color: #059669;
+      border: 1px solid rgba(5, 150, 105, 0.25);
+    }
+
+    .status-interview {
+      background: rgba(245, 158, 11, 0.10);
+      color: #d97706;
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: revealUp 0.65s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    }
+
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .delay-1 { animation-delay: 0.06s; }
+    .delay-2 { animation-delay: 0.12s; }
+    .delay-3 { animation-delay: 0.18s; }
+    .delay-4 { animation-delay: 0.24s; }
+
+    @media (max-width: 1000px) {
+      body {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .nav-list {
+        grid-template-columns: 1fr;
+      }
+
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .quick-actions {
+        width: 100%;
+      }
+
+      .btn {
+        flex: 1;
+      }
+
+      .search-wrap {
+        order: 3;
+        max-width: 100%;
+        margin: 10px 0 0;
+        width: 100%;
+      }
+
+      .topbar-inner {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <img src="./ventrix-logo-mark.png" alt="VentrixCarros Logo" />
+      <span>VENTRIXCARROS</span>
+    </div>
+
+    <nav class="nav-list">
+      <a href="dashboard.html" class="nav-item active">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+          </svg>
+        </span>
+        Dashboard
+      </a>
+
+      <a href="ai-recruitment.html" class="nav-item">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="3"></circle>
+            <path d="M5 21v-2a7 7 0 0 1 14 0v2"></path>
+            <path d="M19 5l1 1"></path>
+            <path d="M20 4l-1 1"></path>
+          </svg>
+        </span>
+        AI Recruitment
+      </a>
+
+      <a href="jobs.html" class="nav-item">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="7" width="18" height="13" rx="2"></rect>
+            <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            <path d="M3 12h18"></path>
+            <path d="M10 12v2h4v-2"></path>
+          </svg>
+        </span>
+        Jobs
+      </a>
+
+      <a href="candidates.html" class="nav-item">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="8" r="3"></circle>
+            <path d="M3 20v-2a6 6 0 0 1 12 0v2"></path>
+            <circle cx="17" cy="9" r="2.5"></circle>
+            <path d="M16 15a5 5 0 0 1 5 5"></path>
+          </svg>
+        </span>
+        Candidates
+      </a>
+
+      <a href="applications.html" class="nav-item">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="3" width="14" height="18" rx="2"></rect>
+            <path d="M9 3v3h6V3"></path>
+            <path d="M8 12l2 2 4-4"></path>
+          </svg>
+        </span>
+        Applications
+      </a>
+
+      <a href="shortlisted.html" class="nav-item">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="3"></circle>
+            <path d="M5 21v-2a7 7 0 0 1 14 0v2"></path>
+            <path d="M19 3l.6 1.2L21 4.4l-1 1 .2 1.4-1.2-.7-1.2.7.2-1.4-1-1 1.4-.2L19 3z"></path>
+          </svg>
+        </span>
+        Shortlisted
+      </a>
+
+      <a href="interviews.html" class="nav-item">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="8" y="3" width="8" height="12" rx="4"></rect>
+            <path d="M5 11a7 7 0 0 0 14 0"></path>
+            <path d="M12 18v3"></path>
+            <path d="M9 21h6"></path>
+          </svg>
+        </span>
+        Interviews
+      </a>
+
+      <a href="messages.html" class="nav-item">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 11.5a7.5 7.5 0 0 1-8 7.5 8.5 8.5 0 0 1-3-.5L4 20l1.5-4A7.5 7.5 0 1 1 20 11.5z"></path>
+          </svg>
+        </span>
+        Messages
+      </a>
+
+      <a href="analytics.html" class="nav-item">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19V5"></path>
+            <path d="M4 19h17"></path>
+            <path d="M7 15l4-4 3 2 5-6"></path>
+            <path d="M16 7h3v3"></path>
+          </svg>
+        </span>
+        Analytics
+      </a>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Account</div>
+
+        <a href="subscription.html" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+              <path d="M3 10h18"></path>
+              <path d="M7 15h4"></path>
+            </svg>
+          </span>
+          Subscription
+        </a>
+
+        <a href="company-profile.html" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"></path>
+              <path d="M2 21h20"></path>
+              <path d="M8 7h2"></path>
+              <path d="M8 11h2"></path>
+              <path d="M8 15h2"></path>
+              <path d="M16 9h2"></path>
+              <path d="M16 13h2"></path>
+              <path d="M16 17h2"></path>
+            </svg>
+          </span>
+          Company Profile
+        </a>
+
+        <a href="settings.html" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.8 1.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V20h-2.6v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1-1.8-1.8.1-.1A1.7 1.7 0 0 0 8 15a1.7 1.7 0 0 0-1.6-1H6v-2.6h.4A1.7 1.7 0 0 0 8 10a1.7 1.7 0 0 0-.3-1.9l-.1-.1 1.8-1.8.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.6V5H15v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1 1.8 1.8-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.4V14h-.4a1.7 1.7 0 0 0-1.6 1z"></path>
+            </svg>
+          </span>
+          Settings
+        </a>
+
+        <a href="login.html" class="nav-item" id="sidebarLogout">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 5H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4"></path>
+              <path d="M14 8l4 4-4 4"></path>
+              <path d="M9 12h9"></path>
+            </svg>
+          </span>
+          Logout
+        </a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="topbar-left">
+          <a href="index.html" class="back-btn">← Back</a>
+          <div class="page-title">Company Dashboard</div>
+        </div>
+
+        <div class="search-wrap">
+          <span class="search-icon">🔎</span>
+          <input
+            class="search-input"
+            type="text"
+            placeholder="Search jobs, candidates, or companies..."
+          />
+        </div>
+
+        <div class="nav-right">
+          <button class="icon-btn" id="notificationButton" title="Notifications">
+            🔔
+          </button>
+
+          <div class="profile-wrap">
+            <button class="avatar-btn" id="profileButton" title="Profile">
+              <span id="profileButtonInitials">VC</span>
+            </button>
+
+            <div class="profile-panel" id="profilePanel">
+              <div class="profile-header">
+                <div class="profile-avatar" id="profileAvatarInitials">VC</div>
+                <div>
+                  <strong id="profileName">Loading account...</strong>
+                  <span id="profileEmail">Loading email...</span>
+                </div>
+              </div>
+
+              <div class="profile-divider"></div>
+
+              <a href="company-profile.html" class="profile-item">
+                <span>🏢</span>
+                Company Profile
+              </a>
+
+              <a href="settings.html" class="profile-item">
+                <span>⚙️</span>
+                Settings
+              </a>
+
+              <a href="login.html" class="profile-item profile-logout" id="profileLogout">
+                <span>↪</span>
+                Logout
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="notification-panel" id="notificationPanel">
+      <div class="notification-header">
+        <strong>Notifications</strong>
+        <button id="markNotificationsRead">Mark all as read</button>
+      </div>
+
+      <div class="notification-item unread">
+        <div class="notification-icon">👤</div>
+        <div>
+          <strong>New application received</strong>
+          <span>Rahul Sharma applied for Frontend Developer.</span>
+          <small>10 minutes ago</small>
+        </div>
+      </div>
+
+      <div class="notification-item">
+        <div class="notification-icon">🎤</div>
+        <div>
+          <strong>Interview scheduled</strong>
+          <span>Interview with Priya Nair is scheduled.</span>
+          <small>1 hour ago</small>
+        </div>
+      </div>
+
+      <div class="notification-item">
+        <div class="notification-icon">⭐</div>
+        <div>
+          <strong>Candidate shortlisted</strong>
+          <span>Arjun Mehta was shortlisted.</span>
+          <small>2 hours ago</small>
+        </div>
+      </div>
+
+      <div class="notification-empty" id="notificationEmpty">
+        No new notifications
+      </div>
+    </div>
+
+    <main class="dashboard-wrap">
+      <div class="container">
+        <div class="dashboard-head reveal-up">
+          <div>
+            <h1 class="dashboard-title">Overview</h1>
+            <p class="dashboard-sub">
+              Manage jobs, candidates, and AI-powered hiring workflows
+            </p>
+          </div>
+
+          <div class="quick-actions">
+            <a href="jobs.html" class="btn btn-primary">
+              <span class="plus-icon">+</span>
+              Post a job
+            </a>
+            <a href="candidates.html" class="btn btn-outline">👥 View candidates</a>
+            <a href="analytics.html" class="btn btn-outline">📊 Analytics</a>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card reveal-up delay-1">
+            <div class="kpi-label">Active jobs</div>
+            <div class="kpi-value" id="activeJobsCount">0</div>
+            <div class="kpi-delta delta-up">Currently active for your company</div>
+          </div>
+
+          <div class="kpi-card reveal-up delay-2">
+            <div class="kpi-label">Applications</div>
+            <div class="kpi-value" id="applicationsCount">0</div>
+            <div class="kpi-delta delta-up">All applications received</div>
+          </div>
+
+          <div class="kpi-card reveal-up delay-3">
+            <div class="kpi-label">Shortlisted</div>
+            <div class="kpi-value" id="shortlistedCount">0</div>
+            <div class="kpi-delta delta-up">Total candidates shortlisted</div>
+          </div>
+
+          <div class="kpi-card reveal-up delay-4">
+            <div class="kpi-label">Interviews</div>
+            <div class="kpi-value" id="interviewsCount">0</div>
+            <div class="kpi-delta delta-down">Scheduled interviews</div>
+          </div>
+        </div>
+
+        <div class="main-grid">
+          <section class="panel reveal-up delay-3">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">AI Insights</h2>
+                <p class="panel-sub">
+                  Smart suggestions to improve your hiring process
+                </p>
+              </div>
+              <span class="ai-badge">● AI Active</span>
+            </div>
+
+            <div class="insights-list">
+              <div class="insight-card">
+                <div class="insight-icon">🎯</div>
+                <div class="insight-text">
+                  <strong>Top 5 candidates for “Frontend Developer”</strong>
+                  <span>
+                    AI identified 5 strong matches with 85%+ fit based on skills
+                    and experience.
+                  </span>
+                </div>
+              </div>
+
+              <div class="insight-card">
+                <div class="insight-icon">⏱</div>
+                <div class="insight-text">
+                  <strong>Reduce time-to-hire by 22%</strong>
+                  <span>
+                    Automate initial screening for high-volume roles to cut manual
+                    review time.
+                  </span>
+                </div>
+              </div>
+
+              <div class="insight-card">
+                <div class="insight-icon">🧭</div>
+                <div class="insight-text">
+                  <strong>Job description optimization</strong>
+                  <span>
+                    Rewrite requirements for “AI Engineer” to attract more
+                    mid–senior candidates.
+                  </span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel reveal-up delay-4">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">Recent candidates</h2>
+                <p class="panel-sub">
+                  Latest applications with AI match scores
+                </p>
+              </div>
+              <a
+                href="candidates.html"
+                class="btn btn-outline"
+                style="padding: 7px 12px; font-size: 12px;"
+              >
+                View all
+              </a>
+            </div>
+
+            <div class="table-wrap">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Candidate</th>
+                    <th>Role</th>
+                    <th>AI score</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="recentCandidateRows">
+                  <tr>
+                    <td colspan="4">Loading recent applications...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const API_BASE_URL = "http://localhost:5000/api";
+    const token = localStorage.getItem("ventrixcarrosToken");
+
+    function logOut() {
+      localStorage.removeItem("ventrixcarrosToken");
+      localStorage.removeItem("ventrixcarrosUser");
+      window.location.href = "login.html";
+    }
+
+    document.getElementById("sidebarLogout").addEventListener("click", (event) => {
+      event.preventDefault();
+      logOut();
+    });
+
+    document.getElementById("profileLogout").addEventListener("click", (event) => {
+      event.preventDefault();
+      logOut();
+    });
+
+    function showProfile(user) {
+  if (!user) return;
+
+  const initials = (user.name || user.email || "U")
+    .split(/\s+/)
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
+  const profileName = document.getElementById("profileName");
+  const profileEmail = document.getElementById("profileEmail");
+  const profileAvatarInitials = document.getElementById("profileAvatarInitials");
+  const profileButtonInitials = document.getElementById("profileButtonInitials");
+
+  if (profileName) profileName.textContent = user.name || "User";
+  if (profileEmail) profileEmail.textContent = user.email || "";
+  if (profileAvatarInitials) profileAvatarInitials.textContent = initials;
+  if (profileButtonInitials) profileButtonInitials.textContent = initials;
+}
+
+    try {
+      const savedUser = localStorage.getItem("ventrixcarrosUser");
+      if (savedUser) showProfile(JSON.parse(savedUser));
+    } catch (error) {
+      console.error("Could not read saved account details:", error);
+    }
+
+    async function loadDashboardAccount() {
+      if (!token) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/auth/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (response.status === 401) {
+          logOut();
+          return;
+        }
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok || !data.user) {
+          throw new Error(data.message || "Could not load your account.");
+        }
+        showProfile(data.user);
+        localStorage.setItem("ventrixcarrosUser", JSON.stringify(data.user));
+      } catch (error) {
+        console.error("Dashboard account loading error:", error);
+        alert(`Could not load account details: ${error.message}`);
+      }
+    }
+
+    function escapeHTML(value) {
+      const characters = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" };
+      return String(value ?? "").replace(/[&<>"']/g, (character) => characters[character]);
+    }
+
+    function renderRecentCandidates(candidates) {
+      const rows = document.getElementById("recentCandidateRows");
+      if (!candidates.length) {
+        rows.innerHTML = '<tr><td colspan="4">No applications yet.</td></tr>';
+        return;
+      }
+
+      const statusStyles = {
+        submitted: ["New", "status-new"],
+        reviewing: ["Reviewing", "status-screened"],
+        shortlisted: ["Shortlisted", "status-screened"],
+        rejected: ["Rejected", "status-new"],
+        hired: ["Hired", "status-interview"],
+        withdrawn: ["Withdrawn", "status-new"],
+      };
+
+      rows.innerHTML = candidates.map((candidate) => {
+        const name = candidate.name || "Candidate";
+        const initials = name.split(/\s+/).filter(Boolean).slice(0, 2)
+          .map((part) => part[0]).join("").toUpperCase();
+        const profileDetails = [candidate.experience, candidate.currentRole]
+          .filter(Boolean).join(" • ") || "Candidate profile";
+        const score = candidate.aiScore == null ? null : Number(candidate.aiScore);
+        const scoreText = score === null || Number.isNaN(score) ? "—" : `${score}%`;
+        const scoreClass = score === null || Number.isNaN(score)
+          ? "score-medium" : score >= 85 ? "score-high" : score >= 70 ? "score-medium" : "score-low";
+        const [statusLabel, statusClass] = statusStyles[candidate.status] || [candidate.status || "New", "status-new"];
+        const candidateName = candidate.candidateId
+          ? `<a href="candidate-detail.html?id=${encodeURIComponent(candidate.candidateId)}" class="candidate-link">${escapeHTML(name)}</a>`
+          : `<span class="candidate-link">${escapeHTML(name)}</span>`;
+
+        return `<tr>
+          <td><div class="candidate-name"><div class="candidate-avatar">${escapeHTML(initials || "C")}</div><div>${candidateName}<div style="font-size: 11px; color: var(--muted)">${escapeHTML(profileDetails)}</div></div></div></td>
+          <td>${escapeHTML(candidate.jobTitle || "—")}</td>
+          <td><span class="score-pill ${scoreClass}">${escapeHTML(scoreText)}</span></td>
+          <td><span class="status-pill ${statusClass}">${escapeHTML(statusLabel)}</span></td>
+        </tr>`;
+      }).join("");
+    }
+
+    async function loadDashboardSummary() {
+      const rows = document.getElementById("recentCandidateRows");
+      if (!token) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/dashboard/summary`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await response.json().catch(() => ({}));
+        if (response.status === 401) {
+          logOut();
+          return;
+        }
+        if (!response.ok) {
+          throw new Error(data.message || (response.status === 403
+            ? "Use a recruiter account linked to a company to view this dashboard."
+            : "Could not load dashboard information."));
+        }
+
+        const stats = data.stats || {};
+        document.getElementById("activeJobsCount").textContent = Number(stats.activeJobs) || 0;
+        document.getElementById("applicationsCount").textContent = (Number(stats.applications) || 0).toLocaleString("en-IN");
+        document.getElementById("shortlistedCount").textContent = Number(stats.shortlisted) || 0;
+        document.getElementById("interviewsCount").textContent = Number(stats.interviews) || 0;
+        renderRecentCandidates(Array.isArray(data.recentCandidates) ? data.recentCandidates : []);
+      } catch (error) {
+        console.error("Dashboard summary loading error:", error);
+        rows.innerHTML = `<tr><td colspan="4">${escapeHTML(error.message || "Could not load dashboard information.")}</td></tr>`;
+      }
+    }
+
+    const currentPage = window.location.pathname.split("/").pop() || "dashboard.html";
+    document.querySelectorAll(".nav-item").forEach((item) => {
+      if ((item.getAttribute("href") || "") === currentPage) item.classList.add("active");
+      else item.classList.remove("active");
+    });
+
+    loadDashboardAccount();
+    loadDashboardSummary();
+  </script>
+
+  <script src="notification.js"></script>
+  <script src="profile.js"></script>
+</body>
+</html>

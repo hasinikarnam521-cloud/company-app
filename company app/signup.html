@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create account — VentrixCarros</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --deep-navy: #050a30;
+      --navy: #070d3f;
+      --electric-blue: #2c83f8;
+      --royal-blue: #274cdc;
+      --vivid-blue: #1c19b8;
+      --white: #ffffff;
+      --light-blue: #e0e4f5;
+      --ink: var(--deep-navy);
+      --muted: #5b6b85;
+      --line: var(--light-blue);
+      --bg: #f7f9ff;
+      --surface: var(--white);
+      --radius: 24px;
+      --shadow: 0 24px 70px rgba(5, 10, 48, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 600px at 50% -20%, rgba(44, 131, 248, 0.12), transparent 70%),
+        var(--bg);
+      line-height: 1.65;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1200px, 100% - 40px);
+      margin-inline: auto;
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(18px);
+      background: rgba(255, 255, 255, 0.85);
+      border-bottom: 1px solid var(--light-blue);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+    }
+
+    .brand-logo {
+      width: 58px;
+      height: 58px;
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .nav a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      transition: 0.2s;
+    }
+
+    .nav a:hover {
+      color: var(--electric-blue);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      border-radius: 999px;
+      padding: 14px 27px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    .btn-primary {
+      color: var(--white);
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      box-shadow: 0 16px 45px rgba(44, 131, 248, 0.30);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 22px 60px rgba(39, 76, 220, 0.35);
+    }
+
+    .btn-primary:disabled {
+      cursor: wait;
+      opacity: 0.7;
+      transform: none;
+    }
+
+    .btn-outline {
+      background: var(--white);
+      border: 1px solid var(--light-blue);
+      color: var(--deep-navy);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+      transform: translateY(-2px);
+    }
+
+    .signup-wrap {
+      flex: 1;
+      display: grid;
+      place-items: center;
+      padding: 50px 0 80px;
+    }
+
+    .signup-box {
+      width: min(480px, 100% - 40px);
+    }
+
+    .signup-logo {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 18px;
+      border-radius: 20px;
+      display: grid;
+      place-items: center;
+      background: transparent;
+      box-shadow: none;
+      overflow: hidden;
+    }
+
+    .signup-logo img {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .signup-title {
+      font-family: "Sora", sans-serif;
+      font-size: 32px;
+      letter-spacing: -1px;
+      color: var(--deep-navy);
+      margin-bottom: 8px;
+    }
+
+    .signup-sub {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 26px;
+    }
+
+    .value-prop {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 22px 20px;
+      text-align: left;
+      margin-bottom: 22px;
+    }
+
+    .value-prop h2 {
+      font-family: "Sora", sans-serif;
+      font-size: 20px;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+      margin-bottom: 10px;
+    }
+
+    .value-prop p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .signup-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 36px 32px;
+      text-align: left;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .signup-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 28px 80px rgba(5, 10, 48, 0.14);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+      position: relative;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--deep-navy);
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      padding-right: 44px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      font-size: 15px;
+      font-family: inherit;
+      color: var(--deep-navy);
+      background: var(--white);
+      transition: 0.2s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 0 4px rgba(44, 131, 248, 0.12);
+    }
+
+    .password-wrap {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 18px;
+      display: grid;
+      place-items: center;
+      padding: 6px;
+      border-radius: 8px;
+      transition: 0.2s;
+    }
+
+    .toggle-password:hover {
+      color: var(--electric-blue);
+      background: rgba(44, 131, 248, 0.08);
+    }
+
+    .form-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .form-message {
+      display: none;
+      margin-bottom: 18px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+    }
+
+    .form-message.show {
+      display: block;
+    }
+
+    .form-message.error {
+      color: #8b1e2d;
+      background: #fff0f1;
+      border: 1px solid #ffd2d6;
+    }
+
+    .form-message.success {
+      color: #17633a;
+      background: #edfff4;
+      border: 1px solid #c4f1d5;
+    }
+
+    .form-actions {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin: 18px 0 22px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .form-actions a {
+      color: var(--electric-blue);
+      font-weight: 600;
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .signup-divider {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 24px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .signup-divider::before,
+    .signup-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+
+    .signup-footer {
+      text-align: center;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .signup-footer a {
+      color: var(--electric-blue);
+      font-weight: 600;
+    }
+
+    .benefits-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 22px;
+      text-align: left;
+    }
+
+    .benefit-mini {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .benefit-mini:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 50px rgba(5, 10, 48, 0.10);
+    }
+
+    .benefit-mini-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: 16px;
+      color: var(--white);
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      box-shadow: 0 8px 20px rgba(44, 131, 248, 0.25);
+      flex: 0 0 34px;
+    }
+
+    .benefit-mini-text strong {
+      display: block;
+      font-size: 13px;
+      color: var(--deep-navy);
+      margin-bottom: 2px;
+    }
+
+    .benefit-mini-text span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .footer {
+      width: 100%;
+      background: var(--deep-navy);
+      border-top: 1px solid rgba(224, 228, 245, 0.15);
+      padding: 34px 0;
+      box-sizing: border-box;
+      margin-top: auto;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.70);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 22px;
+    }
+
+    .footer a:hover {
+      color: var(--electric-blue);
+    }
+
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(18px);
+      animation: revealUp 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    }
+
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .delay-1 { animation-delay: 0.08s; }
+    .delay-2 { animation-delay: 0.16s; }
+    .delay-3 { animation-delay: 0.24s; }
+    .delay-4 { animation-delay: 0.32s; }
+    .delay-5 { animation-delay: 0.40s; }
+    .delay-6 { animation-delay: 0.48s; }
+
+    .fade-in {
+      opacity: 0;
+      animation: fadeIn 0.8s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .benefits-row {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        display: none;
+      }
+
+      .signup-card {
+        padding: 28px 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <div class="brand">
+        <img src="./ventrix-logo-mark.png" alt="VentrixCarros Logo" class="brand-logo" />
+        VentrixCarros
+      </div>
+
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="index.html" class="btn btn-outline">Back to site</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="signup-wrap">
+    <div class="signup-box">
+      <div class="signup-logo reveal-up">
+        <img src="./ventrix-logo-mark.png" alt="VentrixCarros Logo" />
+      </div>
+
+      <h1 class="signup-title reveal-up delay-1">Create your company account</h1>
+      <p class="signup-sub reveal-up delay-2">
+        Get started with VentrixCarros in minutes
+      </p>
+
+      <div class="value-prop fade-in delay-3">
+        <h2>Why companies use VentrixCarros</h2>
+        <p>
+          VentrixCarros brings jobs, candidates, applications, interviews, and
+          hiring insights into one clean dashboard. Recruiters save time on
+          manual screening, collaborate faster, and make data-driven hiring
+          decisions — from first application to final offer.
+        </p>
+      </div>
+
+      <div class="signup-card fade-in delay-4">
+        <div class="form-message" id="formMessage" role="alert" aria-live="polite"></div>
+
+        <form id="signupForm">
+          <div id="signupFields">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="companyName">Company name</label>
+                <input
+                  class="form-input"
+                  type="text"
+                  id="companyName"
+                  name="companyName"
+                  autocomplete="organization"
+                  placeholder="Your Company Ltd."
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="workEmail">Work email</label>
+                <input
+                  class="form-input"
+                  type="email"
+                  id="workEmail"
+                  name="workEmail"
+                  autocomplete="email"
+                  placeholder="you@company.com"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="fullName">Full name</label>
+              <input
+                class="form-input"
+                type="text"
+                id="fullName"
+                name="fullName"
+                autocomplete="name"
+                placeholder="Your name"
+                required
+              />
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <div class="password-wrap">
+                  <input
+                    class="form-input"
+                    type="password"
+                    id="password"
+                    name="password"
+                    autocomplete="new-password"
+                    placeholder="Create a password"
+                    minlength="8"
+                    required
+                  />
+                  <button
+                    type="button"
+                    class="toggle-password"
+                    id="togglePassword"
+                    title="Show password"
+                    aria-label="Show password"
+                  >
+                    👁
+                  </button>
+                </div>
+                <p class="form-note">At least 8 characters</p>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="confirmPassword">Confirm password</label>
+                <div class="password-wrap">
+                  <input
+                    class="form-input"
+                    type="password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    autocomplete="new-password"
+                    placeholder="Re-enter password"
+                    minlength="8"
+                    required
+                  />
+                  <button
+                    type="button"
+                    class="toggle-password"
+                    id="toggleConfirmPassword"
+                    title="Show password"
+                    aria-label="Show password"
+                  >
+                    👁
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <input type="checkbox" id="terms" required />
+              <label for="terms">
+                I agree to the
+                <a href="#">Terms of Service</a>
+                and
+                <a href="#">Privacy Policy</a>.
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group" id="otpGroup" hidden>
+            <label class="form-label" for="otpCode">Email verification code</label>
+            <input
+              class="form-input"
+              type="text"
+              id="otpCode"
+              inputmode="numeric"
+              autocomplete="one-time-code"
+              maxlength="6"
+              placeholder="Enter the 6-digit code"
+            />
+            <p class="form-note" id="otpMessage"></p>
+            <p class="form-note" id="otpTimer">Code expires in 1:00</p>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" id="submitButton">
+            Create account
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-outline btn-block"
+            id="resendCodeButton"
+            hidden
+            style="margin-top: 12px;"
+          >
+            Resend code
+          </button>
+        </form>
+
+        <div class="signup-divider">or</div>
+
+        <div class="signup-footer">
+          Already have an account?
+          <a href="login.html">Log in</a>
+        </div>
+      </div>
+
+      <div class="benefits-row">
+        <div class="benefit-mini fade-in delay-4">
+          <div class="benefit-mini-icon">⚡</div>
+          <div class="benefit-mini-text">
+            <strong>AI screening</strong>
+            <span>Auto-rank candidates by fit</span>
+          </div>
+        </div>
+
+        <div class="benefit-mini fade-in delay-5">
+          <div class="benefit-mini-icon">📊</div>
+          <div class="benefit-mini-text">
+            <strong>Analytics</strong>
+            <span>Track applications &amp; hires</span>
+          </div>
+        </div>
+
+        <div class="benefit-mini fade-in delay-6">
+          <div class="benefit-mini-icon">🔒</div>
+          <div class="benefit-mini-text">
+            <strong>Secure</strong>
+            <span>Private company data</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>© 2026 VentrixCarros. All rights reserved.</p>
+
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms</a>
+        <a href="#">Support</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const API_BASE_URL = "http://localhost:5000/api";
+
+    function setupTogglePassword(inputId, buttonId) {
+      const toggle = document.getElementById(buttonId);
+      const input = document.getElementById(inputId);
+
+      toggle.addEventListener("click", () => {
+        const isVisible = input.type === "text";
+        input.type = isVisible ? "password" : "text";
+        toggle.textContent = isVisible ? "👁" : "🙈";
+        toggle.title = isVisible ? "Show password" : "Hide password";
+      });
+    }
+
+    setupTogglePassword("password", "togglePassword");
+    setupTogglePassword("confirmPassword", "toggleConfirmPassword");
+
+    const signupForm = document.getElementById("signupForm");
+    const signupFields = document.getElementById("signupFields");
+    const otpGroup = document.getElementById("otpGroup");
+    const otpInput = document.getElementById("otpCode");
+    const otpMessage = document.getElementById("otpMessage");
+    const formMessage = document.getElementById("formMessage");
+    const submitButton = document.getElementById("submitButton");
+    const resendCodeButton = document.getElementById("resendCodeButton");
+    const otpTimer = document.getElementById("otpTimer");
+
+    let otpCountdownInterval = null;
+    let otpStep = false;
+    let pendingSignup = null;
+
+    function showMessage(message, type = "error") {
+      formMessage.textContent = message;
+      formMessage.className = `form-message show ${type}`;
+    }
+
+    function startOtpCountdown() {
+      clearInterval(otpCountdownInterval);
+
+      const expiresAt = Date.now() + 60 * 1000;
+      resendCodeButton.hidden = false;
+      resendCodeButton.disabled = true;
+
+      const updateCountdown = () => {
+        const remaining = Math.max(0, expiresAt - Date.now());
+        const totalSeconds = Math.ceil(remaining / 1000);
+        const timeText = `${Math.floor(totalSeconds / 60)}:${String(totalSeconds % 60).padStart(2, "0")}`;
+
+        otpTimer.textContent = remaining > 0
+          ? `Code expires in ${timeText}`
+          : "The code expired. Request a new one.";
+
+        resendCodeButton.disabled = remaining > 0;
+        resendCodeButton.textContent = remaining > 0
+          ? `Resend code in ${timeText}`
+          : "Resend code";
+
+        if (remaining === 0) {
+          clearInterval(otpCountdownInterval);
+        }
+      };
+
+      updateCountdown();
+      otpCountdownInterval = setInterval(updateCountdown, 1000);
+    }
+
+    otpInput.addEventListener("input", () => {
+      otpInput.value = otpInput.value.replace(/\D/g, "").slice(0, 6);
+    });
+
+    resendCodeButton.addEventListener("click", async () => {
+      resendCodeButton.disabled = true;
+
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/auth/register/resend-otp`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: pendingSignup.email }),
+          }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Could not resend the code.");
+        }
+
+        otpMessage.textContent = data.message;
+        showMessage(data.message, "success");
+        startOtpCountdown();
+      } catch (error) {
+        showMessage(error.message || "Could not resend the code.");
+        resendCodeButton.disabled = false;
+        resendCodeButton.textContent = "Resend code";
+      }
+    });
+
+    signupForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const companyName = document.getElementById("companyName").value.trim();
+      const email = document.getElementById("workEmail").value.trim().toLowerCase();
+      const name = document.getElementById("fullName").value.trim();
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+
+      if (!otpStep && password.length < 8) {
+        showMessage("Password must be at least 8 characters.");
+        return;
+      }
+
+      if (!otpStep && password !== confirmPassword) {
+        showMessage("Passwords do not match.");
+        return;
+      }
+
+      if (otpStep && !/^\d{6}$/.test(otpInput.value.trim())) {
+        showMessage("Enter the 6-digit verification code from your email.");
+        return;
+      }
+
+      submitButton.disabled = true;
+      submitButton.textContent = otpStep ? "Verifying code..." : "Creating account...";
+
+      try {
+        const response = otpStep
+          ? await fetch(`${API_BASE_URL}/auth/verify-otp`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                email: pendingSignup.email,
+                code: otpInput.value.trim(),
+              }),
+            })
+          : await fetch(`${API_BASE_URL}/auth/register`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                companyName,
+                name,
+                email,
+                password,
+                role: "recruiter",
+              }),
+            });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data.message ||
+              (otpStep ? "Code verification failed." : "Could not create your account.")
+          );
+        }
+
+        if (!otpStep) {
+          pendingSignup = { companyName, name, email };
+
+          sessionStorage.setItem(
+            "ventrixcarrosPendingSignup",
+            JSON.stringify(pendingSignup)
+          );
+          sessionStorage.removeItem("ventrixcarrosOnboardingStep");
+          sessionStorage.removeItem("ventrixcarrosReturnAfterLogin");
+          sessionStorage.removeItem("ventrixcarrosPendingCheckout");
+
+          otpStep = true;
+          signupFields.hidden = true;
+          signupFields.querySelectorAll("[required]").forEach((input) => {
+            input.required = false;
+          });
+
+          otpGroup.hidden = false;
+          otpInput.required = true;
+          resendCodeButton.hidden = false;
+          otpMessage.textContent =
+            data.message || `A verification code was sent to ${email}.`;
+          startOtpCountdown();
+
+          submitButton.textContent = "Verify email";
+          showMessage("Check your email and enter the verification code.", "success");
+          otpInput.focus();
+          return;
+        }
+
+        if (!data.paymentToken) {
+          throw new Error("Email verified, but payment authorization was not returned.");
+        }
+
+        sessionStorage.setItem("ventrixcarrosPaymentToken", data.paymentToken);
+        window.location.href = "payment.html";
+      } catch (error) {
+        showMessage(
+          error.message || "Could not connect to the backend. Check that it is running."
+        );
+      } finally {
+        submitButton.disabled = false;
+
+        if (!otpStep) {
+          submitButton.textContent = "Create account";
+        }
+      }
+    });
+  </script>
+</body>
+</html>

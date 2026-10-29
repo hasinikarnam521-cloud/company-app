@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job Details — VentrixCarros</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --navy: #050a30;
+      --blue: #2c83f8;
+      --royal: #274cdc;
+      --white: #fff;
+      --line: #e0e4f5;
+      --muted: #5b6b85;
+      --bg: #f7f9ff;
+      --green: #059669;
+      --orange: #d97706;
+      --red: #dc2626;
+      --radius: 20px;
+      --shadow: 0 18px 50px rgba(5, 10, 48, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      color: var(--navy);
+      font-family: "Inter", sans-serif;
+      background: var(--bg);
+      display: grid;
+      grid-template-columns: 250px 1fr;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    select {
+      font: inherit;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 22px 16px;
+      overflow-y: auto;
+      background: var(--white);
+      border-right: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px;
+      margin-bottom: 22px;
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+    }
+
+    .brand img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+
+    .admin-label {
+      display: block;
+      color: var(--muted);
+      font-family: "Inter", sans-serif;
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      color: var(--royal);
+      background: rgba(44, 131, 248, 0.1);
+    }
+
+    .nav-section {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .nav-section-title {
+      padding: 6px 12px;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .main-content {
+      min-width: 0;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      padding: 14px 0;
+      background: rgba(247, 249, 255, 0.94);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .container {
+      width: min(1280px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .topbar-inner,
+    .topbar-left,
+    .page-head,
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .topbar-left {
+      justify-content: flex-start;
+    }
+
+    .back-btn,
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--navy);
+      background: var(--white);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .btn:hover,
+    .back-btn:hover {
+      color: var(--blue);
+      border-color: var(--blue);
+    }
+
+    .btn-primary {
+      color: var(--white);
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--blue), var(--royal));
+    }
+
+    .btn-primary:hover {
+      color: var(--white);
+    }
+
+    .avatar {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--white);
+      background: linear-gradient(135deg, var(--blue), var(--royal));
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .page-wrap {
+      padding: 30px 0 60px;
+    }
+
+    .page-head {
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    h1,
+    h2 {
+      font-family: "Sora", sans-serif;
+    }
+
+    h1 {
+      margin-bottom: 6px;
+      font-size: 28px;
+    }
+
+    .page-sub,
+    .panel-sub,
+    .muted {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 999px;
+      color: var(--muted);
+      background: #eef1f8;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: capitalize;
+    }
+
+    .badge.active {
+      color: var(--green);
+      background: rgba(5, 150, 105, 0.1);
+    }
+
+    .badge.closed {
+      color: var(--red);
+      background: rgba(220, 38, 38, 0.1);
+    }
+
+    .badge.draft {
+      color: var(--muted);
+      background: rgba(91, 107, 133, 0.1);
+    }
+
+    .metric-grid,
+    .content-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .metric-grid {
+      grid-template-columns: repeat(2, 1fr);
+      margin-bottom: 18px;
+    }
+
+    .content-grid {
+      grid-template-columns: 1.5fr 1fr;
+      align-items: start;
+    }
+
+    .card,
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .card {
+      padding: 18px;
+    }
+
+    .metric-label {
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .metric-value {
+      font-family: "Sora", sans-serif;
+      font-size: 28px;
+    }
+
+    .panel {
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .panel-head {
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .panel-head h2 {
+      margin-bottom: 3px;
+      font-size: 18px;
+    }
+
+    .description {
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .tag-list {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .form-group {
+      display: grid;
+      gap: 7px;
+      margin-bottom: 14px;
+    }
+
+    .form-label {
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .form-select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--white);
+    }
+
+    .notice {
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      color: var(--muted);
+      background: #fafbff;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .error {
+      display: none;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(220, 38, 38, 0.25);
+      border-radius: 12px;
+      color: var(--red);
+      background: rgba(220, 38, 38, 0.06);
+      font-size: 13px;
+    }
+
+    @media (max-width: 950px) {
+      body {
+        display: block;
+      }
+
+      .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        width: min(100% - 24px, 1280px);
+      }
+
+      .nav-list,
+      .metric-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar-inner {
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .page-head {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <img src="ventrix-logo-mark.png" alt="VentrixCarros logo" />
+      <div>
+        <span>VENTRIXCARROS</span>
+        <span class="admin-label">Company console</span>
+      </div>
+    </div>
+
+    <nav class="nav-list">
+      <a href="dashboard.html" class="nav-item">🏠 Dashboard</a>
+      <a href="jobs.html" class="nav-item active">💼 Jobs</a>
+      <a href="candidates.html" class="nav-item">👥 Candidates</a>
+      <a href="applications.html" class="nav-item">📄 Applications</a>
+      <a href="shortlisted.html" class="nav-item">⭐ Shortlisted</a>
+      <a href="interviews.html" class="nav-item">📅 Interviews</a>
+      <a href="messages.html" class="nav-item">💬 Messages</a>
+      <a href="subscription.html" class="nav-item">💳 Subscription</a>
+      <a href="company-profile.html" class="nav-item">🏢 Company Profile</a>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Account</div>
+        <a href="settings.html" class="nav-item">⚙️ Settings</a>
+        <a href="index.html" class="nav-item" id="logoutLink">🚪 Logout</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="topbar-left">
+          <a href="jobs.html" class="back-btn">← Back to jobs</a>
+          <strong>Job Details</strong>
+        </div>
+        <div class="avatar">VC</div>
+      </div>
+    </header>
+
+    <main class="page-wrap">
+      <div class="container">
+        <div id="errorMessage" class="error"></div>
+
+        <section class="page-head">
+          <div>
+            <h1 id="jobTitle">Loading job…</h1>
+            <p class="page-sub" id="jobMeta"></p>
+          </div>
+          <div class="actions">
+            <span class="badge" id="jobStatusBadge">Loading</span>
+            <button class="btn" id="editJobButton" type="button" disabled>
+              Edit job
+            </button>
+          </div>
+        </section>
+
+        <section class="metric-grid">
+          <div class="card">
+            <div class="metric-label">Applications</div>
+            <div class="metric-value" id="applicationCount">—</div>
+          </div>
+          <div class="card">
+            <div class="metric-label">Status</div>
+            <div class="metric-value" id="statusValue">—</div>
+          </div>
+        </section>
+
+        <div class="content-grid">
+          <div>
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Job description</h2>
+                  <p class="panel-sub">Description saved for this job</p>
+                </div>
+              </div>
+              <div class="description" id="jobDescription">Loading…</div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Required skills</h2>
+                  <p class="panel-sub">Skills saved for this job</p>
+                </div>
+              </div>
+              <div class="tag-list" id="jobSkills"></div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Applications</h2>
+                  <p class="panel-sub">
+                    Applications linked to this job in the company database
+                  </p>
+                </div>
+              </div>
+              <div class="notice" id="applicationsNotice">
+                Loading application information…
+              </div>
+            </section>
+          </div>
+
+          <aside>
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Job settings</h2>
+                  <p class="panel-sub">Change this job’s status</p>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="jobStatus">Job status</label>
+                <select class="form-select" id="jobStatus">
+                  <option value="draft">Draft</option>
+                  <option value="active">Active</option>
+                  <option value="closed">Closed</option>
+                </select>
+              </div>
+
+              <button class="btn btn-primary" id="saveStatusButton" type="button" style="width:100%">
+                Save status
+              </button>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Job information</h2>
+                  <p class="panel-sub">Current saved details</p>
+                </div>
+              </div>
+              <p class="notice" id="jobInformation">Loading job details…</p>
+            </section>
+          </aside>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const API_BASE_URL = "http://localhost:5000/api";
+    const token = localStorage.getItem("ventrixcarrosToken");
+
+    let currentJob = null;
+
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (character) => {
+        const replacements = {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;",
+        };
+        return replacements[character];
+      });
+    }
+
+    function showError(message) {
+      const errorBox = document.getElementById("errorMessage");
+      errorBox.textContent = message;
+      errorBox.style.display = "block";
+    }
+
+    function clearError() {
+      const errorBox = document.getElementById("errorMessage");
+      errorBox.textContent = "";
+      errorBox.style.display = "none";
+    }
+
+    function jobIdFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("id") || params.get("jobId") || params.get("job_id");
+    }
+
+    function formatDate(value) {
+      if (!value) return "—";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "—";
+      return date.toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      });
+    }
+
+    function titleCase(value) {
+      return String(value || "")
+        .replaceAll("_", " ")
+        .replace(/\b\w/g, (letter) => letter.toUpperCase());
+    }
+
+    function renderJob(job) {
+      currentJob = job;
+
+      const skills = Array.isArray(job.skills) ? job.skills : [];
+      const applications = Array.isArray(job.applications) ? job.applications : [];
+      const status = String(job.status || "draft").toLowerCase();
+
+      document.title = (job.title || "Job Details") + " — VentrixCarros";
+      document.getElementById("jobTitle").textContent = job.title || "Untitled job";
+      document.getElementById("jobMeta").textContent = [
+        titleCase(job.job_type),
+        job.location || "Location not set",
+        job.experience_required || "Experience not specified",
+        "Posted " + formatDate(job.created_at || job.createdAt),
+      ].join(" · ");
+
+      const badge = document.getElementById("jobStatusBadge");
+      badge.textContent = titleCase(status);
+      badge.className = "badge " + status;
+
+      document.getElementById("statusValue").textContent = titleCase(status);
+      document.getElementById("jobStatus").value = status;
+      document.getElementById("applicationCount").textContent =
+        applications.length.toLocaleString("en-IN");
+      document.getElementById("jobDescription").textContent =
+        job.description || "No description was provided.";
+
+      document.getElementById("jobSkills").innerHTML = skills.length
+        ? skills.map((skill) =>
+            '<span class="tag">' + escapeHTML(skill) + "</span>"
+          ).join("")
+        : '<span class="muted">No skills listed.</span>';
+
+      document.getElementById("applicationsNotice").textContent =
+        applications.length === 0
+          ? "No applications are linked to this job yet. Candidate details will be available when the student website is connected."
+          : applications.length +
+            " application record(s) are linked to this job. Candidate profile details are not included in the company website yet.";
+
+      document.getElementById("jobInformation").innerHTML =
+        "<strong>Location:</strong> " + escapeHTML(job.location || "Not set") +
+        "<br><strong>Job type:</strong> " + escapeHTML(titleCase(job.job_type)) +
+        "<br><strong>Experience:</strong> " + escapeHTML(job.experience_required || "Not specified") +
+        "<br><strong>Salary range:</strong> " + escapeHTML(job.salary_range || "Not specified");
+
+      document.getElementById("editJobButton").disabled = false;
+      document.getElementById("saveStatusButton").disabled = false;
+    }
+
+    async function apiRequest(path, options = {}) {
+      const response = await fetch(API_BASE_URL + path, {
+        method: options.method || "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+          ...(options.headers || {}),
+        },
+        body: options.body,
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(data.message || "The request failed.");
+      }
+
+      return data;
+    }
+
+    async function loadJob() {
+      if (!token) {
+        showError("Please log in again. Your login token was not found.");
+        return;
+      }
+
+      const requestedId = jobIdFromUrl();
+
+      if (!requestedId) {
+        showError("This page needs a job ID. Open it using the Details link from your jobs list.");
+        return;
+      }
+
+      try {
+        const data = await apiRequest("/jobs/mine");
+        const jobs = Array.isArray(data.jobs) ? data.jobs : [];
+        const job = jobs.find((item) => String(item.id) === String(requestedId));
+
+        if (!job) {
+          showError("That job was not found in your company account.");
+          return;
+        }
+
+        renderJob(job);
+      } catch (error) {
+        showError(error.message || "Could not load the job.");
+      }
+    }
+
+    async function saveStatus() {
+      if (!currentJob) return;
+
+      clearError();
+
+      const status = document.getElementById("jobStatus").value;
+
+      try {
+        const data = await apiRequest(
+          "/jobs/" + currentJob.id + "/status",
+          {
+            method: "PATCH",
+            body: JSON.stringify({ status }),
+          }
+        );
+
+        currentJob = {
+          ...currentJob,
+          ...(data.job || {}),
+          status,
+        };
+
+        renderJob(currentJob);
+        alert("Job status updated.");
+      } catch (error) {
+        showError(error.message || "Could not update the job status.");
+      }
+    }
+
+    async function editJob() {
+      if (!currentJob) return;
+
+      const title = prompt("Job title:", currentJob.title || "");
+      if (title === null) return;
+
+      const description = prompt(
+        "Job description:",
+        currentJob.description || ""
+      );
+      if (description === null) return;
+
+      const location = prompt("Location:", currentJob.location || "");
+      if (location === null) return;
+
+      const jobType = prompt(
+        "Job type: full_time, part_time, contract, or internship",
+        currentJob.job_type || "full_time"
+      );
+      if (jobType === null) return;
+
+      const experience = prompt(
+        "Experience required:",
+        currentJob.experience_required || ""
+      );
+      if (experience === null) return;
+
+      const salary = prompt("Salary range:", currentJob.salary_range || "");
+      if (salary === null) return;
+
+      const skillsText = prompt(
+        "Skills, separated by commas:",
+        Array.isArray(currentJob.skills) ? currentJob.skills.join(", ") : ""
+      );
+      if (skillsText === null) return;
+
+      const cleanJobType = jobType.trim().toLowerCase();
+      if (!["full_time", "part_time", "contract", "internship"].includes(cleanJobType)) {
+        alert("Enter a valid job type.");
+        return;
+      }
+
+      const cleanTitle = title.trim();
+      const cleanDescription = description.trim();
+
+      if (!cleanTitle || cleanDescription.length < 10) {
+        alert("Enter a job title and a description of at least 10 characters.");
+        return;
+      }
+
+      const skills = skillsText
+        .split(",")
+        .map((skill) => skill.trim())
+        .filter(Boolean);
+
+      clearError();
+
+      try {
+        const data = await apiRequest("/jobs/" + currentJob.id, {
+          method: "PATCH",
+          body: JSON.stringify({
+            title: cleanTitle,
+            description: cleanDescription,
+            location: location.trim(),
+            job_type: cleanJobType,
+            experience_required: experience.trim(),
+            salary_range: salary.trim(),
+            skills,
+          }),
+        });
+
+        currentJob = {
+          ...currentJob,
+          ...(data.job || {}),
+        };
+
+        renderJob(currentJob);
+        alert("Job details updated.");
+      } catch (error) {
+        showError(error.message || "Could not update the job.");
+      }
+    }
+
+    document
+      .getElementById("saveStatusButton")
+      .addEventListener("click", saveStatus);
+
+    document
+      .getElementById("editJobButton")
+      .addEventListener("click", editJob);
+
+    document.getElementById("logoutLink").addEventListener("click", () => {
+      localStorage.removeItem("ventrixcarrosToken");
+      localStorage.removeItem("ventrixcarrosUser");
+    });
+
+    loadJob();
+  </script>
+</body>
+</html>

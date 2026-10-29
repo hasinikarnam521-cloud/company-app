@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Subscription — VentrixCarros</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --deep-navy: #050a30;
+      --navy: #070d3f;
+      --electric-blue: #2c83f8;
+      --royal-blue: #274cdc;
+      --vivid-blue: #1c19b8;
+      --white: #ffffff;
+      --light-blue: #e0e4f5;
+
+      --ink: var(--deep-navy);
+      --muted: #5b6b85;
+      --line: var(--light-blue);
+      --bg: #f7f9ff;
+      --surface: var(--white);
+
+      --radius: 24px;
+      --shadow: 0 24px 70px rgba(5, 10, 48, 0.10);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 600px at 50% -20%, rgba(44, 131, 248, 0.08), transparent 70%),
+        var(--bg);
+      line-height: 1.65;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1200px, 100% - 40px);
+      margin-inline: auto;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      background: var(--white);
+      border-right: 1px solid var(--line);
+      padding: 20px 16px;
+      overflow-y: auto;
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+      padding: 10px 12px;
+      margin-bottom: 18px;
+    }
+    .sidebar-brand img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+}
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: var(--white);
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      box-shadow: 0 10px 28px rgba(44, 131, 248, 0.30);
+      font-size: 18px;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      transition: 0.2s ease;
+      cursor: pointer;
+    }
+
+    .nav-item:hover {
+      background: rgba(44, 131, 248, 0.06);
+      color: var(--electric-blue);
+    }
+
+    .nav-item.active {
+      background: linear-gradient(135deg, rgba(44, 131, 248, 0.12), rgba(39, 76, 220, 0.12));
+      color: var(--royal-blue);
+      font-weight: 600;
+    }
+
+    .nav-icon {
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+    .nav-section {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .nav-section-title {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      padding: 6px 12px;
+      margin-bottom: 6px;
+    }
+
+    /* Main content */
+    .main-content {
+      min-width: 0;
+    }
+
+    /* Top header */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: rgba(247, 249, 255, 0.85);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 0;
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--white);
+      color: var(--deep-navy);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: 0.2s ease;
+      text-decoration: none;
+    }
+
+    .back-btn:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+      transform: translateX(-2px);
+    }
+
+    .page-title {
+      font-family: "Sora", sans-serif;
+      font-size: 20px;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+    }
+
+    .search-wrap {
+      flex: 1;
+      max-width: 420px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 11px 16px 11px 38px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--deep-navy);
+      background: var(--white);
+      transition: 0.2s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 0 4px rgba(44, 131, 248, 0.12);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: var(--white);
+      display: grid;
+      place-items: center;
+      font-size: 17px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+      transform: translateY(-2px);
+    }
+
+    .avatar-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      color: var(--white);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(44, 131, 248, 0.25);
+    }
+
+    .profile-wrap {
+  position: relative;
+}
+
+.profile-panel {
+  position: fixed;
+  top: 82px;
+  right: 30px;
+  width: 280px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 20px 55px rgba(5,10,48,.18);
+  overflow: hidden;
+  z-index: 100;
+  display: none;
+}
+
+.profile-panel.show {
+  display: block;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px;
+}
+
+.profile-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg,var(--electric-blue),var(--royal-blue));
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.profile-header strong {
+  display: block;
+  color: var(--deep-navy);
+  font-size: 13px;
+}
+
+.profile-header span {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.profile-divider {
+  height: 1px;
+  background: var(--line);
+}
+
+.profile-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 13px 18px;
+  color: var(--deep-navy);
+  font-size: 12px;
+  font-weight: 500;
+  transition: background .2s ease, color .2s ease;
+}
+
+.profile-item span {
+  width: 22px;
+  text-align: center;
+  font-size: 15px;
+}
+
+.profile-item:hover {
+  background: rgba(44,131,248,.06);
+  color: var(--electric-blue);
+}
+
+.profile-logout {
+  border-top: 1px solid var(--line);
+  color: #dc2626;
+}
+
+.profile-logout:hover {
+  background: rgba(220,38,38,.05);
+  color: #dc2626;
+}
+
+.notification-panel {
+  position: fixed;
+  top: 82px;
+  right: 30px;
+  width: 360px;
+  max-width: calc(100vw - 30px);
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 20px 55px rgba(5,10,48,0.18);
+  overflow: hidden;
+  z-index: 100;
+  display: none;
+}
+
+.notification-panel.show {
+  display: block;
+}
+
+.notification-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.notification-header strong {
+  color: var(--deep-navy);
+  font-family: "Sora", sans-serif;
+  font-size: 15px;
+}
+
+.notification-header button {
+  border: none;
+  background: transparent;
+  color: var(--electric-blue);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.notification-item {
+  display: flex;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  transition: background .2s ease;
+}
+
+.notification-item:hover {
+  background: rgba(44,131,248,.04);
+}
+
+.notification-item.unread {
+  background: rgba(44,131,248,.06);
+}
+
+.notification-icon {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: rgba(44,131,248,.10);
+}
+
+.notification-item strong {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--deep-navy);
+  font-size: 12px;
+}
+
+.notification-item span {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.notification-item small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.notification-empty {
+  display: none;
+  padding: 28px 18px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 12px;
+}
+
+    /* Page content */
+    .page-wrap {
+      padding: 28px 0 60px;
+    }
+
+    .page-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .page-title-large {
+      font-family: "Sora", sans-serif;
+      font-size: 26px;
+      letter-spacing: -1px;
+      color: var(--deep-navy);
+    }
+
+    .page-sub {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .actions-right {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      border-radius: 999px;
+      padding: 11px 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.25s ease;
+      font-family: inherit;
+      font-size: 13px;
+    }
+
+    .btn-primary {
+      color: var(--white);
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      box-shadow: 0 14px 40px rgba(44, 131, 248, 0.30);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 55px rgba(39, 76, 220, 0.35);
+    }
+
+    .btn-outline {
+      background: var(--white);
+      border: 1px solid var(--line);
+      color: var(--deep-navy);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+      transform: translateY(-2px);
+    }
+
+    /* Sections */
+    .section-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .panel-title {
+      font-family: "Sora", sans-serif;
+      font-size: 18px;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+    }
+
+    .panel-sub {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Current plan */
+    .plan-summary {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .plan-name {
+      font-family: "Sora", sans-serif;
+      font-size: 22px;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+      margin-bottom: 4px;
+    }
+
+    .plan-desc {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .plan-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(44, 131, 248, 0.10);
+      color: var(--electric-blue);
+      border: 1px solid rgba(44, 131, 248, 0.25);
+    }
+
+    .usage-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .usage-card {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--white);
+    }
+
+    .usage-label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 6px;
+    }
+
+    .usage-value {
+      font-family: "Sora", sans-serif;
+      font-size: 20px;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+    }
+
+    .usage-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* Payment & billing */
+    .payment-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--white);
+      margin-bottom: 14px;
+    }
+
+    .payment-info strong {
+      display: block;
+      font-size: 13px;
+      color: var(--deep-navy);
+      margin-bottom: 3px;
+    }
+
+    .payment-info span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .billing-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .billing-table th,
+    .billing-table td {
+      text-align: left;
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .billing-table th {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      font-weight: 600;
+    }
+
+    /* Animations */
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: revealUp 0.65s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    }
+
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .delay-1 {
+      animation-delay: 0.06s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.12s;
+    }
+
+    .delay-3 {
+      animation-delay: 0.18s;
+    }
+
+    /* Responsive */
+    @media (max-width: 1000px) {
+      body {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .section-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .nav-list {
+        grid-template-columns: 1fr;
+      }
+
+      .search-wrap {
+        order: 3;
+        max-width: 100%;
+        margin: 10px 0 0;
+        width: 100%;
+      }
+
+      .topbar-inner {
+        flex-wrap: wrap;
+      }
+
+      .usage-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <img src="./ventrix-logo-mark.png" alt="VentrixCarros Logo">
+      <span>VENTRIXCARROS</span>
+    </div>
+
+    <nav class="nav-list">
+      <a href="dashboard.html" class="nav-item">
+        <span class="nav-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<rect x="3" y="3" width="7" height="7" rx="1"></rect>
+<rect x="14" y="3" width="7" height="7" rx="1"></rect>
+<rect x="3" y="14" width="7" height="7" rx="1"></rect>
+<rect x="14" y="14" width="7" height="7" rx="1"></rect>
+</svg>
+</span>
+        Dashboard
+      </a>
+      <a href="ai-recruitment.html" class="nav-item">
+        <span class="nav-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="12" cy="8" r="3"></circle>
+<path d="M5 21v-2a7 7 0 0 1 14 0v2"></path>
+<path d="M19 5l1 1"></path>
+<path d="M20 4l-1 1"></path>
+</svg>
+</span>
+        AI Recruitment
+      </a>
+      <a href="jobs.html" class="nav-item">
+        <span class="nav-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<rect x="3" y="7" width="18" height="13" rx="2"></rect>
+<path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+<path d="M3 12h18"></path>
+<path d="M10 12v2h4v-2"></path>
+</svg>
+</span>
+        Jobs
+      </a>
+      <a href="candidates.html" class="nav-item">
+        <span class="nav-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="9" cy="8" r="3"></circle>
+<path d="M3 20v-2a6 6 0 0 1 12 0v2"></path>
+<circle cx="17" cy="9" r="2.5"></circle>
+<path d="M16 15a5 5 0 0 1 5 5"></path>
+</svg>
+</span>
+        Candidates
+      </a>
+      <a href="applications.html" class="nav-item">
+        <span class="nav-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<rect x="5" y="3" width="14" height="18" rx="2"></rect>
+<path d="M9 3v3h6V3"></path>
+<path d="M8 12l2 2 4-4"></path>
+</svg>
+</span>
+        Applications
+      </a>
+      <a href="shortlisted.html" class="nav-item">
+        <span class="nav-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="12" cy="8" r="3"></circle>
+<path d="M5 21v-2a7 7 0 0 1 14 0v2"></path>
+<path d="M19 3l.6 1.2L21 4.4l-1 1 .2 1.4-1.2-.7-1.2.7.2-1.4-1-1 1.4-.2L19 3z"></path>
+</svg>
+</span>
+        Shortlisted
+      </a>
+      <a href="interviews.html" class="nav-item">
+        <span class="nav-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<rect x="8" y="3" width="8" height="12" rx="4"></rect>
+<path d="M5 11a7 7 0 0 0 14 0"></path>
+<path d="M12 18v3"></path>
+<path d="M9 21h6"></path>
+</svg>
+</span>
+        Interviews
+      </a>
+      <a href="messages.html" class="nav-item">
+        <span class="nav-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M20 11.5a7.5 7.5 0 0 1-8 7.5 8.5 8.5 0 0 1-3-.5L4 20l1.5-4A7.5 7.5 0 1 1 20 11.5z"></path>
+</svg>
+</span>
+        Messages
+      </a>
+      <a href="analytics.html" class="nav-item">
+        <span class="nav-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M4 19V5"></path>
+<path d="M4 19h17"></path>
+<path d="M7 15l4-4 3 2 5-6"></path>
+<path d="M16 7h3v3"></path>
+</svg>
+</span>
+        Analytics
+      </a>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Account</div>
+        <a href="subscription.html" class="nav-item active">
+          <span class="nav-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<rect x="3" y="5" width="18" height="14" rx="2"></rect>
+<path d="M3 10h18"></path>
+<path d="M7 15h4"></path>
+</svg>
+</span>
+          Subscription
+        </a>
+        <a href="company-profile.html" class="nav-item">
+          <span class="nav-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"></path>
+<path d="M2 21h20"></path>
+<path d="M8 7h2"></path>
+<path d="M8 11h2"></path>
+<path d="M8 15h2"></path>
+<path d="M16 9h2"></path>
+<path d="M16 13h2"></path>
+<path d="M16 17h2"></path>
+</svg>
+</span>
+          Company Profile
+        </a>
+        <a href="settings.html" class="nav-item">
+          <span class="nav-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="12" cy="12" r="3"></circle>
+<path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.8 1.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V20h-2.6v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1-1.8-1.8.1-.1A1.7 1.7 0 0 0 8 15a1.7 1.7 0 0 0-1.6-1H6v-2.6h.4A1.7 1.7 0 0 0 8 10a1.7 1.7 0 0 0-.3-1.9l-.1-.1 1.8-1.8.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.6V5H15v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1 1.8 1.8-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.4V14h-.4a1.7 1.7 0 0 0-1.6 1z"></path>
+</svg>
+</span>
+          Settings
+        </a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <div class="main-content">
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="topbar-left">
+          <a href="dashboard.html" class="back-btn">
+            ← Back
+          </a>
+          <div class="page-title">Subscription</div>
+        </div>
+
+        <div class="search-wrap">
+          <span class="search-icon">🔎</span>
+          <input
+            class="search-input"
+            type="text"
+            placeholder="Search billing, invoices..."
+          />
+        </div>
+
+        <div class="nav-right">
+  <button class="icon-btn" id="notificationButton" title="Notifications">🔔</button>
+
+  <div class="profile-wrap">
+    <button class="avatar-btn" id="profileButton" title="Profile">VC</button>
+
+    <div class="profile-panel" id="profilePanel">
+      <div class="profile-header">
+        <div class="profile-avatar">VC</div>
+        <div>
+          <strong>VentrixCarros</strong>
+          <span>Company Account</span>
+        </div>
+      </div>
+
+      <div class="profile-divider"></div>
+
+      <a href="company-profile.html" class="profile-item">
+        <span>🏢</span> Company Profile
+      </a>
+
+      <a href="settings.html" class="profile-item">
+        <span>⚙️</span> Settings
+      </a>
+
+      <a href="index.html" class="profile-item profile-logout">
+        <span>↪</span> Logout
+      </a>
+    </div>
+  </div>
+</div>
+      </div>
+    </header>
+
+    <div class="notification-panel" id="notificationPanel">
+  <div class="notification-header">
+    <strong>Notifications</strong>
+    <button id="markNotificationsRead">Mark all as read</button>
+  </div>
+
+  <div class="notification-item unread">
+    <div class="notification-icon">👤</div>
+    <div>
+      <strong>New application received</strong>
+      <span>Rahul Sharma applied for Frontend Developer.</span>
+      <small>10 minutes ago</small>
+    </div>
+  </div>
+
+  <div class="notification-item">
+    <div class="notification-icon">🎤</div>
+    <div>
+      <strong>Interview scheduled</strong>
+      <span>Interview with Priya Nair is scheduled.</span>
+      <small>1 hour ago</small>
+    </div>
+  </div>
+
+  <div class="notification-item">
+    <div class="notification-icon">⭐</div>
+    <div>
+      <strong>Candidate shortlisted</strong>
+      <span>Arjun Mehta was shortlisted.</span>
+      <small>2 hours ago</small>
+    </div>
+  </div>
+
+  <div class="notification-empty" id="notificationEmpty">
+    No new notifications
+  </div>
+</div>
+
+    <!-- Page content -->
+    <main class="page-wrap">
+      <div class="container">
+        <!-- Page head -->
+        <div class="page-head reveal-up">
+          <div>
+            <h1 class="page-title-large">Subscription</h1>
+            <p class="page-sub">
+              View your plan and securely complete payment with Razorpay.
+            </p>
+          </div>
+
+          <div class="actions-right">
+            <button class="btn btn-outline" id="downloadInvoiceButton">📥 Download invoice</button>
+            <button class="btn btn-primary">💬 Contact support</button>
+          </div>
+        </div>
+
+        <div class="section-grid">
+          <!-- Left: Current plan + features -->
+          <div>
+            <!-- Current plan -->
+            <section class="panel reveal-up delay-1">
+              <div class="panel-head">
+                <div>
+                  <div class="panel-title">Current plan</div>
+                  <div class="panel-sub" id="subscriptionSubtitle">Checking your subscription...</div>
+                </div>
+                <span class="plan-badge" id="subscriptionStatus">Checking...</span>
+              </div>
+
+              <div class="plan-summary">
+                <div>
+                  <div class="plan-name" id="currentPlanName">Loading plan...</div>
+                  <div class="plan-desc" id="currentPlanDetails">Loading subscription details...</div>
+                </div>
+                <div class="actions-right">
+                  <a class="btn btn-outline" href="#availablePlans">Choose a plan</a>
+                </div>
+              </div>
+
+              <div class="usage-row">
+                <div class="usage-card"><div class="usage-label">Active jobs</div><div class="usage-value" id="activeJobsUsage">—</div><div class="usage-sub" id="jobLimitUsage">Loading plan limit...</div></div>
+                <div class="usage-card"><div class="usage-label">AI screenings</div><div class="usage-value">—</div><div class="usage-sub">Not tracked by the backend yet</div></div>
+                <div class="usage-card"><div class="usage-label">Team members</div><div class="usage-value" id="teamLimitUsage">—</div><div class="usage-sub">Plan seat limit</div></div>
+              </div>
+            </section>
+
+            <!-- What’s included -->
+            <section class="panel reveal-up delay-2" style="margin-top: 18px;">
+              <div class="panel-head">
+                <div>
+<div class="panel-title" id="plansPanel">Available plans</div>
+                  <div class="panel-sub">Choose a plan. Payment is verified by the backend before activation.</div>
+                </div>
+              </div>
+
+              <div class="plan-features" id="availablePlans" style="display: grid; gap: 12px;">
+                <div class="panel-sub">Loading available plans...</div>
+              </div>
+            </section>
+          </div>
+
+          <!-- Right: Payment & billing -->
+          <div>
+            <!-- Payment method -->
+            <section class="panel reveal-up delay-2">
+              <div class="panel-head">
+                <div>
+                  <div class="panel-title">Payment method</div>
+                  <div class="panel-sub">Secure checkout with Razorpay</div>
+                </div>
+                <button class="btn btn-outline btn-sm">Edit</button>
+              </div>
+
+              <div class="payment-row">
+                <div class="payment-info"><strong>Payment method is selected securely at checkout</strong><span>Your card details are handled by Razorpay.</span></div>
+              </div>
+              <div class="panel-sub" style="margin-top: 10px;" id="paymentNote">No payment method or future charge is stored by this page.</div>
+            </section>
+
+            <!-- Billing history -->
+            <section class="panel reveal-up delay-3" style="margin-top: 18px;">
+              <div class="panel-head">
+                <div>
+                  <div class="panel-title">Billing history</div>
+                  <div class="panel-sub">Past invoices and payments</div>
+                </div>
+                <button class="btn btn-outline btn-sm" id="exportBillingButton">Export CSV</button>
+              </div>
+
+              <div class="table-wrap">
+                <table class="billing-table">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Amount</th>
+                      <th>Status</th>
+                      <th>Invoice</th>
+                    </tr>
+                  </thead>
+                  <tbody id="billingHistoryRows"><tr><td colspan="4">Billing history is not connected to a backend endpoint yet.</td></tr></tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    const API_BASE_URL = "http://localhost:5000/api";
+    const token = localStorage.getItem("ventrixcarrosToken");
+    let availablePlans = [];
+    let currentSubscription = null;
+
+    function logOut() {
+      localStorage.removeItem("ventrixcarrosToken");
+      localStorage.removeItem("ventrixcarrosUser");
+      window.location.href = "login.html";
+    }
+
+    function showPageMessage(message, type = "error") {
+      let box = document.getElementById("subscriptionMessage");
+      if (!box) {
+        box = document.createElement("div");
+        box.id = "subscriptionMessage";
+        box.className = "panel-sub";
+        box.style.cssText = "margin:0 0 16px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--white);";
+        document.querySelector(".page-head").after(box);
+      }
+      box.textContent = message;
+      box.style.color = type === "success" ? "#17633a" : "#8b1e2d";
+    }
+
+    async function apiRequest(path, options = {}) {
+      const response = await fetch(`${API_BASE_URL}${path}`, {
+        ...options,
+        headers: { ...(options.body ? { "Content-Type": "application/json" } : {}), Authorization: `Bearer ${token}`, ...(options.headers || {}) },
+      });
+      const data = await response.json().catch(() => ({}));
+      if (response.status === 401) {
+        logOut();
+        throw new Error("Your login session expired. Please log in again.");
+      }
+      if (!response.ok) throw new Error(data.message || "The request could not be completed.");
+      return data;
+    }
+
+    function escapeHTML(value) {
+      const map = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" };
+      return String(value ?? "").replace(/[&<>"']/g, (character) => map[character]);
+    }
+
+    function formatMoney(amount, currency = "INR") {
+      const value = Number(amount);
+      return Number.isFinite(value) ? new Intl.NumberFormat("en-IN", { style: "currency", currency }).format(value) : "Price unavailable";
+    }
+
+    function formatDate(value) {
+      if (!value) return "—";
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? "—" : date.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+    }
+
+    function renderCurrentSubscription(subscription) {
+      currentSubscription = subscription || null;
+      const badge = document.getElementById("subscriptionStatus");
+      const name = document.getElementById("currentPlanName");
+      const details = document.getElementById("currentPlanDetails");
+      const subtitle = document.getElementById("subscriptionSubtitle");
+      if (!subscription || !subscription.plan) {
+        badge.textContent = "No active plan";
+        name.textContent = "No active subscription";
+        details.textContent = "Choose a plan below. The backend activates it only after verifying successful payment.";
+        subtitle.textContent = "No active subscription found for your company.";
+        document.getElementById("activeJobsUsage").textContent = "0";
+        document.getElementById("jobLimitUsage").textContent = "Subscribe to activate jobs";
+        document.getElementById("teamLimitUsage").textContent = "—";
+        return;
+      }
+      const plan = subscription.plan;
+      const cycle = plan.billing_cycle === "yearly" ? "year" : "month";
+      badge.textContent = subscription.status || "Active";
+      name.textContent = `${plan.name} — ${formatMoney(plan.price, plan.currency)}/${cycle}`;
+      details.textContent = `Active from ${formatDate(subscription.starts_at)} until ${formatDate(subscription.ends_at)}.`;
+      subtitle.textContent = "Active subscription details from your backend.";
+      const jobLimit = Number(plan.max_active_jobs);
+      document.getElementById("jobLimitUsage").textContent = jobLimit === -1 ? "Unlimited active jobs on this plan" : `Plan limit: ${Number.isFinite(jobLimit) ? jobLimit : "—"} active jobs`;
+      const teamLimit = Number(plan.max_users);
+      document.getElementById("teamLimitUsage").textContent = teamLimit === -1 ? "Unlimited" : Number.isFinite(teamLimit) ? String(teamLimit) : "—";
+    }
+
+    function renderPlans(plans) {
+      const container = document.getElementById("availablePlans");
+      if (!plans.length) {
+        container.innerHTML = '<div class="panel-sub">No active plans are available right now.</div>';
+        return;
+      }
+      container.innerHTML = plans.map((plan) => {
+        const features = Array.isArray(plan.features) ? plan.features : [];
+        const featureMarkup = features.map((feature) => `<div class="plan-feature" style="display:flex;gap:8px;font-size:13px;color:var(--muted);"><span style="color:var(--electric-blue);font-weight:700;">✔</span>${escapeHTML(feature)}</div>`).join("");
+        const cycle = plan.billing_cycle === "yearly" ? "year" : "month";
+        const isCurrent = currentSubscription && Number(currentSubscription.plan_id) === Number(plan.id);
+        return `<article style="padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--white);">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+            <div><strong style="display:block;color:var(--deep-navy);font-family:'Sora',sans-serif;font-size:16px;">${escapeHTML(plan.name)}</strong>
+              <div class="panel-sub" style="margin-top:4px;">${escapeHTML(plan.description || "")}</div>
+              <div style="margin-top:8px;font-family:'Sora',sans-serif;font-size:20px;color:var(--deep-navy);">${escapeHTML(formatMoney(plan.price, plan.currency))}<span style="font:12px Inter,sans-serif;color:var(--muted);"> / ${cycle}</span></div>
+            </div>
+            <button class="btn btn-primary" data-plan-id="${Number(plan.id)}" ${isCurrent ? "disabled" : ""}>${isCurrent ? "Current plan" : "Subscribe"}</button>
+          </div>
+          ${featureMarkup ? `<div style="display:grid;gap:7px;margin-top:12px;">${featureMarkup}</div>` : ""}
+        </article>`;
+      }).join("");
+    }
+
+    async function loadPlans() {
+      const data = await apiRequest("/plans");
+      availablePlans = Array.isArray(data.plans) ? data.plans : [];
+      renderPlans(availablePlans);
+    }
+
+    async function loadCurrentSubscription() {
+      const data = await apiRequest("/subscriptions/current");
+      renderCurrentSubscription(data.subscription);
+      renderPlans(availablePlans);
+    }
+
+    async function loadActiveJobCount() {
+      try {
+        const data = await apiRequest("/dashboard/summary");
+        document.getElementById("activeJobsUsage").textContent = Number(data.stats?.activeJobs) || 0;
+      } catch (error) {
+        console.warn("Could not load job usage:", error.message);
+      }
+    }
+
+    async function subscribeToPlan(planId) {
+      const button = document.querySelector(`[data-plan-id="${planId}"]`);
+      if (!window.Razorpay) {
+        showPageMessage("Razorpay Checkout did not load. Check your internet connection and refresh this page.");
+        return;
+      }
+      if (button) { button.disabled = true; button.textContent = "Preparing checkout..."; }
+      try {
+        const result = await apiRequest("/payments/create-order", { method: "POST", body: JSON.stringify({ planId: Number(planId) }) });
+        const order = result.order;
+        if (!order || !order.orderId || !order.keyId) throw new Error("The backend did not return the Razorpay order details.");
+        const options = {
+          key: order.keyId,
+          amount: order.amount,
+          currency: order.currency,
+          name: "VentrixCarros",
+          description: `${order.planName} subscription`,
+          order_id: order.orderId,
+          handler: async function (paymentResponse) {
+            try {
+              showPageMessage("Payment received. Verifying it securely...", "success");
+              await apiRequest("/payments/verify", { method: "POST", body: JSON.stringify(paymentResponse) });
+              showPageMessage("Payment verified. Your subscription is active.", "success");
+              sessionStorage.removeItem("ventrixcarrosOnboardingStep");
+              sessionStorage.removeItem("ventrixcarrosPendingSignup");
+              await loadCurrentSubscription();
+            } catch (error) {
+              showPageMessage(error.message || "Payment verification failed. Contact support before trying to pay again.");
+            } finally {
+              if (button) { button.disabled = false; button.textContent = "Subscribe"; }
+            }
+          },
+          theme: { color: "#2c83f8" },
+          modal: { ondismiss: function () { if (button) { button.disabled = false; button.textContent = "Subscribe"; } } },
+        };
+        const checkout = new window.Razorpay(options);
+        checkout.on("payment.failed", function (event) {
+          showPageMessage(event.error?.description || "Payment failed. Your subscription was not activated.");
+          if (button) { button.disabled = false; button.textContent = "Subscribe"; }
+        });
+        checkout.open();
+      } catch (error) {
+        showPageMessage(error.message || "Could not start payment. Check that the backend is running.");
+        if (button) { button.disabled = false; button.textContent = "Subscribe"; }
+      }
+    }
+
+    document.getElementById("availablePlans").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-plan-id]");
+      if (button && !button.disabled) subscribeToPlan(button.dataset.planId);
+    });
+    document.getElementById("downloadInvoiceButton").addEventListener("click", () => showPageMessage("Invoice downloads are not connected to a backend endpoint yet."));
+    document.getElementById("exportBillingButton").addEventListener("click", () => showPageMessage("Billing history export is not connected to a backend endpoint yet."));
+
+    document.querySelectorAll(".nav-item").forEach((item) => {
+      if (item.getAttribute("href") === (window.location.pathname.split("/").pop() || "subscription.html")) item.classList.add("active");
+      else item.classList.remove("active");
+    });
+
+    if (!token) {
+      window.location.href = "login.html";
+    } else {
+      Promise.allSettled([loadPlans(), loadCurrentSubscription(), loadActiveJobCount()]).then((results) => {
+        results.forEach((result) => {
+          if (result.status === "rejected") {
+            console.error("Subscription page loading error:", result.reason);
+            showPageMessage(result.reason?.message || "Could not load subscription information.");
+          }
+        });
+      });
+    }
+  </script>
+  <script src="notification.js"></script>
+<script src="profile.js"></script>
+</body>
+</html>

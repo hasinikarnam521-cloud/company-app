@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job Details — VentrixCarros</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --deep-navy: #050a30;
+      --navy: #070d3f;
+      --electric-blue: #2c83f8;
+      --royal-blue: #274cdc;
+      --vivid-blue: #1c19b8;
+      --white: #ffffff;
+      --light-blue: #e0e4f5;
+      --ink: var(--deep-navy);
+      --muted: #5b6b85;
+      --line: var(--light-blue);
+      --bg: #f7f9ff;
+      --surface: var(--white);
+      --green: #059669;
+      --orange: #d97706;
+      --red: #dc2626;
+      --radius: 22px;
+      --shadow: 0 24px 70px rgba(5, 10, 48, 0.10);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 600px at 50% -20%, rgba(44, 131, 248, 0.08), transparent 70%),
+        var(--bg);
+      line-height: 1.65;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    .container {
+      width: min(1200px, 100% - 40px);
+      margin-inline: auto;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 20px 16px;
+      overflow-y: auto;
+      background: var(--white);
+      border-right: 1px solid var(--line);
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      margin-bottom: 18px;
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+      color: var(--deep-navy);
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      color: var(--white);
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      box-shadow: 0 10px 28px rgba(44, 131, 248, 0.30);
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+      transition: 0.2s ease;
+    }
+
+    .nav-item:hover {
+      color: var(--electric-blue);
+      background: rgba(44, 131, 248, 0.06);
+    }
+
+    .nav-item.active {
+      color: var(--royal-blue);
+      font-weight: 600;
+      background: linear-gradient(
+        135deg,
+        rgba(44, 131, 248, 0.12),
+        rgba(39, 76, 220, 0.12)
+      );
+    }
+
+    .nav-icon {
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+    .nav-section {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .nav-section-title {
+      padding: 6px 12px;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+    }
+
+    /* Main */
+    .main-content {
+      min-width: 0;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      padding: 14px 0;
+      backdrop-filter: blur(18px);
+      background: rgba(247, 249, 255, 0.86);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .back-btn,
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.25s ease;
+    }
+
+    .back-btn {
+      padding: 9px 14px;
+      color: var(--deep-navy);
+      background: var(--white);
+      border: 1px solid var(--line);
+      font-size: 13px;
+    }
+
+    .back-btn:hover {
+      color: var(--electric-blue);
+      border-color: var(--electric-blue);
+      transform: translateX(-2px);
+    }
+
+    .page-title {
+      font-family: "Sora", sans-serif;
+      font-size: 20px;
+      color: var(--deep-navy);
+    }
+
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      max-width: 420px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 11px 16px 11px 38px;
+      color: var(--deep-navy);
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 0 4px rgba(44, 131, 248, 0.12);
+    }
+
+    .search-icon {
+      position: absolute;
+      top: 50%;
+      left: 13px;
+      color: var(--muted);
+      transform: translateY(-50%);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-btn,
+    .avatar-btn {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+    }
+
+    .icon-btn {
+      color: var(--muted);
+      background: var(--white);
+      border: 1px solid var(--line);
+      cursor: pointer;
+    }
+
+    .avatar-btn {
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 11px 18px;
+      border: none;
+      font-size: 13px;
+    }
+
+    .btn-primary {
+      color: var(--white);
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      box-shadow: 0 14px 40px rgba(44, 131, 248, 0.30);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 55px rgba(39, 76, 220, 0.35);
+    }
+
+    .btn-outline {
+      color: var(--deep-navy);
+      background: var(--white);
+      border: 1px solid var(--line);
+    }
+
+    .btn-outline:hover {
+      color: var(--electric-blue);
+      border-color: var(--electric-blue);
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      color: var(--white);
+      background: linear-gradient(135deg, #dc2626, #991b1b);
+    }
+
+    .btn-sm {
+      padding: 7px 12px;
+      font-size: 12px;
+    }
+
+    /* Page */
+    .page-wrap {
+      padding: 28px 0 60px;
+    }
+
+    .job-header,
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .job-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 24px;
+      margin-bottom: 18px;
+    }
+
+    .job-title {
+      margin-bottom: 5px;
+      font-family: "Sora", sans-serif;
+      font-size: 26px;
+      color: var(--deep-navy);
+    }
+
+    .job-meta {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .job-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .badge,
+    .status-pill,
+    .score-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .badge {
+      color: var(--royal-blue);
+      background: rgba(44, 131, 248, 0.08);
+      border: 1px solid rgba(44, 131, 248, 0.22);
+    }
+
+    .status-active {
+      color: var(--green);
+      background: rgba(5, 150, 105, 0.10);
+      border: 1px solid rgba(5, 150, 105, 0.25);
+    }
+
+    .job-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      align-content: flex-start;
+      gap: 9px;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+    }
+
+    .panel {
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .panel-title {
+      font-family: "Sora", sans-serif;
+      font-size: 18px;
+      color: var(--deep-navy);
+    }
+
+    .panel-sub {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* Metrics */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .metric-card {
+      padding: 15px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 15px;
+    }
+
+    .metric-label {
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .metric-value {
+      color: var(--deep-navy);
+      font-family: "Sora", sans-serif;
+      font-size: 23px;
+    }
+
+    /* Description */
+    .description {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .description h3 {
+      margin: 18px 0 7px;
+      color: var(--deep-navy);
+      font-family: "Sora", sans-serif;
+      font-size: 15px;
+    }
+
+    .description h3:first-child {
+      margin-top: 0;
+    }
+
+    .description ul {
+      padding-left: 20px;
+    }
+
+    /* AI box */
+    .ai-box {
+      display: flex;
+      gap: 12px;
+      padding: 15px;
+      border: 1px solid rgba(44, 131, 248, 0.25);
+      border-radius: 15px;
+      background: rgba(44, 131, 248, 0.04);
+    }
+
+    .ai-icon {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 40px;
+      border-radius: 12px;
+      color: var(--white);
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+    }
+
+    .ai-box strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--deep-navy);
+      font-size: 13px;
+    }
+
+    .ai-box span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* Requirements */
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      padding: 6px 10px;
+      color: var(--royal-blue);
+      background: rgba(44, 131, 248, 0.07);
+      border: 1px solid rgba(44, 131, 248, 0.20);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Application table */
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .table th,
+    .table td {
+      padding: 11px 8px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .table th {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .candidate {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 180px;
+    }
+
+    .candidate-avatar {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--white);
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .candidate strong {
+      display: block;
+      color: var(--deep-navy);
+      font-size: 13px;
+    }
+
+    .candidate span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .score-high {
+      color: var(--green);
+      background: rgba(5, 150, 105, 0.10);
+      border: 1px solid rgba(5, 150, 105, 0.25);
+    }
+
+    .score-medium {
+      color: var(--electric-blue);
+      background: rgba(44, 131, 248, 0.10);
+      border: 1px solid rgba(44, 131, 248, 0.25);
+    }
+
+    .stage-new {
+      color: var(--electric-blue);
+      background: rgba(44, 131, 248, 0.10);
+      border: 1px solid rgba(44, 131, 248, 0.25);
+    }
+
+    .stage-shortlisted {
+      color: var(--royal-blue);
+      background: rgba(39, 76, 220, 0.10);
+      border: 1px solid rgba(39, 76, 220, 0.25);
+    }
+
+    /* Form */
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--deep-navy);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .form-input,
+    .form-textarea,
+    .form-select {
+      width: 100%;
+      padding: 11px 13px;
+      color: var(--deep-navy);
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      outline: none;
+    }
+
+    .form-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus,
+    .form-select:focus {
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 0 4px rgba(44, 131, 248, 0.12);
+    }
+
+    /* Animation */
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: revealUp 0.65s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    }
+
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .delay-1 {
+      animation-delay: 0.08s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.16s;
+    }
+
+    .delay-3 {
+      animation-delay: 0.24s;
+    }
+
+    /* Responsive */
+    @media (max-width: 1000px) {
+      body {
+        display: block;
+      }
+
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .nav-list {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar-inner {
+        flex-wrap: wrap;
+      }
+
+      .search-wrap {
+        order: 3;
+        width: 100%;
+        max-width: none;
+      }
+
+      .job-header {
+        flex-direction: column;
+      }
+
+      .job-actions {
+        justify-content: flex-start;
+      }
+
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark">V</div>
+      <span>VENTRIXCARROS</span>
+    </div>
+
+    <nav class="nav-list">
+      <a href="dashboard.html" class="nav-item">
+        <span class="nav-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<rect x="3" y="3" width="7" height="7" rx="1"></rect>
+<rect x="14" y="3" width="7" height="7" rx="1"></rect>
+<rect x="3" y="14" width="7" height="7" rx="1"></rect>
+<rect x="14" y="14" width="7" height="7" rx="1"></rect>
+</svg>
+</span>
+        Dashboard
+      </a>
+      <a href="ai-recruitment.html" class="nav-item">
+        <span class="nav-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="12" cy="8" r="3"></circle>
+<path d="M5 21v-2a7 7 0 0 1 14 0v2"></path>
+<path d="M19 5l1 1"></path>
+<path d="M20 4l-1 1"></path>
+</svg>
+</span>
+        AI Recruitment
+      </a>
+      <a href="jobs.html" class="nav-item active">
+        <span class="nav-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<rect x="3" y="7" width="18" height="13" rx="2"></rect>
+<path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+<path d="M3 12h18"></path>
+<path d="M10 12v2h4v-2"></path>
+</svg>
+</span>
+        Jobs
+      </a>
+      <a href="candidates.html" class="nav-item">
+        <span class="nav-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="9" cy="8" r="3"></circle>
+<path d="M3 20v-2a6 6 0 0 1 12 0v2"></path>
+<circle cx="17" cy="9" r="2.5"></circle>
+<path d="M16 15a5 5 0 0 1 5 5"></path>
+</svg>
+</span>
+        Candidates
+      </a>
+      <a href="applications.html" class="nav-item">
+        <span class="nav-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<rect x="5" y="3" width="14" height="18" rx="2"></rect>
+<path d="M9 3v3h6V3"></path>
+<path d="M8 12l2 2 4-4"></path>
+</svg>
+</span>
+        Applications
+      </a>
+      <a href="shortlisted.html" class="nav-item">
+        <span class="nav-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="12" cy="8" r="3"></circle>
+<path d="M5 21v-2a7 7 0 0 1 14 0v2"></path>
+<path d="M19 3l.6 1.2L21 4.4l-1 1 .2 1.4-1.2-.7-1.2.7.2-1.4-1-1 1.4-.2L19 3z"></path>
+</svg>
+</span>
+        Shortlisted
+      </a>
+      <a href="interviews.html" class="nav-item">
+        <span class="nav-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<rect x="8" y="3" width="8" height="12" rx="4"></rect>
+<path d="M5 11a7 7 0 0 0 14 0"></path>
+<path d="M12 18v3"></path>
+<path d="M9 21h6"></path>
+</svg>
+</span>
+        Interviews
+      </a>
+      <a href="messages.html" class="nav-item">
+        <span class="nav-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M20 11.5a7.5 7.5 0 0 1-8 7.5 8.5 8.5 0 0 1-3-.5L4 20l1.5-4A7.5 7.5 0 1 1 20 11.5z"></path>
+</svg>
+</span>
+        Messages
+      </a>
+      <a href="analytics.html" class="nav-item">
+        <span class="nav-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M4 19V5"></path>
+<path d="M4 19h17"></path>
+<path d="M7 15l4-4 3 2 5-6"></path>
+<path d="M16 7h3v3"></path>
+</svg>
+</span>
+        Analytics
+      </a>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Account</div>
+        <a href="subscription.html" class="nav-item">
+          <span class="nav-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<rect x="3" y="5" width="18" height="14" rx="2"></rect>
+<path d="M3 10h18"></path>
+<path d="M7 15h4"></path>
+</svg>
+</span>
+          Subscription
+        </a>
+        <a href="company-profile.html" class="nav-item">
+          <span class="nav-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"></path>
+<path d="M2 21h20"></path>
+<path d="M8 7h2"></path>
+<path d="M8 11h2"></path>
+<path d="M8 15h2"></path>
+<path d="M16 9h2"></path>
+<path d="M16 13h2"></path>
+<path d="M16 17h2"></path>
+</svg>
+</span>
+          Company Profile
+        </a>
+        <a href="settings.html" class="nav-item">
+          <span class="nav-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="12" cy="12" r="3"></circle>
+<path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.8 1.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V20h-2.6v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1-1.8-1.8.1-.1A1.7 1.7 0 0 0 8 15a1.7 1.7 0 0 0-1.6-1H6v-2.6h.4A1.7 1.7 0 0 0 8 10a1.7 1.7 0 0 0-.3-1.9l-.1-.1 1.8-1.8.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.6V5H15v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1 1.8 1.8-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.4V14h-.4a1.7 1.7 0 0 0-1.6 1z"></path>
+</svg>
+</span>
+          Settings
+        </a>
+        <a href="index.html" class="nav-item">
+          <span class="nav-icon">🚪</span>
+          Logout
+        </a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="topbar-left">
+          <a href="jobs.html" class="back-btn">← Back</a>
+          <div class="page-title">Job Details</div>
+        </div>
+
+        <div class="search-wrap">
+          <span class="search-icon">🔎</span>
+          <input
+            class="search-input"
+            type="text"
+            placeholder="Search jobs or candidates..."
+          />
+        </div>
+
+        <div class="nav-right">
+          <button class="icon-btn" id="notificationButton">🔔</button>
+          <div class="avatar-btn">VC</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-wrap">
+      <div class="container">
+        <section class="job-header reveal-up">
+          <div>
+            <h1 class="job-title">Frontend Developer</h1>
+            <p class="job-meta">
+              Engineering · Remote · Full-time · Posted October 1, 2026
+            </p>
+
+            <div class="job-badges">
+              <span class="status-pill status-active">● Active</span>
+              <span class="badge">React</span>
+              <span class="badge">TypeScript</span>
+              <span class="badge">3–5 years</span>
+            </div>
+          </div>
+
+          <div class="job-actions">
+            <button class="btn btn-outline" id="previewButton">👁 Preview</button>
+            <button class="btn btn-outline" id="editButton">✏️ Edit job</button>
+            <button class="btn btn-primary" id="screenButton">🤖 Run AI screening</button>
+          </div>
+        </section>
+
+        <div class="metrics-grid reveal-up delay-1">
+          <div class="metric-card">
+            <div class="metric-label">Applications</div>
+            <div class="metric-value">42</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">Screened</div>
+            <div class="metric-value">31</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">Shortlisted</div>
+            <div class="metric-value">12</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">Interviews</div>
+            <div class="metric-value">5</div>
+          </div>
+        </div>
+
+        <div class="content-grid">
+          <div>
+            <section class="panel reveal-up delay-1">
+              <div class="panel-head">
+                <div>
+                  <h2 class="panel-title">Job description</h2>
+                  <p class="panel-sub">Current published description</p>
+                </div>
+                <button class="btn btn-outline btn-sm" id="optimizeButton">
+                  ✨ Optimize with AI
+                </button>
+              </div>
+
+              <div class="description">
+                <h3>About the role</h3>
+                <p>
+                  We are looking for a talented Frontend Developer to join our
+                  product engineering team. You will build responsive,
+                  accessible, and high-performance interfaces for our hiring
+                  platform.
+                </p>
+
+                <h3>Responsibilities</h3>
+                <ul>
+                  <li>Build and maintain modern React applications.</li>
+                  <li>Collaborate with product designers and backend engineers.</li>
+                  <li>Write clean, testable, and maintainable code.</li>
+                  <li>Improve application performance and user experience.</li>
+                </ul>
+
+                <h3>Requirements</h3>
+                <ul>
+                  <li>3–5 years of frontend development experience.</li>
+                  <li>Strong knowledge of React and TypeScript.</li>
+                  <li>Experience with responsive UI development.</li>
+                  <li>Familiarity with testing tools and Git.</li>
+                </ul>
+              </div>
+            </section>
+
+            <section class="panel reveal-up delay-2">
+              <div class="panel-head">
+                <div>
+                  <h2 class="panel-title">Recent applications</h2>
+                  <p class="panel-sub">Candidates applying for this job</p>
+                </div>
+                <a href="applications.html" class="btn btn-outline btn-sm">
+                  View all
+                </a>
+              </div>
+
+              <div class="table-wrap">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Candidate</th>
+                      <th>Applied</th>
+                      <th>AI score</th>
+                      <th>Stage</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div class="candidate">
+                          <div class="candidate-avatar">RS</div>
+                          <div>
+                            <strong>Rahul Sharma</strong>
+                            <span>React · TypeScript</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td>Oct 2, 2026</td>
+                      <td>
+                        <span class="score-pill score-high">92%</span>
+                      </td>
+                      <td>
+                        <span class="status-pill stage-shortlisted">
+                          Shortlisted
+                        </span>
+                      </td>
+                      <td>
+                        <a href="candidate-detail.html" class="btn btn-outline btn-sm">
+                          View
+                        </a>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <div class="candidate">
+                          <div class="candidate-avatar">AM</div>
+                          <div>
+                            <strong>Arjun Mehta</strong>
+                            <span>React · JavaScript</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td>Oct 4, 2026</td>
+                      <td>
+                        <span class="score-pill score-medium">78%</span>
+                      </td>
+                      <td>
+                        <span class="status-pill stage-new">New</span>
+                      </td>
+                      <td>
+                        <a href="candidate-detail.html" class="btn btn-outline btn-sm">
+                          View
+                        </a>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <div class="candidate">
+                          <div class="candidate-avatar">MK</div>
+                          <div>
+                            <strong>Meera Kulkarni</strong>
+                            <span>React · Next.js</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td>Oct 6, 2026</td>
+                      <td>
+                        <span class="score-pill score-high">87%</span>
+                      </td>
+                      <td>
+                        <span class="status-pill stage-shortlisted">
+                          Shortlisted
+                        </span>
+                      </td>
+                      <td>
+                        <a href="candidate-detail.html" class="btn btn-outline btn-sm">
+                          View
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+
+          <aside>
+            <section class="panel reveal-up delay-2">
+              <div class="panel-head">
+                <div>
+                  <h2 class="panel-title">AI job insights</h2>
+                  <p class="panel-sub">Recommendations for this role</p>
+                </div>
+                <span class="badge">● AI active</span>
+              </div>
+
+              <div class="ai-box">
+                <div class="ai-icon">🎯</div>
+                <div>
+                  <strong>Strong candidate response</strong>
+                  <span>
+                    This job has received 42 applications. React and TypeScript
+                    requirements are attracting relevant candidates.
+                  </span>
+                </div>
+              </div>
+
+              <div class="ai-box" style="margin-top:12px;">
+                <div class="ai-icon">✨</div>
+                <div>
+                  <strong>Improve the job description</strong>
+                  <span>
+                    Adding salary information and benefits may increase qualified
+                    applications.
+                  </span>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel reveal-up delay-3">
+              <div class="panel-head">
+                <div>
+                  <h2 class="panel-title">Required skills</h2>
+                  <p class="panel-sub">Skills used for AI matching</p>
+                </div>
+                <button class="btn btn-outline btn-sm">Edit</button>
+              </div>
+
+              <div class="tag-list">
+                <span class="tag">React</span>
+                <span class="tag">TypeScript</span>
+                <span class="tag">JavaScript</span>
+                <span class="tag">HTML/CSS</span>
+                <span class="tag">Testing</span>
+                <span class="tag">Git</span>
+              </div>
+            </section>
+
+            <section class="panel reveal-up delay-3">
+              <div class="panel-head">
+                <div>
+                  <h2 class="panel-title">Job settings</h2>
+                  <p class="panel-sub">Manage job visibility and status</p>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="jobStatus">Job status</label>
+                <select class="form-select" id="jobStatus">
+                  <option selected>Active</option>
+                  <option>Draft</option>
+                  <option>Paused</option>
+                  <option>Closed</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="closingDate">Closing date</label>
+                <input
+                  class="form-input"
+                  type="date"
+                  id="closingDate"
+                  value="2026-11-15"
+                />
+              </div>
+
+              <button class="btn btn-primary" id="saveButton" style="width:100%;">
+                Save settings
+              </button>
+            </section>
+          </aside>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function demoAlert(message) {
+      alert(`${message}\n\nConnect this action to your backend.`);
+    }
+
+    document
+      .getElementById("previewButton")
+      .addEventListener("click", () => {
+        demoAlert("Opening public job preview.");
+      });
+
+    document
+      .getElementById("editButton")
+      .addEventListener("click", () => {
+        demoAlert("Opening job editor.");
+      });
+
+    document
+      .getElementById("screenButton")
+      .addEventListener("click", () => {
+        demoAlert("AI screening started for Frontend Developer.");
+      });
+
+    document
+      .getElementById("optimizeButton")
+      .addEventListener("click", () => {
+        demoAlert("AI is preparing job-description recommendations.");
+      });
+
+    document
+      .getElementById("saveButton")
+      .addEventListener("click", () => {
+        const status = document.getElementById("jobStatus").value;
+        const closingDate = document.getElementById("closingDate").value;
+
+        alert(
+          `Job settings saved in demo mode.\n\nStatus: ${status}\nClosing date: ${closingDate}`
+        );
+      });
+
+    document
+      .getElementById("notificationButton")
+      .addEventListener("click", () => {
+        alert("You have 3 new notifications.");
+      });
+  </script>
+</body>
+</html>

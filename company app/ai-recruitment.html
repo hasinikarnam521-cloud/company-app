@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Recruitment — VentrixCarros</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --deep-navy: #050a30;
+      --navy: #070d3f;
+      --electric-blue: #2c83f8;
+      --royal-blue: #274cdc;
+      --vivid-blue: #1c19b8;
+      --white: #ffffff;
+      --light-blue: #e0e4f5;
+
+      --ink: var(--deep-navy);
+      --muted: #5b6b85;
+      --line: var(--light-blue);
+      --bg: #f7f9ff;
+      --surface: var(--white);
+
+      --radius: 24px;
+      --shadow: 0 24px 70px rgba(5, 10, 48, 0.10);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 600px at 50% -20%, rgba(44, 131, 248, 0.08), transparent 70%),
+        var(--bg);
+      line-height: 1.65;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1200px, 100% - 40px);
+      margin-inline: auto;
+    }
+
+    /* Sidebar (same as dashboard) */
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      background: var(--white);
+      border-right: 1px solid var(--line);
+      padding: 20px 16px;
+      overflow-y: auto;
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: "Sora", sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+      padding: 10px 12px;
+      margin-bottom: 18px;
+    }
+
+    .sidebar-brand img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+}
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: var(--white);
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      box-shadow: 0 10px 28px rgba(44, 131, 248, 0.30);
+      font-size: 18px;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      transition: 0.2s ease;
+      cursor: pointer;
+    }
+
+    .nav-item:hover {
+      background: rgba(44, 131, 248, 0.06);
+      color: var(--electric-blue);
+    }
+
+    .nav-item.active {
+      background: linear-gradient(135deg, rgba(44, 131, 248, 0.12), rgba(39, 76, 220, 0.12));
+      color: var(--royal-blue);
+      font-weight: 600;
+    }
+
+    .nav-icon {
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+    .nav-section {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .nav-section-title {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      padding: 6px 12px;
+      margin-bottom: 6px;
+    }
+
+    /* Main content */
+    .main-content {
+      min-width: 0;
+    }
+
+    /* Top header */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: rgba(247, 249, 255, 0.85);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 0;
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--white);
+      color: var(--deep-navy);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: 0.2s ease;
+      text-decoration: none;
+    }
+
+    .back-btn:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+      transform: translateX(-2px);
+    }
+
+    .page-title {
+      font-family: "Sora", sans-serif;
+      font-size: 20px;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+    }
+
+    .search-wrap {
+      flex: 1;
+      max-width: 420px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 11px 16px 11px 38px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--deep-navy);
+      background: var(--white);
+      transition: 0.2s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 0 4px rgba(44, 131, 248, 0.12);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: var(--white);
+      display: grid;
+      place-items: center;
+      font-size: 17px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+      transform: translateY(-2px);
+    }
+
+    .avatar-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      color: var(--white);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(44, 131, 248, 0.25);
+    }
+
+    /* Profile menu */
+
+.profile-wrap {
+  position: relative;
+}
+
+.profile-panel {
+  position: fixed;
+  top: 82px;
+  right: 30px;
+  width: 280px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 20px 55px rgba(5, 10, 48, 0.18);
+  overflow: hidden;
+  z-index: 100;
+  display: none;
+}
+
+.profile-panel.show {
+  display: block;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px;
+}
+
+.profile-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(
+    135deg,
+    var(--electric-blue),
+    var(--royal-blue)
+  );
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.profile-header strong {
+  display: block;
+  color: var(--deep-navy);
+  font-size: 13px;
+}
+
+.profile-header span {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.profile-divider {
+  height: 1px;
+  background: var(--line);
+}
+
+.profile-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 13px 18px;
+  color: var(--deep-navy);
+  font-size: 12px;
+  font-weight: 500;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.profile-item span {
+  width: 22px;
+  text-align: center;
+  font-size: 15px;
+}
+
+.profile-item:hover {
+  background: rgba(44, 131, 248, 0.06);
+  color: var(--electric-blue);
+}
+
+.profile-logout {
+  border-top: 1px solid var(--line);
+  color: #dc2626;
+}
+
+.profile-logout:hover {
+  background: rgba(220, 38, 38, 0.05);
+  color: #dc2626;
+}
+
+/* Notification panel */
+.notification-panel {
+  position: fixed;
+  top: 82px;
+  right: 30px;
+  width: 360px;
+  max-width: calc(100vw - 30px);
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 20px 55px rgba(5, 10, 48, 0.18);
+  overflow: hidden;
+  z-index: 100;
+  display: none;
+}
+
+.notification-panel.show {
+  display: block;
+}
+
+.notification-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.notification-header strong {
+  color: var(--deep-navy);
+  font-family: "Sora", sans-serif;
+  font-size: 15px;
+}
+
+.notification-header button {
+  border: none;
+  background: transparent;
+  color: var(--electric-blue);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.notification-item {
+  display: flex;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  transition: background 0.2s ease;
+}
+
+.notification-item:hover {
+  background: rgba(44, 131, 248, 0.04);
+}
+
+.notification-item.unread {
+  background: rgba(44, 131, 248, 0.06);
+}
+
+.notification-icon {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: rgba(44, 131, 248, 0.10);
+}
+
+.notification-item strong {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--deep-navy);
+  font-size: 12px;
+}
+
+.notification-item span {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.notification-item small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.notification-empty {
+  display: none;
+  padding: 28px 18px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 12px;
+}
+
+
+
+    /* Page content */
+    .page-wrap {
+      padding: 28px 0 60px;
+    }
+
+    .page-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .page-title-large {
+      font-family: "Sora", sans-serif;
+      font-size: 26px;
+      letter-spacing: -1px;
+      color: var(--deep-navy);
+    }
+
+    .page-sub {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(44, 131, 248, 0.08);
+      border: 1px solid rgba(44, 131, 248, 0.25);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--royal-blue);
+    }
+
+    /* AI features grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 28px 80px rgba(5, 10, 48, 0.12);
+    }
+
+    .feature-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .feature-title {
+      font-family: "Sora", sans-serif;
+      font-size: 18px;
+      letter-spacing: -0.5px;
+      color: var(--deep-navy);
+    }
+
+    .feature-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      color: var(--white);
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      box-shadow: 0 8px 20px rgba(44, 131, 248, 0.25);
+    }
+
+    .feature-text {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .feature-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.25s ease;
+      font-family: inherit;
+      font-size: 13px;
+    }
+
+    .btn-primary {
+      color: var(--white);
+      background: linear-gradient(135deg, var(--electric-blue), var(--royal-blue));
+      box-shadow: 0 12px 35px rgba(44, 131, 248, 0.30);
+    }
+
+    .screening-note {
+      color: var(--muted);
+      font-size: 12px;
+      margin: 8px 0 14px;
+    }
+
+    .screening-label {
+      display: block;
+      color: var(--deep-navy);
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 7px;
+    }
+
+    .screening-select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--white);
+      color: var(--deep-navy);
+      font: inherit;
+      margin-bottom: 14px;
+    }
+
+    .screening-status {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    .screening-results {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .screening-result {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      background: var(--bg);
+      font-size: 13px;
+    }
+
+    .screening-result strong {
+      color: var(--deep-navy);
+    }
+
+    .screening-score {
+      color: var(--royal-blue);
+      font-weight: 700;
+      float: right;
+    }
+
+    .feature-actions .btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+      transform: none;
+      box-shadow: none;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 50px rgba(39, 76, 220, 0.35);
+    }
+
+    .btn-outline {
+      background: var(--white);
+      border: 1px solid var(--line);
+      color: var(--deep-navy);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+      transform: translateY(-2px);
+    }
+
+    /* Animations */
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: revealUp 0.65s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    }
+
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .delay-1 {
+      animation-delay: 0.06s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.12s;
+    }
+
+    .delay-3 {
+      animation-delay: 0.18s;
+    }
+
+    .delay-4 {
+      animation-delay: 0.24s;
+    }
+
+    /* Responsive */
+    @media (max-width: 1000px) {
+      body {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .nav-list {
+        grid-template-columns: 1fr;
+      }
+
+      .search-wrap {
+        order: 3;
+        max-width: 100%;
+        margin: 10px 0 0;
+        width: 100%;
+      }
+
+      .topbar-inner {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <img src="./ventrix-logo-mark.png" alt="VentrixCarros Logo">
+      <span>VENTRIXCARROS</span>
+    </div>
+
+    <nav class="nav-list">
+      <a href="dashboard.html" class="nav-item">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="8" r="3"></circle>
+    <path d="M5 21v-2a7 7 0 0 1 14 0v2"></path>
+    <path d="M19 5l1 1"></path>
+    <path d="M20 4l-1 1"></path>
+  </svg>
+</span>
+        Dashboard
+      </a>
+      <a href="ai-recruitment.html" class="nav-item active">
+        <span class="nav-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="8" r="3"></circle>
+        <path d="M5 21v-2a7 7 0 0 1 14 0v2"></path>
+        <path d="M19 5l1 1"></path>
+        <path d="M20 4l-1 1"></path>
+      </svg>
+    </span>
+        AI Recruitment
+      </a>
+      <a href="jobs.html" class="nav-item">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="7" width="18" height="13" rx="2"></rect>
+    <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+    <path d="M3 12h18"></path>
+    <path d="M10 12v2h4v-2"></path>
+  </svg>
+</span>
+        Jobs
+      </a>
+      <a href="candidates.html" class="nav-item">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="9" cy="8" r="3"></circle>
+    <path d="M3 20v-2a6 6 0 0 1 12 0v2"></path>
+    <circle cx="17" cy="9" r="2.5"></circle>
+    <path d="M16 15a5 5 0 0 1 5 5"></path>
+  </svg>
+</span>
+        Candidates
+      </a>
+      <a href="applications.html" class="nav-item">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="5" y="3" width="14" height="18" rx="2"></rect>
+    <path d="M9 3v3h6V3"></path>
+    <path d="M8 12l2 2 4-4"></path>
+  </svg>
+</span>
+        Applications
+      </a>
+      <a href="shortlisted.html" class="nav-item">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="8" r="3"></circle>
+    <path d="M5 21v-2a7 7 0 0 1 14 0v2"></path>
+    <path d="M19 3l.6 1.2L21 4.4l-1 1 .2 1.4-1.2-.7-1.2.7.2-1.4-1-1 1.4-.2L19 3z"></path>
+  </svg>
+</span>
+        Shortlisted
+      </a>
+      <a href="interviews.html" class="nav-item">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="8" y="3" width="8" height="12" rx="4"></rect>
+    <path d="M5 11a7 7 0 0 0 14 0"></path>
+    <path d="M12 18v3"></path>
+    <path d="M9 21h6"></path>
+  </svg>
+</span>
+        Interviews
+      </a>
+      <a href="messages.html" class="nav-item">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 11.5a7.5 7.5 0 0 1-8 7.5 8.5 8.5 0 0 1-3-.5L4 20l1.5-4A7.5 7.5 0 1 1 20 11.5z"></path>
+  </svg>
+</span>
+        Messages
+      </a>
+      <a href="analytics.html" class="nav-item">
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 19V5"></path>
+    <path d="M4 19h17"></path>
+    <path d="M7 15l4-4 3 2 5-6"></path>
+    <path d="M16 7h3v3"></path>
+  </svg>
+</span>
+        Analytics
+      </a>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Account</div>
+        <a href="subscription.html" class="nav-item">
+          <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+    <path d="M3 10h18"></path>
+    <path d="M7 15h4"></path>
+  </svg>
+</span>
+          Subscription
+        </a>
+        <a href="company-profile.html" class="nav-item">
+          <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"></path>
+    <path d="M2 21h20"></path>
+    <path d="M8 7h2"></path>
+    <path d="M8 11h2"></path>
+    <path d="M8 15h2"></path>
+    <path d="M16 9h2"></path>
+    <path d="M16 13h2"></path>
+    <path d="M16 17h2"></path>
+  </svg>
+</span>
+          Company Profile
+        </a>
+        <a href="settings.html" class="nav-item">
+          <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="3"></circle>
+    <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.8 1.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V20h-2.6v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1-1.8-1.8.1-.1A1.7 1.7 0 0 0 8 15a1.7 1.7 0 0 0-1.6-1H6v-2.6h.4A1.7 1.7 0 0 0 8 10a1.7 1.7 0 0 0-.3-1.9l-.1-.1 1.8-1.8.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.6V5H15v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1 1.8 1.8-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.4V14h-.4a1.7 1.7 0 0 0-1.6 1z"></path>
+  </svg>
+</span>
+          Settings
+        </a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <div class="main-content">
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="topbar-left">
+          <a href="dashboard.html" class="back-btn">
+            ← Back
+          </a>
+          <div class="page-title">AI Recruitment</div>
+        </div>
+
+        <div class="search-wrap">
+          <span class="search-icon">🔎</span>
+          <input
+  class="search-input"
+  id="aiSearch"
+  type="text"
+  placeholder="Search AI features, jobs, candidates..."
+/>
+        </div>
+
+        <div class="nav-right">
+  <button class="icon-btn" id="notificationButton" title="Notifications">🔔</button>
+
+  <div class="profile-wrap">
+    <button class="avatar-btn" id="profileButton" title="Profile">VC</button>
+
+    <div class="profile-panel" id="profilePanel">
+      <div class="profile-header">
+        <div class="profile-avatar">VC</div>
+        <div>
+          <strong>VentrixCarros</strong>
+          <span>Company Account</span>
+        </div>
+      </div>
+
+      <div class="profile-divider"></div>
+
+      <a href="company-profile.html" class="profile-item">
+        <span>🏢</span> Company Profile
+      </a>
+
+      <a href="settings.html" class="profile-item">
+        <span>⚙️</span> Settings
+      </a>
+
+      <a href="index.html" class="profile-item profile-logout">
+        <span>↪</span> Logout
+      </a>
+    </div>
+  </div>
+</div>
+      </div>
+    </header>
+
+    <!-- Notification panel -->
+<div class="notification-panel" id="notificationPanel">
+
+  <div class="notification-header">
+    <strong>Notifications</strong>
+    <button id="markNotificationsRead">
+      Mark all as read
+    </button>
+  </div>
+
+  <div class="notification-item unread">
+    <div class="notification-icon">👤</div>
+    <div>
+      <strong>New application received</strong>
+      <span>Rahul Sharma applied for Frontend Developer.</span>
+      <small>10 minutes ago</small>
+    </div>
+  </div>
+
+  <div class="notification-item">
+    <div class="notification-icon">🎤</div>
+    <div>
+      <strong>Interview scheduled</strong>
+      <span>Interview with Priya Nair is scheduled.</span>
+      <small>1 hour ago</small>
+    </div>
+  </div>
+
+  <div class="notification-item">
+    <div class="notification-icon">⭐</div>
+    <div>
+      <strong>Candidate shortlisted</strong>
+      <span>Arjun Mehta was shortlisted.</span>
+      <small>2 hours ago</small>
+    </div>
+  </div>
+
+  <div class="notification-empty" id="notificationEmpty">
+    No new notifications
+  </div>
+
+</div>
+
+    <!-- Page content -->
+    <main class="page-wrap">
+      <div class="container">
+        <div class="page-head reveal-up">
+          <div>
+            <h1 class="page-title-large">AI-powered hiring tools</h1>
+            <p class="page-sub">
+              Use AI tools to create job descriptions, review applicants, prepare interviews, and improve your hiring workflow.
+            </p>
+          </div>
+          <span class="ai-badge">● AI Hiring Tools</span>
+        </div>
+
+        <!-- AI features grid -->
+        <div class="features-grid">
+          <!-- AI Job Description Generator -->
+          <div class="feature-card reveal-up delay-1">
+            <div class="feature-head">
+              <h2 class="feature-title">AI Job Description Generator</h2>
+              <div class="feature-icon">✍️</div>
+            </div>
+            <p class="feature-text">
+              Generate clear, inclusive, and attractive job descriptions from a few inputs like role title, must-have skills, and seniority.
+            </p>
+            <div class="feature-actions">
+              <button class="btn btn-primary">Generate JD</button>
+              <button class="btn btn-outline">Use template</button>
+            </div>
+          </div>
+
+          <!-- Skills-based candidate screening -->
+          <div class="feature-card reveal-up delay-2">
+            <div class="feature-head">
+              <h2 class="feature-title">Candidate Skills Screening</h2>
+              <div class="feature-icon">🔍</div>
+            </div>
+            <p class="feature-text">
+              Compare applicants’ listed skills with the required skills for a job and save a match score to each application.
+            </p>
+            <p class="screening-note">AI provides advisory suggestions based on job and applicant information. Review results before making hiring decisions.</p>
+            <label class="screening-label" for="screenJobSelect">Choose one of your active jobs</label>
+            <select id="screenJobSelect" class="screening-select">
+              <option value="">Loading your jobs…</option>
+            </select>
+            <div class="feature-actions">
+              <button class="btn btn-primary" id="runScreeningButton" type="button">Run screening</button>
+              <button class="btn btn-outline" id="viewScoresButton" type="button">View scores</button>
+            </div>
+            <p id="screeningStatus" class="screening-status" role="status" aria-live="polite"></p>
+            <div id="screeningResults" class="screening-results" hidden></div>
+          </div>          <!-- AI Interview Question Generator -->
+          <div class="feature-card reveal-up delay-3">
+            <div class="feature-head">
+              <h2 class="feature-title">AI Interview Question Generator</h2>
+              <div class="feature-icon">🎤</div>
+            </div>
+            <p class="feature-text">
+              Get tailored technical and behavioral questions per role and seniority, aligned with your job requirements.
+            </p>
+            <div class="feature-actions">
+              <button class="btn btn-primary">Generate questions</button>
+              <button class="btn btn-outline">Question bank</button>
+            </div>
+          </div>
+
+          <!-- AI Skill Gap Analysis -->
+          <div class="feature-card reveal-up delay-4">
+            <div class="feature-head">
+              <h2 class="feature-title">AI Skill Gap Analysis</h2>
+              <div class="feature-icon">🧩</div>
+            </div>
+            <p class="feature-text">
+              Compare candidate skills against role requirements and see missing competencies and training suggestions.
+            </p>
+            <div class="feature-actions">
+              <button class="btn btn-primary">Analyze skills</button>
+              <button class="btn btn-outline">View gaps</button>
+            </div>
+          </div>
+
+          <!-- AI Diversity & Bias Check -->
+          <div class="feature-card reveal-up delay-3">
+            <div class="feature-head">
+              <h2 class="feature-title">AI Diversity & Bias Check</h2>
+              <div class="feature-icon">⚖️</div>
+            </div>
+            <p class="feature-text">
+              Scan job descriptions and screening rules for biased language and get inclusive alternatives.
+            </p>
+            <div class="feature-actions">
+              <button class="btn btn-primary">Check JD</button>
+              <button class="btn btn-outline">Guidelines</button>
+            </div>
+          </div>
+
+          <!-- AI Time-to-Hire Optimizer -->
+          <div class="feature-card reveal-up delay-4">
+            <div class="feature-head">
+              <h2 class="feature-title">AI Time-to-Hire Optimizer</h2>
+              <div class="feature-icon">⏱</div>
+            </div>
+            <p class="feature-text">
+              Get recommendations to reduce time-to-hire: automation opportunities, bottleneck alerts, and workflow tweaks.
+            </p>
+            <div class="feature-actions">
+              <button class="btn btn-primary">Optimize now</button>
+              <button class="btn btn-outline">View insights</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // API connection for the AI Recruitment page.
+    const API_BASE_URL = "http://localhost:5000/api";
+    const authToken = localStorage.getItem("ventrixcarrosToken");
+    const jobSelect = document.getElementById("screenJobSelect");
+    const screeningStatus = document.getElementById("screeningStatus");
+    const screeningResults = document.getElementById("screeningResults");
+    const runScreeningButton = document.getElementById("runScreeningButton");
+    const viewScoresButton = document.getElementById("viewScoresButton");
+    let latestScreeningResults = [];
+    const savedToolOutputs = new WeakMap();
+
+    async function readApiResponse(response) {
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        const validationMessage = data.errors?.map((item) => item.message).join(" ");
+        throw new Error(validationMessage || data.message || "The request could not be completed.");
+      }
+      return data;
+    }
+
+    async function postAiRequest(path, body) {
+      const response = await fetch(API_BASE_URL + "/ai/" + path, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + authToken,
+        },
+        body: JSON.stringify(body || {}),
+      });
+      return readApiResponse(response);
+    }
+
+    function setScreeningStatus(message) {
+      screeningStatus.textContent = message;
+    }
+
+    function addOption(label, value = "") {
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = label;
+      jobSelect.appendChild(option);
+    }
+
+    async function loadCompanyJobs() {
+      if (!authToken) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      try {
+        const headers = { Authorization: "Bearer " + authToken };
+        const [companyResponse, jobsResponse] = await Promise.all([
+          fetch(API_BASE_URL + "/companies/mine", { headers }),
+          fetch(API_BASE_URL + "/jobs", { headers }),
+        ]);
+        const companyData = await readApiResponse(companyResponse);
+        const jobsData = await readApiResponse(jobsResponse);
+        const companyId = Number(companyData.company && companyData.company.id);
+        const companyJobs = (jobsData.jobs || []).filter((job) =>
+          Number(job.company_id || (job.company && job.company.id)) === companyId
+        );
+
+        jobSelect.replaceChildren();
+        if (!companyJobs.length) {
+          addOption("No active jobs found", "");
+          setScreeningStatus("Create and activate a job before using job-based tools.");
+          runScreeningButton.disabled = true;
+          return;
+        }
+
+        addOption("Select a job", "");
+        companyJobs.forEach((job) => {
+          const label = job.location ? job.title + " — " + job.location : job.title;
+          addOption(label, job.id);
+        });
+        setScreeningStatus("Choose a job to screen applicants or review its description.");
+      } catch (error) {
+        jobSelect.replaceChildren();
+        addOption("Could not load jobs", "");
+        setScreeningStatus(error.message || "Could not load your jobs. Check that the backend is running.");
+      }
+    }
+
+    function renderScreeningResults(results) {
+      screeningResults.replaceChildren();
+      screeningResults.hidden = false;
+
+      if (!results.length) {
+        screeningResults.textContent = "No applications were found for this job yet.";
+        return;
+      }
+
+      results.forEach((result) => {
+        const card = document.createElement("div");
+        card.className = "screening-result";
+
+        const name = document.createElement("strong");
+        name.textContent = result.candidateName || "Candidate";
+        const score = document.createElement("span");
+        score.className = "screening-score";
+        score.textContent = (Number(result.score) || 0) + "% match";
+        const matched = document.createElement("p");
+        matched.textContent = "Matched skills: " + ((result.matchedSkills || []).join(", ") || "None listed");
+        const missing = document.createElement("p");
+        missing.textContent = "Skills not listed: " + ((result.missingSkills || []).join(", ") || "None");
+
+        card.append(name, score, matched, missing);
+        screeningResults.appendChild(card);
+      });
+    }
+
+    function getCardOutput(card) {
+      let output = card.querySelector(".ai-tool-output");
+      if (!output) {
+        output = document.createElement("div");
+        output.className = "screening-results ai-tool-output";
+        output.setAttribute("role", "status");
+        output.setAttribute("aria-live", "polite");
+        card.appendChild(output);
+      }
+      return output;
+    }
+
+    function showCardOutput(card, value) {
+      const output = getCardOutput(card);
+      output.replaceChildren();
+      output.hidden = false;
+
+      const result = document.createElement("div");
+      result.className = "screening-result";
+      const text = document.createElement("pre");
+      text.style.whiteSpace = "pre-wrap";
+      text.style.overflowWrap = "anywhere";
+      text.style.font = "inherit";
+      text.style.color = "inherit";
+      text.textContent =
+        typeof value === "string" ? value : JSON.stringify(value, null, 2);
+      result.appendChild(text);
+      output.appendChild(result);
+      savedToolOutputs.set(card, value);
+    }
+
+    function showJobRequired() {
+      const jobId = Number(jobSelect.value);
+      if (!jobId) {
+        setScreeningStatus("Choose one of your active jobs first.");
+        jobSelect.focus();
+        return null;
+      }
+      return jobId;
+    }
+
+    async function runCardTool(button, card, loadingText, action) {
+      const originalText = button.textContent;
+      button.disabled = true;
+      button.textContent = loadingText;
+
+      try {
+        const result = await action();
+        showCardOutput(card, result);
+      } catch (error) {
+        showCardOutput(card, "Could not complete this request: " + error.message);
+      } finally {
+        button.disabled = false;
+        button.textContent = originalText;
+      }
+    }
+
+    runScreeningButton.addEventListener("click", async () => {
+      const jobId = Number(jobSelect.value);
+      if (!jobId) {
+        setScreeningStatus("Choose one of your active jobs first.");
+        return;
+      }
+
+      runScreeningButton.disabled = true;
+      setScreeningStatus("AI is reviewing the applicants against the job requirements…");
+      screeningResults.hidden = true;
+
+      try {
+        const data = await postAiRequest("screen", { jobId });
+        latestScreeningResults = data.results || [];
+        renderScreeningResults(latestScreeningResults);
+        setScreeningStatus(data.message || "Screening completed. Review the suggestions before making decisions.");
+      } catch (error) {
+        setScreeningStatus(error.message || "Screening failed. Please try again.");
+      } finally {
+        runScreeningButton.disabled = false;
+      }
+    });
+
+    viewScoresButton.addEventListener("click", () => {
+      if (!latestScreeningResults.length) {
+        setScreeningStatus("Run screening first to calculate scores.");
+        return;
+      }
+      screeningResults.hidden = false;
+      screeningResults.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+
+    const featureCards = Array.from(document.querySelectorAll(".feature-card"));
+    const cardByTitle = (title) =>
+      featureCards.find((card) => card.querySelector(".feature-title")?.textContent.includes(title));
+
+    const jobDescriptionCard = cardByTitle("AI Job Description Generator");
+    const interviewCard = cardByTitle("AI Interview Question Generator");
+    const skillGapCard = cardByTitle("AI Skill Gap Analysis");
+    const biasCard = cardByTitle("AI Diversity & Bias Check");
+    const optimizerCard = cardByTitle("AI Time-to-Hire Optimizer");
+
+    const jdButtons = jobDescriptionCard.querySelectorAll(".feature-actions .btn");
+    jdButtons[0].addEventListener("click", () => {
+      const title = window.prompt("Enter the job title:");
+      if (!title || !title.trim()) return;
+      const skillsText = window.prompt("Enter required skills, separated by commas:");
+      if (!skillsText || !skillsText.trim()) return;
+
+      const seniority = window.prompt("Enter seniority (optional, for example: Entry-level):") || "";
+      const location = window.prompt("Enter location (optional):") || "";
+      const employmentType = window.prompt("Enter employment type (optional, for example: Full-time):") || "";
+      const extraDetails = window.prompt("Add any other job details (optional):") || "";
+      const skills = skillsText.split(",").map((skill) => skill.trim()).filter(Boolean);
+
+      runCardTool(jdButtons[0], jobDescriptionCard, "Generating…", async () => {
+        const data = await postAiRequest("job-description", {
+          title: title.trim(),
+          seniority: seniority.trim(),
+          skills,
+          location: location.trim(),
+          employmentType: employmentType.trim(),
+          extraDetails: extraDetails.trim(),
+        });
+        return data.description || "The generator returned no description.";
+      });
+    });
+
+    jdButtons[1].addEventListener("click", () => {
+      const template = [
+        "Job title: [Enter role title]",
+        "",
+        "About the role:",
+        "[Describe the purpose of the role and its main responsibilities.]",
+        "",
+        "Responsibilities:",
+        "• [Responsibility 1]",
+        "• [Responsibility 2]",
+        "• [Responsibility 3]",
+        "",
+        "Required skills:",
+        "• [Required skill 1]",
+        "• [Required skill 2]",
+        "",
+        "Experience and qualifications:",
+        "[Add only requirements that are genuinely needed for this role.]",
+      ].join("\n");
+      showCardOutput(jobDescriptionCard, template);
+    });
+
+    const interviewButtons = interviewCard.querySelectorAll(".feature-actions .btn");
+    interviewButtons[0].addEventListener("click", () => {
+      const jobId = showJobRequired();
+      if (!jobId) return;
+      const enteredCount = window.prompt("How many interview questions? Enter a number from 3 to 12:", "8");
+      if (enteredCount === null) return;
+      const questionCount = Number(enteredCount);
+      if (!Number.isInteger(questionCount) || questionCount < 3 || questionCount > 12) {
+        showCardOutput(interviewCard, "Enter a whole number from 3 to 12.");
+        return;
+      }
+
+      runCardTool(interviewButtons[0], interviewCard, "Generating…", async () => {
+        const data = await postAiRequest("interview-questions", { jobId, questionCount });
+        return data.questions ?? data;
+      });
+    });
+
+    interviewButtons[1].addEventListener("click", () => {
+      const saved = savedToolOutputs.get(interviewCard);
+      showCardOutput(
+        interviewCard,
+        saved || "Generate interview questions for a job first. The generated questions will appear here."
+      );
+    });
+
+    const skillButtons = skillGapCard.querySelectorAll(".feature-actions .btn");
+    skillButtons[0].addEventListener("click", () => {
+      const jobId = showJobRequired();
+      if (!jobId) return;
+      const candidateIdText = window.prompt(
+        "Enter the candidate ID for an applicant to this job. You can find candidate IDs on the Candidates page:"
+      );
+      if (candidateIdText === null) return;
+      const candidateId = Number(candidateIdText);
+      if (!Number.isInteger(candidateId) || candidateId <= 0) {
+        showCardOutput(skillGapCard, "Enter a valid positive candidate ID.");
+        return;
+      }
+
+      runCardTool(skillButtons[0], skillGapCard, "Analyzing…", async () => {
+        const data = await postAiRequest("skill-gap", { jobId, candidateId });
+        return data.analysis ?? data;
+      });
+    });
+
+    skillButtons[1].addEventListener("click", () => {
+      const saved = savedToolOutputs.get(skillGapCard);
+      showCardOutput(
+        skillGapCard,
+        saved || "Run a skill gap analysis for an applicant first. The result will appear here."
+      );
+    });
+
+    const biasButtons = biasCard.querySelectorAll(".feature-actions .btn");
+    biasButtons[0].addEventListener("click", () => {
+      const jobId = showJobRequired();
+      if (!jobId) return;
+
+      runCardTool(biasButtons[0], biasCard, "Checking…", async () => {
+        const data = await postAiRequest("bias-check", { jobId });
+        return data.review ?? data;
+      });
+    });
+
+    biasButtons[1].addEventListener("click", () => {
+      showCardOutput(
+        biasCard,
+        "Guidelines: use job-related skills and qualifications; avoid wording that favors or excludes people based on protected or personal traits; keep requirements genuinely necessary for the role. AI feedback is advisory and is not a legal assessment."
+      );
+    });
+
+    const optimizerButtons = optimizerCard.querySelectorAll(".feature-actions .btn");
+    optimizerButtons[0].addEventListener("click", () => {
+      runCardTool(optimizerButtons[0], optimizerCard, "Analyzing…", async () => {
+        const data = await postAiRequest("time-to-hire", {});
+        return data.insights ?? data;
+      });
+    });
+
+    optimizerButtons[1].addEventListener("click", () => {
+      const saved = savedToolOutputs.get(optimizerCard);
+      showCardOutput(
+        optimizerCard,
+        saved || "Run the optimizer first. Its hiring workflow recommendations will appear here."
+      );
+    });
+
+    // Search across feature titles and descriptions.
+    const aiSearch = document.getElementById("aiSearch");
+    aiSearch.addEventListener("input", function () {
+      const searchTerm = aiSearch.value.toLowerCase().trim();
+
+      featureCards.forEach(function (card) {
+        const title = card.querySelector(".feature-title").textContent.toLowerCase();
+        const description = card.querySelector(".feature-text").textContent.toLowerCase();
+        card.style.display =
+          title.includes(searchTerm) || description.includes(searchTerm) ? "" : "none";
+      });
+    });
+
+    loadCompanyJobs();
+  </script>
+  <script src="notification.js"></script>
+<script src="profile.js"></script>
+
+</body>
+</html>
+

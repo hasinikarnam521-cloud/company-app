@@ -3,12 +3,12 @@ const aiToolsService = require("../services/aiToolsService");
 
 async function screenCandidates(req, res, next) {
   try {
-    const result = await aiService.screenCandidates(
+    const results = await aiService.screenCandidates(
       req.user.id,
       Number(req.body.jobId)
     );
 
-    res.json({ success: true, ...result });
+    res.json({ success: true, results });
   } catch (error) {
     next(error);
   }
@@ -29,6 +29,7 @@ async function generateJobDescription(req, res, next) {
     next(error);
   }
 }
+
 async function generateInterviewQuestions(req, res, next) {
   try {
     const questions = await aiToolsService.generateInterviewQuestions(

@@ -20,12 +20,16 @@
     "helmet": "^8.3.0",
     "jsonwebtoken": "^9.0.3",
     "mysql2": "^3.24.6",
-    "nodemailer": "^10.1.7",
     "openai": "^7.39.0",
     "razorpay": "^2.9.8",
     "sequelize": "^6.37.8"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
+  },
+  "overrides": {
+    "sequelize": {
+      "uuid": "11.1.1"
+    }
   }
 }

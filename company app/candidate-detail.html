@@ -552,6 +552,7 @@
       }
     }
   </style>
+  <script src="config.js"></script>
 </head>
 
 <body>
@@ -886,138 +887,337 @@
   </main>
 
   <script>
-    const candidateData = {
-      "rahul-sharma": {
-        name: "Rahul Sharma",
-        initials: "RS",
-        role: "Frontend Developer",
-        experience: "3 years",
-        location: "Remote",
-        email: "rahul.sharma@example.com",
-        score: "92%",
-        status: "Shortlisted",
-        skills: [
-          "React",
-          "TypeScript",
-          "JavaScript",
-          "Next.js",
-          "HTML/CSS",
-          "Git"
-        ]
-      },
+  const API_BASE_URL = window.APP_CONFIG?.API_BASE_URL;
+  const authToken = localStorage.getItem("ventrixcarrosToken");
+  const params = new URLSearchParams(window.location.search);
+  const requestedApplicationId = Number(params.get("applicationId"));
+  const requestedCandidateId = Number(params.get("id"));
 
-      "priya-nair": {
-        name: "Priya Nair",
-        initials: "PN",
-        role: "AI Engineer",
-        experience: "5 years",
-        location: "Bengaluru",
-        email: "priya.nair@example.com",
-        score: "89%",
-        status: "Interview",
-        skills: [
-          "Python",
-          "LLMs",
-          "PyTorch",
-          "MLOps",
-          "TensorFlow",
-          "SQL"
-        ]
-      },
+  let currentApplication = null;
 
-      "arjun-mehta": {
-        name: "Arjun Mehta",
-        initials: "AM",
-        role: "Frontend Developer",
-        experience: "2 years",
-        location: "Delhi NCR",
-        email: "arjun.mehta@example.com",
-        score: "78%",
-        status: "New",
-        skills: [
-          "React",
-          "JavaScript",
-          "HTML/CSS",
-          "Git",
-          "REST APIs"
-        ]
+  const statusBox = document.createElement("p");
+  statusBox.setAttribute("role", "status");
+  statusBox.setAttribute("aria-live", "polite");
+  statusBox.style.cssText =
+    "margin:0 auto 16px;padding:12px 16px;border-radius:12px;background:#e0e4f5;color:#050a30;";
+  document.querySelector(".container").prepend(statusBox);
+
+  function showMessage(message) {
+    statusBox.textContent = message;
+    statusBox.hidden = !message;
+  }
+
+  function apiRequest(path, options = {}) {
+    if (!API_BASE_URL) {
+      throw new Error("API address is missing. Check config.js.");
+    }
+
+    return fetch(API_BASE_URL + path, {
+      ...options,
+      headers: {
+        ...(options.body ? { "Content-Type": "application/json" } : {}),
+        Authorization: "Bearer " + authToken,
+        ...options.headers,
+      },
+    }).then(async (response) => {
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(data.message || "The request could not be completed.");
       }
-    };
 
-    const params = new URLSearchParams(window.location.search);
-    const candidateId = params.get("id") || "rahul-sharma";
-    const candidate =
-      candidateData[candidateId] || candidateData["rahul-sharma"];
+      return data;
+    });
+  }
 
-    document.title = `${candidate.name} — Candidate Details`;
+  function setDetailValue(label, value) {
+    document.querySelectorAll(".detail-item").forEach((item) => {
+      const itemLabel = item
+        .querySelector(".detail-label")
+        ?.textContent.trim()
+        .toLowerCase();
 
-    document.getElementById("largeAvatar").textContent = candidate.initials;
-    document.getElementById("profileName").textContent = candidate.name;
+      if (itemLabel === label.toLowerCase()) {
+        const valueElement = item.querySelector(".detail-value");
+        if (valueElement) valueElement.textContent = value || "Not provided";
+      }
+    });
+  }
 
+  function formatDate(value) {
+    if (!value) return "Not available";
+
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "Not available";
+
+    return date.toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  }
+
+  function makeInitials(name) {
+    return String(name || "Applicant")
+      .trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((part) => part[0] || "")
+      .join("")
+      .toUpperCase();
+  }
+
+  function renderSkills(skills) {
+    const list = document.getElementById("skillsList");
+    list.replaceChildren();
+
+    const safeSkills = Array.isArray(skills)
+      ? skills.filter((skill) => typeof skill === "string" && skill.trim())
+      : [];
+
+    if (!safeSkills.length) {
+      list.textContent = "No skills listed.";
+      return;
+    }
+
+    safeSkills.forEach((skill) => {
+      const tag = document.createElement("span");
+      tag.className = "tag";
+      tag.textContent = skill;
+      list.appendChild(tag);
+    });
+  }
+
+  function renderApplication(application) {
+    const candidate = application.candidate || {};
+    const job = application.job || {};
+    const name = candidate.name || "Applicant";
+    const experience = candidate.experience || "Not provided";
+    const location = candidate.location || "Not provided";
+    const score = Number(application.ai_score);
+    const hasScore = Number.isFinite(score);
+    const status = String(application.status || "submitted")
+      .replaceAll("_", " ")
+      .replace(/\b\w/g, (letter) => letter.toUpperCase());
+
+    currentApplication = application;
+
+    document.title = `${name} — Candidate Details`;
+    document.getElementById("largeAvatar").textContent = makeInitials(name);
+    document.getElementById("profileName").textContent = name;
     document.getElementById("profileRole").textContent =
-      `${candidate.role} · ${candidate.experience} experience · ${candidate.location}`;
+      `${candidate.current_role || job.title || "Applicant"} · ${experience} · ${location}`;
+    document.getElementById("profileEmail").textContent =
+      candidate.email || "No email provided";
+    document.getElementById("detailRole").textContent =
+      job.title || "Not available";
+    document.getElementById("detailExperience").textContent = experience;
+    document.getElementById("detailLocation").textContent = location;
+    document.getElementById("detailStatus").textContent = status;
 
-    document.getElementById("profileEmail").textContent = candidate.email;
-    document.getElementById("scoreNumber").textContent = candidate.score;
-    document.getElementById("detailRole").textContent = candidate.role;
-    document.getElementById("detailExperience").textContent =
-      candidate.experience;
-    document.getElementById("detailLocation").textContent =
-      candidate.location;
-    document.getElementById("detailStatus").textContent =
-      candidate.status;
+    document.getElementById("scoreNumber").textContent = hasScore
+      ? `${score}%`
+      : "—";
 
-    document.getElementById("skillsList").innerHTML =
-      candidate.skills
-        .map((skill) => `<span class="tag">${skill}</span>`)
-        .join("");
+    const scoreCircle = document.querySelector(".score-circle");
+    scoreCircle.style.background = hasScore
+      ? `radial-gradient(circle at center, white 57%, transparent 58%), conic-gradient(var(--electric-blue) ${Math.max(0, Math.min(score, 100))}%, var(--light-blue) 0)`
+      : "radial-gradient(circle at center, white 57%, transparent 58%), conic-gradient(var(--light-blue) 100%, var(--light-blue) 0)";
 
-    document
-      .getElementById("messageButton")
-      .addEventListener("click", () => {
-        window.location.href = "messages.html";
+    document.querySelector(".score-copy strong").textContent = hasScore
+      ? "AI match score"
+      : "No AI score available";
+
+    document.querySelector(".score-copy > span").textContent = hasScore
+      ? "This score is advisory. Review the candidate’s application and qualifications yourself."
+      : "No score has been saved for this application.";
+
+    document.querySelector(".score-points").replaceChildren();
+
+    setDetailValue("Application date", formatDate(application.created_at));
+    setDetailValue("Expected salary", candidate.expected_salary);
+    setDetailValue("Availability", "Not provided");
+    setDetailValue("Owner", "Not available");
+    setDetailValue("Last updated", formatDate(application.updated_at));
+    setDetailValue("Source", "Company application");
+
+    renderSkills(candidate.skills);
+
+    const timeline = document.querySelector(".timeline");
+    timeline.textContent =
+      "Detailed work history is not available in the candidate profile.";
+
+    const recommendation = document.querySelector(".recommendation");
+    recommendation.querySelector("strong").textContent =
+      "Review the application";
+    recommendation.querySelector("span").textContent =
+      "Use the candidate profile and interview process to assess job-related qualifications. AI output is advisory.";
+
+    const resumePanel = Array.from(document.querySelectorAll(".panel")).find(
+      (panel) => panel.querySelector(".panel-title")?.textContent.trim() === "Resume"
+    );
+    const resumeButton = resumePanel?.querySelector("button");
+    const resumeUrl = candidate.resume_url;
+
+    if (resumeButton) {
+      resumeButton.disabled = !resumeUrl;
+      resumeButton.textContent = resumeUrl ? "👁 View resume" : "Resume unavailable";
+      resumeButton.onclick = () => {
+        if (resumeUrl) window.open(resumeUrl, "_blank", "noopener,noreferrer");
+      };
+    }
+
+    const noteInput = document.getElementById("noteInput");
+    noteInput.value = application.notes || "";
+  }
+
+  async function loadApplication() {
+    if (!authToken) {
+      window.location.href = "login.html";
+      return;
+    }
+
+    if (!requestedApplicationId && !requestedCandidateId) {
+      showMessage("Open this page from an application or candidate link.");
+      return;
+    }
+
+    showMessage("Loading candidate details…");
+
+    try {
+      const data = await apiRequest("/applications");
+      const applications = Array.isArray(data.applications)
+        ? data.applications
+        : [];
+
+      currentApplication = applications.find((application) =>
+        requestedApplicationId
+          ? Number(application.id) === requestedApplicationId
+          : Number(application.candidate?.id) === requestedCandidateId
+      );
+
+      if (!currentApplication) {
+        showMessage(
+          "No application for this candidate was found in your company account."
+        );
+        return;
+      }
+
+      renderApplication(currentApplication);
+      showMessage("");
+    } catch (error) {
+      showMessage(error.message || "Could not load candidate details.");
+    }
+  }
+
+  document.getElementById("skillGapButton").addEventListener("click", async () => {
+    if (!currentApplication?.candidate?.id || !currentApplication?.job?.id) {
+      showMessage("This application is missing its candidate or job details.");
+      return;
+    }
+
+    const button = document.getElementById("skillGapButton");
+    button.disabled = true;
+    button.textContent = "Analyzing…";
+
+    try {
+      const data = await apiRequest("/ai/skill-gap", {
+        method: "POST",
+        body: JSON.stringify({
+          jobId: currentApplication.job.id,
+          candidateId: currentApplication.candidate.id,
+        }),
       });
 
-    document
-      .getElementById("interviewButton")
-      .addEventListener("click", () => {
-        window.location.href = "interviews.html";
+      showMessage(JSON.stringify(data.analysis || data, null, 2));
+    } catch (error) {
+      showMessage(error.message || "Could not analyze the skill gap.");
+    } finally {
+      button.disabled = false;
+      button.textContent = "🧩 Analyze gaps";
+    }
+  });
+
+  document.getElementById("noteForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    if (!currentApplication) {
+      showMessage("Load an application before saving a note.");
+      return;
+    }
+
+    const allowedStatuses = [
+      "submitted",
+      "reviewing",
+      "shortlisted",
+      "rejected",
+      "hired",
+    ];
+
+    if (!allowedStatuses.includes(currentApplication.status)) {
+      showMessage("A note cannot be saved for this application status.");
+      return;
+    }
+
+    const note = document.getElementById("noteInput").value.trim();
+
+    try {
+      await apiRequest(`/applications/${currentApplication.id}/status`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          status: currentApplication.status,
+          notes: note,
+        }),
       });
 
-    document
-      .getElementById("recommendationButton")
-      .addEventListener("click", () => {
-        window.location.href = "interviews.html";
-      });
+      currentApplication.notes = note;
+      showMessage("Recruiter note saved.");
+    } catch (error) {
+      showMessage(error.message || "Could not save the recruiter note.");
+    }
+  });
 
-    document
-      .getElementById("shortlistButton")
-      .addEventListener("click", (event) => {
-        event.currentTarget.textContent = "✓ Shortlisted";
-        alert(`${candidate.name} has been shortlisted.`);
-      });
+  document.getElementById("messageButton").addEventListener("click", () => {
+    window.location.href = "messages.html";
+  });
 
-    document
-      .getElementById("skillGapButton")
-      .addEventListener("click", () => {
-        alert(`AI skill-gap analysis started for ${candidate.name}.`);
-      });
+  document.getElementById("interviewButton").addEventListener("click", () => {
+    window.location.href = "interviews.html";
+  });
 
-    document
-      .getElementById("noteForm")
-      .addEventListener("submit", (event) => {
-        event.preventDefault();
+  document.getElementById("recommendationButton").addEventListener("click", () => {
+    window.location.href = "interviews.html";
+  });
 
-        const note = document.getElementById("noteInput").value.trim();
+  document.getElementById("shortlistButton").addEventListener("click", async () => {
+  const button = document.getElementById("shortlistButton");
 
-        if (!note) {
-          alert("Please enter a note first.");
-          return;
-        }
+  if (!currentApplication?.job?.id || !currentApplication?.candidate?.id) {
+    showMessage("This application is missing its job or candidate details.");
+    return;
+  }
 
-        alert("Recruiter note saved in demo mode.");
-        document.getElementById("noteInput").value = "";
-      });
-  </script>
+  button.disabled = true;
+  button.textContent = "Adding…";
+
+  try {
+    await apiRequest(`/shortlists/jobs/${currentApplication.job.id}`, {
+      method: "POST",
+      body: JSON.stringify({
+        candidateId: currentApplication.candidate.id,
+      }),
+    });
+
+    button.textContent = "✓ Shortlisted";
+    showMessage("Candidate added to the shortlist.");
+  } catch (error) {
+    button.textContent = "⭐ Shortlist";
+    showMessage(error.message || "Could not add this candidate to the shortlist.");
+    button.disabled = false;
+  }
+});
+
+  loadApplication();
+</script>
 </body>
 </html>

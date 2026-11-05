@@ -4,6 +4,7 @@ const User = require("../models/User");
 const Candidate = require("../models/Candidate");
 const Company = require("../models/Company");
 const Job = require("../models/Job");
+const Shortlist = require("../models/Shortlist");
 
 async function scheduleInterview(userId, applicationId, interviewData) {
   const user = await User.findByPk(userId);
@@ -26,6 +27,19 @@ async function scheduleInterview(userId, applicationId, interviewData) {
     error.status = 404;
     throw error;
   }
+  const shortlistEntry = await Shortlist.findOne({
+  where: {
+    company_id: user.company_id,
+    job_id: application.job_id,
+    candidate_id: application.candidate_id,
+  },
+});
+
+if (!shortlistEntry) {
+  const error = new Error("Only shortlisted applicants can be scheduled for an interview.");
+  error.status = 400;
+  throw error;
+}
 
   return Interview.create({
     application_id: application.id,

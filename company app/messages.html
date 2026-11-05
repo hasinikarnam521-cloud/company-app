@@ -891,6 +891,7 @@
       }
     }
   </style>
+  <script src="config.js"></script>
 </head>
 
 <body>
@@ -1033,6 +1034,17 @@
 </span>
           Settings
         </a>
+        <a href="index.html" class="nav-item" id="logoutLink">
+  <span class="nav-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10 17l5-5-5-5"></path>
+      <path d="M15 12H3"></path>
+      <path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"></path>
+    </svg>
+  </span>
+  Logout
+</a>
       </div>
     </nav>
   </aside>
@@ -1098,7 +1110,7 @@
           <div>
             <h1 class="page-title-large">Messages</h1>
             <p class="page-sub">
-              Communicate with candidates and team, with AI assistance for replies and summaries.
+              Communicate with candidates and your team.
             </p>
           </div>
 
@@ -1130,7 +1142,7 @@
   </div>
 
   <script>
-    const API_BASE_URL = "http://localhost:5000/api";
+    const API_BASE_URL = window.APP_CONFIG.API_BASE_URL;
     const token = localStorage.getItem("ventrixcarrosToken");
     const conversationsList = document.getElementById("conversationsList");
     const messagesList = document.getElementById("messagesList");

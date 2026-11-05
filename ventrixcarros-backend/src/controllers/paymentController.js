@@ -48,7 +48,47 @@ async function verifyPayment(req, res) {
   }
 }
 
+async function getBillingHistory(req, res) {
+  try {
+    const result = await paymentService.getBillingHistory(req.user.id);
+
+    return res.json({
+      success: true,
+      ...result,
+    });
+  } catch (error) {
+    console.error("Billing history error:", error.message);
+
+    return res.status(error.status || 500).json({
+      success: false,
+      message: error.message || "Could not load billing history.",
+    });
+  }
+}
+
+async function handleRazorpayWebhook(req, res) {
+  try {
+    const result = await paymentService.handleRazorpayWebhook(
+      req.rawBody,
+      req.get("x-razorpay-signature")
+    );
+
+    return res.status(200).json({ success: true, ...result });
+  } catch (error) {
+    console.error("Razorpay webhook error:", error.message);
+
+    return res.status(error.status || 500).json({
+      success: false,
+      message: error.status
+        ? error.message
+        : "Webhook processing failed. Razorpay may retry the event.",
+    });
+  }
+}
+
 module.exports = {
   createOrder,
   verifyPayment,
+  getBillingHistory,
+  handleRazorpayWebhook,
 };

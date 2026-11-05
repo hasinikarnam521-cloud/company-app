@@ -864,6 +864,7 @@
       }
     }
   </style>
+  <script src="config.js"></script>
 </head>
 
 <body>
@@ -1017,10 +1018,17 @@
           Settings
         </a>
 
-        <a href="index.html" class="nav-item">
-          <span class="nav-icon">🚪</span>
-          Logout
-        </a>
+        <a href="index.html" class="nav-item" id="logoutLink">
+  <span class="nav-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10 17l5-5-5-5"></path>
+      <path d="M15 12H3"></path>
+      <path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"></path>
+    </svg>
+  </span>
+  Logout
+</a>
       </div>
     </nav>
   </aside>
@@ -1110,9 +1118,7 @@
     </div>
   </div>
 
-  <div class="notification-empty" id="notificationEmpty">
-    No new notifications
-  </div>
+  
 </div>
 
     <main class="page-wrap">
@@ -1229,7 +1235,7 @@
   </div>
 
   <script>
-    const API_BASE_URL = "http://localhost:5000/api";
+    const API_BASE_URL = window.APP_CONFIG.API_BASE_URL;
     const token = localStorage.getItem("ventrixcarrosToken");
     const applicationRows = document.getElementById("applicationRows");
     const emptyState = document.getElementById("emptyState");
@@ -1422,28 +1428,69 @@
       applyFilters();
     });
 
-    document.getElementById("exportButton").addEventListener("click", () => {
-      const visible = [...document.querySelectorAll(".application-row")].filter((row) => row.style.display !== "none");
-      if (!visible.length) {
-        alert("There are no visible applications to export.");
-        return;
-      }
-      const csvRows = [["Candidate", "Email", "Job", "AI score", "Status", "Applied on"]];
-      visible.forEach((row) => {
-        const application = applications.find((item) => String(item.id) === row.querySelector("[data-update-application]")?.dataset.updateApplication);
-        if (!application) return;
-        const candidate = application.candidate || {};
-        const job = application.job || {};
-        csvRows.push([candidate.name, candidate.email, job.title, application.ai_score, application.status, formatDate(application.created_at)]);
-      });
-      const csv = csvRows.map((row) => row.map((value) => `"${String(value ?? "").replace(/"/g, '""')}"`).join(",")).join("\r\n");
-      const blobUrl = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
-      const link = document.createElement("a");
-      link.href = blobUrl;
-      link.download = "ventrixcarros-applications.csv";
-      link.click();
-      URL.revokeObjectURL(blobUrl);
-    });
+    function csvCell(value) {
+  let text = String(value ?? "");
+
+  // Prevent spreadsheet formulas from running when the CSV is opened.
+  if (/^[\u0000-\u0020]*[=+\-@]/.test(text)) {
+    text = "'" + text;
+  }
+
+  return `"${text.replace(/"/g, '""')}"`;
+}
+
+document.getElementById("exportButton").addEventListener("click", () => {
+  const visibleRows = [
+    ...document.querySelectorAll(".application-row"),
+  ].filter((row) => row.style.display !== "none");
+
+  if (!visibleRows.length) {
+    alert("There are no visible applications to export.");
+    return;
+  }
+
+  const csvRows = [
+    ["Candidate", "Email", "Job", "AI score", "Status", "Applied on"],
+  ];
+
+  visibleRows.forEach((row) => {
+    const button = row.querySelector("[data-update-application]");
+    const application = applications.find(
+      (item) => String(item.id) === button?.dataset.updateApplication
+    );
+
+    if (!application) return;
+
+    const candidate = application.candidate || {};
+    const job = application.job || {};
+
+    csvRows.push([
+      candidate.name,
+      candidate.email,
+      job.title,
+      application.ai_score,
+      application.status,
+      formatDate(application.created_at),
+    ]);
+  });
+
+  const csv =
+    "\uFEFF" +
+    csvRows.map((row) => row.map(csvCell).join(",")).join("\r\n");
+
+  const blobUrl = URL.createObjectURL(
+    new Blob([csv], { type: "text/csv;charset=utf-8" })
+  );
+
+  const link = document.createElement("a");
+  link.href = blobUrl;
+  link.download = "ventrixcarros-applications.csv";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  window.setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+});
 
     document.querySelectorAll(".nav-item").forEach((item) => {
       if (item.getAttribute("href") === (window.location.pathname.split("/").pop() || "applications.html")) item.classList.add("active");

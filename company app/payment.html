@@ -469,6 +469,7 @@
     }
   </style>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="config.js"></script>
 </head>
 
 <body>
@@ -774,7 +775,7 @@
   </main>
 
   <script>
-    const API_BASE_URL = "http://localhost:5000/api";
+    const API_BASE_URL = window.APP_CONFIG.API_BASE_URL;
     const paymentForm = document.getElementById("paymentForm");
     const payButton = document.getElementById("payButton");
     const statusBox = document.getElementById("successMessage");

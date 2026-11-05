@@ -925,6 +925,7 @@
       }
     }
   </style>
+  <script src="config.js"></script>
 </head>
 <body>
   <aside class="sidebar">
@@ -1210,7 +1211,7 @@
   </div>
 
   <script>
-    const API_BASE_URL = "http://localhost:5000/api";
+    const API_BASE_URL = window.APP_CONFIG.API_BASE_URL;
     const token = localStorage.getItem("ventrixcarrosToken");
     const interviewGrid = document.getElementById("interviewGrid");
     const emptyState = document.getElementById("emptyState");
@@ -1236,10 +1237,16 @@
     }
     function getNested(object, lower, upper) { return object?.[lower] || object?.[upper] || {}; }
     function dateOnly(value) { return String(value || "").slice(0, 10); }
+    function localDateString(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
     function classify(interview) {
       if (interview.status === "completed") return "completed";
       if (interview.status === "cancelled") return "cancelled";
-      const today = new Date().toISOString().slice(0, 10);
+      const today = localDateString()
       const date = dateOnly(interview.interview_date);
       return date === today ? "today" : date > today ? "upcoming" : "past";
     }
@@ -1257,7 +1264,7 @@
     function getApplication(interview) { return getNested(interview, "application", "Application"); }
     function getJob(interview) { return getNested(getApplication(interview), "job", "Job"); }
     function renderStats() {
-      const today = new Date().toISOString().slice(0, 10);
+      const today = localDateString()
       document.getElementById("totalInterviews").textContent = interviews.length;
       document.getElementById("todayInterviews").textContent = interviews.filter((item) => item.status === "scheduled" && dateOnly(item.interview_date) === today).length;
       document.getElementById("upcomingInterviews").textContent = interviews.filter((item) => item.status === "scheduled" && dateOnly(item.interview_date) > today).length;
@@ -1359,14 +1366,63 @@
     document.getElementById("scheduleFocusButton").addEventListener("click", () => document.getElementById("scheduleSection").scrollIntoView({ behavior: "smooth" }));
     [searchInput, statusFilter, roleFilter].forEach((control) => control.addEventListener(control === searchInput ? "input" : "change", renderInterviews));
     resetFilters.addEventListener("click", () => { searchInput.value = ""; statusFilter.value = ""; roleFilter.value = ""; renderInterviews(); });
-    document.getElementById("exportButton").addEventListener("click", () => {
-      const rows = getVisibleInterviews().map((item) => { const candidate = getCandidate(item), job = getJob(item); return [candidate.name, candidate.email, job.title, item.interview_date, item.interview_time, item.interviewer, item.mode, item.status]; });
-      if (!rows.length) return alert("There are no interviews to export.");
-      const csv = [["Candidate", "Email", "Job", "Date", "Time", "Interviewer", "Mode", "Status"], ...rows].map((row) => row.map((value) => `"${String(value ?? "").replace(/"/g, '""')}"`).join(",")).join("\r\n");
-      const link = document.createElement("a"); link.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" })); link.download = "ventrixcarros-interviews.csv"; link.click(); URL.revokeObjectURL(link.href);
-    });
+    function csvCell(value) {
+  let text = String(value ?? "");
+
+  // Prevent spreadsheet formulas from running when the CSV is opened.
+  if (/^[\u0000-\u0020]*[=+\-@]/.test(text)) {
+    text = "'" + text;
+  }
+
+  return `"${text.replace(/"/g, '""')}"`;
+}
+
+document.getElementById("exportButton").addEventListener("click", () => {
+  const rows = getVisibleInterviews().map((item) => {
+    const candidate = getCandidate(item);
+    const job = getJob(item);
+
+    return [
+      candidate.name,
+      candidate.email,
+      job.title,
+      item.interview_date,
+      item.interview_time,
+      item.interviewer,
+      item.mode,
+      item.status,
+    ];
+  });
+
+  if (!rows.length) {
+    alert("There are no interviews to export.");
+    return;
+  }
+
+  const csvRows = [
+    ["Candidate", "Email", "Job", "Date", "Time", "Interviewer", "Mode", "Status"],
+    ...rows,
+  ];
+
+  const csv =
+    "\uFEFF" +
+    csvRows.map((row) => row.map(csvCell).join(",")).join("\r\n");
+
+  const blobUrl = URL.createObjectURL(
+    new Blob([csv], { type: "text/csv;charset=utf-8" })
+  );
+
+  const link = document.createElement("a");
+  link.href = blobUrl;
+  link.download = "ventrixcarros-interviews.csv";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  window.setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+});
     document.querySelectorAll(".profile-logout, .nav-item[href='index.html']").forEach((link) => link.addEventListener("click", (event) => { event.preventDefault(); logout(); }));
-    const todayISO = new Date().toISOString().slice(0, 10);
+    const todayISO = localDateString()
     document.getElementById("interviewDate").min = todayISO;
     loadPageData();
   </script>

@@ -970,6 +970,7 @@
       }
     }
   </style>
+  <script src="config.js"></script>
 </head>
 <body>
   <aside class="sidebar">
@@ -1296,7 +1297,7 @@
   </div>
 
   <script>
-    const API_BASE_URL = "http://localhost:5000/api";
+    const API_BASE_URL = window.APP_CONFIG.API_BASE_URL;
     const token = localStorage.getItem("ventrixcarrosToken");
     const periodFilter = document.getElementById("periodFilter");
     let allApplications = [], allShortlists = [], allInterviews = [];

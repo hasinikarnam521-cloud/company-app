@@ -894,10 +894,10 @@
       }
     }
   </style>
+  <script src="config.js"></script>
 </head>
-
-<!-- Sidebar -->
- </body>
+<body>
+  <!-- Sidebar -->
   <aside class="sidebar">
     <div class="sidebar-brand">
       <img src="./ventrix-logo-mark.png" alt="VentrixCarros Logo">
@@ -1109,29 +1109,17 @@
 
   <div class="notification-item unread">
     <div class="notification-icon">👤</div>
-    <div>
-      <strong>New application received</strong>
-      <span>Rahul Sharma applied for Frontend Developer.</span>
-      <small>10 minutes ago</small>
-    </div>
+    
   </div>
 
   <div class="notification-item">
     <div class="notification-icon">🎤</div>
-    <div>
-      <strong>Interview scheduled</strong>
-      <span>Interview with Priya Nair is scheduled.</span>
-      <small>1 hour ago</small>
-    </div>
+    
   </div>
 
   <div class="notification-item">
     <div class="notification-icon">⭐</div>
-    <div>
-      <strong>Candidate shortlisted</strong>
-      <span>Arjun Mehta was shortlisted.</span>
-      <small>2 hours ago</small>
-    </div>
+    
   </div>
 
   <div class="notification-empty" id="notificationEmpty">
@@ -1225,7 +1213,7 @@
   </div>
 
   <script>
-    const API_BASE_URL = "http://localhost:5000/api";
+    const API_BASE_URL = window.APP_CONFIG.API_BASE_URL;
     const token = localStorage.getItem("ventrixcarrosToken");
     const candidateGrid = document.getElementById("candidateGrid");
     const emptyState = document.getElementById("emptyState");
@@ -1270,15 +1258,10 @@
     }
 
     function getCandidateApplications(allApplications) {
-      const latestByCandidate = new Map();
-      allApplications.forEach((application) => {
-        const candidate = application.candidate;
-        if (!candidate || candidate.id == null) return;
-        const id = String(candidate.id);
-        if (!latestByCandidate.has(id)) latestByCandidate.set(id, application);
-      });
-      return [...latestByCandidate.values()];
-    }
+  return allApplications.filter(
+    (application) => application?.candidate?.id != null
+  );
+}
 
     function updateRoleFilter() {
       const selected = roleFilter.value;
@@ -1343,7 +1326,7 @@
           ? `<button type="button" class="btn btn-primary btn-sm shortlist-button" data-candidate-id="${Number(candidate.id)}" data-job-id="${Number(job.id)}" ${alreadyShortlisted ? "disabled" : ""}>${alreadyShortlisted ? "✓ Shortlisted" : "⭐ Shortlist"}</button>`
           : "";
         const roleLabel = job.title ? `Applied for ${job.title}` : "Applicant profile";
-        return `<article class="candidate-card reveal-up delay-2" data-candidate="${Number(candidate.id)}" data-role="${escapeHTML(job.id)}" data-status="${escapeHTML(application.status)}" data-score="${score.filter}" style="animation-delay:${Math.min(index * 0.04, 0.4)}s">
+        return `<article class="candidate-card reveal-up delay-2" data-application="${Number(application.id)}" data-role="${escapeHTML(job.id)}" data-status="${escapeHTML(application.status)}" data-score="${score.filter}" style="animation-delay:${Math.min(index * 0.04, 0.4)}s">
           <span class="status-badge ${badgeClass}">${escapeHTML(statusLabel)}</span>
           <div class="candidate-top"><div class="candidate-avatar">${escapeHTML(initials || "C")}</div><div><h3 class="candidate-name">${escapeHTML(name)}</h3><p class="candidate-role">${escapeHTML(roleLabel)}</p></div></div>
           <div class="candidate-meta">
@@ -1352,7 +1335,7 @@
             <div class="meta-row"><span>Application</span><strong>${escapeHTML(statusLabel)}</strong></div>
           </div>
           <div class="skills">${skillsHTML}</div>
-          <div class="card-actions"><button type="button" class="btn btn-outline btn-sm view-button" data-candidate-id="${Number(candidate.id)}">View profile</button>${shortlistButton}</div>
+          <div class="card-actions"><button type="button" class="btn btn-outline btn-sm view-button" data-application-id="${Number(application.id)}">View profile</button>${shortlistButton}</div>
         </article>`;
       }).join("");
       updateRoleFilter();
@@ -1420,11 +1403,15 @@
       const viewButton = event.target.closest(".view-button");
       if (viewButton) {
         event.stopPropagation();
-        window.location.href = `candidate-detail.html?id=${encodeURIComponent(viewButton.dataset.candidateId)}`;
+        window.location.href =
+  `candidate-detail.html?applicationId=${encodeURIComponent(viewButton.dataset.applicationId)}`;
         return;
       }
       const card = event.target.closest(".candidate-card");
-      if (card) window.location.href = `candidate-detail.html?id=${encodeURIComponent(card.dataset.candidate)}`;
+      if (card && card.dataset.application) {
+  window.location.href =
+    `candidate-detail.html?applicationId=${encodeURIComponent(card.dataset.application)}`;
+}
     });
 
     searchInput.addEventListener("input", applyFilters);
@@ -1438,25 +1425,68 @@
       scoreFilter.value = "";
       applyFilters();
     });
+function csvCell(value) {
+  let text = String(value ?? "");
 
-    document.getElementById("exportButton").addEventListener("click", () => {
-      const visibleCards = [...document.querySelectorAll(".candidate-card")].filter((card) => card.style.display !== "none");
-      if (!visibleCards.length) return alert("There are no visible candidates to export.");
-      const rows = [["Name", "Email", "Applied for", "AI score", "Status", "Location", "Skills"]];
-      visibleCards.forEach((card) => {
-        const application = candidates.find((item) => String(item.candidate?.id) === card.dataset.candidate);
-        if (!application) return;
-        const candidate = application.candidate || {};
-        rows.push([candidate.name, candidate.email, application.job?.title, application.ai_score, application.status, candidate.location, Array.isArray(candidate.skills) ? candidate.skills.join("; ") : ""]);
-      });
-      const csv = rows.map((row) => row.map((value) => `"${String(value ?? "").replace(/"/g, '""')}"`).join(",")).join("\r\n");
-      const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "ventrixcarros-candidates.csv";
-      link.click();
-      URL.revokeObjectURL(url);
-    });
+  // Prevent spreadsheet formulas from running when the CSV is opened.
+  if (/^[\u0000-\u0020]*[=+\-@]/.test(text)) {
+    text = "'" + text;
+  }
+
+  return `"${text.replace(/"/g, '""')}"`;
+}
+
+document.getElementById("exportButton").addEventListener("click", () => {
+  const visibleCards = [
+    ...document.querySelectorAll(".candidate-card"),
+  ].filter((card) => card.style.display !== "none");
+
+  if (!visibleCards.length) {
+    alert("There are no visible candidates to export.");
+    return;
+  }
+
+  const rows = [
+    ["Name", "Email", "Applied for", "AI score", "Status", "Location", "Skills"],
+  ];
+
+  visibleCards.forEach((card) => {
+    const application = candidates.find(
+      (item) => String(item.id) === card.dataset.application
+    );
+
+    if (!application) return;
+
+    const candidate = application.candidate || {};
+
+    rows.push([
+      candidate.name,
+      candidate.email,
+      application.job?.title,
+      application.ai_score,
+      application.status,
+      candidate.location,
+      Array.isArray(candidate.skills) ? candidate.skills.join("; ") : "",
+    ]);
+  });
+
+  const csv =
+    "\uFEFF" +
+    rows.map((row) => row.map(csvCell).join(",")).join("\r\n");
+
+  const url = URL.createObjectURL(
+    new Blob([csv], { type: "text/csv;charset=utf-8" })
+  );
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "ventrixcarros-candidates.csv";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
 
     document.querySelectorAll(".nav-item").forEach((item) => {
       if (item.getAttribute("href") === (window.location.pathname.split("/").pop() || "candidates.html")) item.classList.add("active");

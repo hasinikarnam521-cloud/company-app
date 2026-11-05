@@ -772,6 +772,7 @@
       }
     }
   </style>
+  <script src="config.js"></script>
 </head>
 
 <body>
@@ -914,6 +915,17 @@
 </span>
           Settings
         </a>
+        <a href="index.html" class="nav-item" id="logoutLink">
+  <span class="nav-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10 17l5-5-5-5"></path>
+      <path d="M15 12H3"></path>
+      <path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"></path>
+    </svg>
+  </span>
+  Logout
+</a>
       </div>
     </nav>
   </aside>
@@ -1112,7 +1124,9 @@
                       <th>Invoice</th>
                     </tr>
                   </thead>
-                  <tbody id="billingHistoryRows"><tr><td colspan="4">Billing history is not connected to a backend endpoint yet.</td></tr></tbody>
+                  <tbody id="billingHistoryRows">
+  <tr><td colspan="4">Loading billing history...</td></tr>
+</tbody>
                 </table>
               </div>
             </section>
@@ -1124,10 +1138,12 @@
 
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-    const API_BASE_URL = "http://localhost:5000/api";
+    const API_BASE_URL = window.APP_CONFIG?.API_BASE_URL || "http://localhost:5000/api";
     const token = localStorage.getItem("ventrixcarrosToken");
     let availablePlans = [];
     let currentSubscription = null;
+    let billingHistory = [];
+    let billingCompany = null;
 
     function logOut() {
       localStorage.removeItem("ventrixcarrosToken");
@@ -1231,17 +1247,52 @@
     }
 
     async function loadPlans() {
-      const data = await apiRequest("/plans");
-      availablePlans = Array.isArray(data.plans) ? data.plans : [];
-      renderPlans(availablePlans);
-    }
+  const container = document.getElementById("availablePlans");
+
+  try {
+    const data = await apiRequest("/plans");
+    availablePlans = Array.isArray(data.plans) ? data.plans : [];
+    renderPlans(availablePlans);
+  } catch (error) {
+    container.innerHTML =
+      '<div class="panel-sub">Could not load plans: ' +
+      escapeHTML(error.message) +
+      "</div>";
+    throw error;
+  }
+}
 
     async function loadCurrentSubscription() {
       const data = await apiRequest("/subscriptions/current");
       renderCurrentSubscription(data.subscription);
       renderPlans(availablePlans);
     }
+    const exportBillingButton = document.getElementById("exportBillingButton");
+if (exportBillingButton) {
+  exportBillingButton.addEventListener("click", exportBillingHistory);
+}
 
+document.getElementById("billingHistoryRows").addEventListener("click", (event) => {
+  const button = event.target.closest("[data-download-invoice]");
+  if (button) downloadInvoice(button.dataset.downloadInvoice);
+});
+document
+  .getElementById("downloadInvoiceButton")
+  .addEventListener("click", function () {
+    const payment =
+      billingHistory.find(function (item) {
+        return String(item.status).toLowerCase() === "paid";
+      }) || billingHistory[0];
+
+    if (!payment) {
+      showPageMessage(
+        "No payment record is available yet. Complete a payment first."
+      );
+      return;
+    }
+
+    downloadInvoice(payment.id);
+  });
     async function loadActiveJobCount() {
       try {
         const data = await apiRequest("/dashboard/summary");
@@ -1250,80 +1301,372 @@
         console.warn("Could not load job usage:", error.message);
       }
     }
+    async function loadBillingHistory() {
+  const rows = document.getElementById("billingHistoryRows");
 
-    async function subscribeToPlan(planId) {
-      const button = document.querySelector(`[data-plan-id="${planId}"]`);
-      if (!window.Razorpay) {
-        showPageMessage("Razorpay Checkout did not load. Check your internet connection and refresh this page.");
-        return;
-      }
-      if (button) { button.disabled = true; button.textContent = "Preparing checkout..."; }
-      try {
-        const result = await apiRequest("/payments/create-order", { method: "POST", body: JSON.stringify({ planId: Number(planId) }) });
-        const order = result.order;
-        if (!order || !order.orderId || !order.keyId) throw new Error("The backend did not return the Razorpay order details.");
-        const options = {
-          key: order.keyId,
-          amount: order.amount,
-          currency: order.currency,
-          name: "VentrixCarros",
-          description: `${order.planName} subscription`,
-          order_id: order.orderId,
-          handler: async function (paymentResponse) {
-            try {
-              showPageMessage("Payment received. Verifying it securely...", "success");
-              await apiRequest("/payments/verify", { method: "POST", body: JSON.stringify(paymentResponse) });
-              showPageMessage("Payment verified. Your subscription is active.", "success");
-              sessionStorage.removeItem("ventrixcarrosOnboardingStep");
-              sessionStorage.removeItem("ventrixcarrosPendingSignup");
-              await loadCurrentSubscription();
-            } catch (error) {
-              showPageMessage(error.message || "Payment verification failed. Contact support before trying to pay again.");
-            } finally {
-              if (button) { button.disabled = false; button.textContent = "Subscribe"; }
-            }
-          },
-          theme: { color: "#2c83f8" },
-          modal: { ondismiss: function () { if (button) { button.disabled = false; button.textContent = "Subscribe"; } } },
-        };
-        const checkout = new window.Razorpay(options);
-        checkout.on("payment.failed", function (event) {
-          showPageMessage(event.error?.description || "Payment failed. Your subscription was not activated.");
-          if (button) { button.disabled = false; button.textContent = "Subscribe"; }
-        });
-        checkout.open();
-      } catch (error) {
-        showPageMessage(error.message || "Could not start payment. Check that the backend is running.");
-        if (button) { button.disabled = false; button.textContent = "Subscribe"; }
-      }
+  try {
+    const data = await apiRequest("/payments/history");
+    billingHistory = Array.isArray(data.payments) ? data.payments : [];
+    billingCompany = data.company || null;
+
+    if (billingHistory.length === 0) {
+      rows.innerHTML = '<tr><td colspan="4">No billing records yet.</td></tr>';
+      return;
     }
 
-    document.getElementById("availablePlans").addEventListener("click", (event) => {
-      const button = event.target.closest("[data-plan-id]");
-      if (button && !button.disabled) subscribeToPlan(button.dataset.planId);
-    });
-    document.getElementById("downloadInvoiceButton").addEventListener("click", () => showPageMessage("Invoice downloads are not connected to a backend endpoint yet."));
-    document.getElementById("exportBillingButton").addEventListener("click", () => showPageMessage("Billing history export is not connected to a backend endpoint yet."));
+    rows.innerHTML = billingHistory.map(function (payment) {
+      const invoice =
+        Array.isArray(payment.invoices) && payment.invoices.length
+          ? payment.invoices[0]
+          : null;
 
-    document.querySelectorAll(".nav-item").forEach((item) => {
-      if (item.getAttribute("href") === (window.location.pathname.split("/").pop() || "subscription.html")) item.classList.add("active");
-      else item.classList.remove("active");
+      const date = payment.created_at
+        ? new Date(payment.created_at).toLocaleDateString()
+        : "—";
+
+      const amount = new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: payment.currency || "INR",
+      }).format(Number(payment.amount) || 0);
+
+      const invoiceCell = invoice
+        ? '<button type="button" class="btn btn-outline btn-sm" data-download-invoice="' +
+          Number(payment.id) +
+          '">Download</button>'
+        : "Not issued";
+
+      return (
+        "<tr><td>" +
+        date +
+        "</td><td>" +
+        amount +
+        "</td><td>" +
+        (payment.status || "—") +
+        "</td><td>" +
+        invoiceCell +
+        "</td></tr>"
+      );
+    }).join("");
+  } catch (error) {
+    rows.innerHTML =
+      '<tr><td colspan="4">Could not load billing history: ' +
+      error.message +
+      "</td></tr>";
+  }
+}
+    function csvCell(value) {
+  let text = String(value == null ? "" : value);
+
+  // Prevent spreadsheet formulas from running.
+  if (/^[=+\-@\t\r]/.test(text)) {
+    text = "'" + text;
+  }
+
+  return '"' + text.replace(/"/g, '""') + '"';
+}
+
+
+function downloadFile(contents, fileName, mimeType) {
+  const blob = new Blob([contents], { type: mimeType });
+  const fileUrl = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = fileUrl;
+  link.download = fileName;
+  link.style.display = "none";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  window.setTimeout(function () {
+    URL.revokeObjectURL(fileUrl);
+  }, 1000);
+}
+
+function exportBillingHistory() {
+  if (!billingHistory.length) {
+    showPageMessage("There are no billing records to export yet.");
+    return;
+  }
+
+  const rows = [
+    [
+      "Date",
+      "Invoice number",
+      "Plan",
+      "Amount",
+      "Currency",
+      "Status",
+      "Payment provider",
+      "Payment method",
+    ],
+    ...billingHistory.map(function (payment) {
+      const invoice =
+        Array.isArray(payment.invoices) && payment.invoices.length
+          ? payment.invoices[0]
+          : null;
+      const plan = payment.subscription && payment.subscription.plan;
+
+      return [
+        formatDate(payment.created_at),
+        invoice ? invoice.invoice_number : "",
+        plan ? plan.name : "Subscription plan",
+        payment.amount,
+        payment.currency,
+        payment.status,
+        payment.provider,
+        payment.payment_method,
+      ];
+    }),
+  ];
+
+  const csv =
+    "\uFEFF" +
+    rows
+      .map(function (row) {
+        return row.map(csvCell).join(",");
+      })
+      .join("\r\n");
+
+  downloadFile(
+    csv,
+    "ventrixcarros-billing-history.csv",
+    "text/csv;charset=utf-8"
+  );
+}
+function downloadInvoice(paymentId) {
+  const payment = billingHistory.find(function (item) {
+    return Number(item.id) === Number(paymentId);
+  });
+
+  if (!payment) {
+    showPageMessage("No payment record is available yet.");
+    return;
+  }
+
+  const invoice =
+    Array.isArray(payment.invoices) && payment.invoices.length
+      ? payment.invoices[0]
+      : null;
+
+  if (!invoice) {
+    showPageMessage("An invoice has not been issued for this payment yet.");
+    return;
+  }
+
+  const invoiceNumber = String(invoice.invoice_number || "");
+
+  const companyName =
+    billingCompany && billingCompany.name
+      ? billingCompany.name
+      : "Company";
+
+  const plan =
+    payment.subscription && payment.subscription.plan
+      ? payment.subscription.plan.name
+      : "Subscription plan";
+
+  const amount = formatMoney(payment.amount, payment.currency || "INR");
+
+  const invoiceHtml = `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>VentrixCarros Invoice</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; color: #172033; }
+    h1 { color: #274cdc; }
+    .row { display: flex; justify-content: space-between; gap: 20px; padding: 12px 0; border-bottom: 1px solid #ddd; }
+    @media print { button { display: none; } }
+  </style>
+</head>
+<body>
+  <button onclick="window.print()">Print / Save as PDF</button>
+  <h1>VentrixCarros Invoice</h1>
+  <p>Invoice number: ${escapeHTML(invoiceNumber)}</p>
+  <p>Issued: ${escapeHTML(formatDate((invoice && invoice.issued_at) || payment.created_at))}</p>
+  <div class="row"><span>Company</span><strong>${escapeHTML(companyName)}</strong></div>
+  <div class="row"><span>Plan</span><strong>${escapeHTML(plan)}</strong></div>
+  <div class="row"><span>Payment status</span><strong>${escapeHTML(payment.status || "—")}</strong></div>
+  <div class="row"><span>Payment reference</span><strong>${escapeHTML(payment.provider_payment_id || payment.provider_order_id || "—")}</strong></div>
+  <div class="row"><span>Total</span><strong>${escapeHTML(amount)}</strong></div>
+<\/body>
+<\/html>`;
+
+  downloadFile(
+    invoiceHtml,
+    "ventrixcarros-invoice-" + payment.id + ".html",
+    "text/html;charset=utf-8"
+  );
+}
+
+  async function subscribeToPlan(planId) {
+  const button = document.querySelector(`[data-plan-id="${Number(planId)}"]`);
+
+  if (!window.Razorpay) {
+    showPageMessage(
+      "Razorpay Checkout did not load. Check your internet connection and refresh this page."
+    );
+    return;
+  }
+
+  if (button) {
+    button.disabled = true;
+    button.textContent = "Preparing checkout...";
+  }
+
+  try {
+    const result = await apiRequest("/payments/create-order", {
+      method: "POST",
+      body: JSON.stringify({ planId: Number(planId) }),
     });
 
-    if (!token) {
-      window.location.href = "login.html";
-    } else {
-      Promise.allSettled([loadPlans(), loadCurrentSubscription(), loadActiveJobCount()]).then((results) => {
-        results.forEach((result) => {
-          if (result.status === "rejected") {
-            console.error("Subscription page loading error:", result.reason);
-            showPageMessage(result.reason?.message || "Could not load subscription information.");
+    const order = result.order;
+
+    if (!order || !order.orderId || !order.keyId) {
+      throw new Error("The backend did not return the Razorpay order details.");
+    }
+
+    const options = {
+      key: order.keyId,
+      amount: order.amount,
+      currency: order.currency,
+      name: "VentrixCarros",
+      description: `${order.planName} subscription`,
+      order_id: order.orderId,
+
+      handler: async function (paymentResponse) {
+        try {
+          showPageMessage(
+            "Payment received. Verifying it securely...",
+            "success"
+          );
+
+          await apiRequest("/payments/verify", {
+            method: "POST",
+            body: JSON.stringify(paymentResponse),
+          });
+
+          sessionStorage.removeItem("ventrixcarrosOnboardingStep");
+          sessionStorage.removeItem("ventrixcarrosPendingSignup");
+
+          showPageMessage(
+            "Payment verified. Your subscription is active.",
+            "success"
+          );
+
+          try {
+            await Promise.all([
+              loadCurrentSubscription(),
+              loadBillingHistory(),
+            ]);
+          } catch (refreshError) {
+            showPageMessage(
+              "Payment was verified, but the page could not refresh. Refresh the page to see your subscription.",
+              "success"
+            );
           }
-        });
-      });
+        } catch (error) {
+          showPageMessage(
+            error.message ||
+              "Payment verification failed. Contact support before trying to pay again."
+          );
+        } finally {
+          if (button) {
+            button.disabled = false;
+            button.textContent = "Subscribe";
+          }
+        }
+      },
+
+      theme: { color: "#2c83f8" },
+
+      modal: {
+        ondismiss: function () {
+          if (button) {
+            button.disabled = false;
+            button.textContent = "Subscribe";
+          }
+        },
+      },
+    };
+
+    const checkout = new window.Razorpay(options);
+
+    checkout.on("payment.failed", function (event) {
+      showPageMessage(
+        event.error?.description ||
+          "Payment failed. Your subscription was not activated."
+      );
+
+      if (button) {
+        button.disabled = false;
+        button.textContent = "Subscribe";
+      }
+    });
+
+    checkout.open();
+  } catch (error) {
+    showPageMessage(
+      error.message || "Could not start payment. Check that the backend is running."
+    );
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = "Subscribe";
     }
-  </script>
-  <script src="notification.js"></script>
+  }
+}
+
+document.getElementById("availablePlans").addEventListener("click", (event) => {
+  const button = event.target.closest("[data-plan-id]");
+
+  if (button && !button.disabled) {
+    subscribeToPlan(button.dataset.planId);
+  }
+});
+
+document.querySelectorAll(".nav-item").forEach((item) => {
+  const currentPage =
+    window.location.pathname.split("/").pop() || "subscription.html";
+
+  if (item.getAttribute("href") === currentPage) {
+    item.classList.add("active");
+  } else {
+    item.classList.remove("active");
+  }
+});
+
+if (!token) {
+  window.location.href = "login.html";
+} else {
+  Promise.allSettled([
+    loadPlans(),
+    loadCurrentSubscription(),
+    loadActiveJobCount(),
+    loadBillingHistory(),
+  ]).then((results) => {
+    results.forEach((result) => {
+      if (result.status === "rejected") {
+        console.error(
+          "Subscription page loading error:",
+          result.reason
+        );
+
+        showPageMessage(
+          result.reason?.message ||
+            "Could not load subscription information."
+        );
+      }
+    });
+  });
+}
+</script>
+
+
+<script src="notification.js"></script>
 <script src="profile.js"></script>
 </body>
 </html>
+
+

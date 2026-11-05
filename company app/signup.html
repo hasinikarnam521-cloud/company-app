@@ -507,6 +507,7 @@
       }
     }
   </style>
+  <script src="config.js"></script>
 </head>
 
 <body>
@@ -560,7 +561,7 @@
                   name="companyName"
                   autocomplete="organization"
                   placeholder="Your Company Ltd."
-                  required
+          
                 />
               </div>
 
@@ -577,9 +578,24 @@
                 />
               </div>
             </div>
+                      </div> <!-- closes the Company name / Work email row -->
 
-            <div class="form-group">
-              <label class="form-label" for="fullName">Full name</label>
+          <div class="form-group">
+            <label class="form-label" for="inviteCode">
+              Invitation code <span class="form-note">(leave blank for a new company)</span>
+            </label>
+            <input
+              class="form-input"
+              type="text"
+              id="inviteCode"
+              inputmode="numeric"
+              maxlength="6"
+              placeholder="Enter the 6-digit code if invited"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="fullName">Full name</label>
               <input
                 class="form-input"
                 type="text"
@@ -734,7 +750,7 @@
   </footer>
 
   <script>
-    const API_BASE_URL = "http://localhost:5000/api";
+    const API_BASE_URL = window.APP_CONFIG.API_BASE_URL;
 
     function setupTogglePassword(inputId, buttonId) {
       const toggle = document.getElementById(buttonId);
@@ -832,15 +848,53 @@
         resendCodeButton.textContent = "Resend code";
       }
     });
+    const savedSignup = sessionStorage.getItem("ventrixcarrosPendingSignup");
+
+if (savedSignup) {
+  try {
+    pendingSignup = JSON.parse(savedSignup);
+
+    if (pendingSignup.email) {
+      otpStep = true;
+      signupFields.hidden = true;
+
+      signupFields.querySelectorAll("[required]").forEach((input) => {
+        input.required = false;
+      });
+
+      otpGroup.hidden = false;
+      otpInput.required = true;
+      resendCodeButton.hidden = false;
+      resendCodeButton.disabled = false;
+      resendCodeButton.textContent = "Resend code";
+      otpMessage.textContent = `Continue verification for ${pendingSignup.email}.`;
+      otpTimer.textContent = "Enter the latest code or resend a new one.";
+      submitButton.textContent = "Verify email";
+    }
+  } catch (error) {
+    sessionStorage.removeItem("ventrixcarrosPendingSignup");
+  }
+}
 
     signupForm.addEventListener("submit", async (event) => {
       event.preventDefault();
 
       const companyName = document.getElementById("companyName").value.trim();
+      const inviteCode = document.getElementById("inviteCode").value.trim();
       const email = document.getElementById("workEmail").value.trim().toLowerCase();
       const name = document.getElementById("fullName").value.trim();
       const password = document.getElementById("password").value;
       const confirmPassword = document.getElementById("confirmPassword").value;
+
+      if (!otpStep && !inviteCode && !companyName) {
+  showMessage("Enter your company name, or enter an invitation code.");
+  return;
+}
+
+if (!otpStep && inviteCode && !/^\d{6}$/.test(inviteCode)) {
+  showMessage("Enter the 6-digit invitation code from your email.");
+  return;
+}
 
       if (!otpStep && password.length < 8) {
         showMessage("Password must be at least 8 characters.");
@@ -871,17 +925,17 @@
               }),
             })
           : await fetch(`${API_BASE_URL}/auth/register`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                companyName,
-                name,
-                email,
-                password,
-                role: "recruiter",
-              }),
-            });
-
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      companyName,
+      inviteCode: document.getElementById("inviteCode").value.trim(),
+      name,
+      email,
+      password,
+      role: "recruiter",
+    }),
+  });
         const data = await response.json();
 
         if (!response.ok) {
@@ -892,7 +946,7 @@
         }
 
         if (!otpStep) {
-          pendingSignup = { companyName, name, email };
+          pendingSignup = { companyName, inviteCode, name, email };
 
           sessionStorage.setItem(
             "ventrixcarrosPendingSignup",
@@ -921,12 +975,20 @@
           return;
         }
 
-        if (!data.paymentToken) {
-          throw new Error("Email verified, but payment authorization was not returned.");
-        }
+        if (data.token) {
+  localStorage.setItem("ventrixcarrosToken", data.token);
+  localStorage.setItem("ventrixcarrosUser", JSON.stringify(data.user));
+  sessionStorage.removeItem("ventrixcarrosPendingSignup");
+  window.location.href = "company-profile.html";
+  return;
+}
 
-        sessionStorage.setItem("ventrixcarrosPaymentToken", data.paymentToken);
-        window.location.href = "payment.html";
+if (!data.paymentToken) {
+  throw new Error("Email verified, but authorization was not returned.");
+}
+
+sessionStorage.setItem("ventrixcarrosPaymentToken", data.paymentToken);
+window.location.href = "payment.html";
       } catch (error) {
         showMessage(
           error.message || "Could not connect to the backend. Check that it is running."

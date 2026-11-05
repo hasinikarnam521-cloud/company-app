@@ -17,6 +17,9 @@ const Invoice = require("./models/Invoice");
 const LoginOtp = require("./models/LoginOtp");
 const Message = require("./models/Message"); 
 const SupportTicket = require("./models/SupportTicket");
+const CompanyInvitation = require("./models/CompanyInvitation");
+const ActivityLog = require("./models/ActivityLog");
+const PlatformSetting = require("./models/PlatformSetting");
 
 User.belongsTo(Company, {
   foreignKey: "company_id",

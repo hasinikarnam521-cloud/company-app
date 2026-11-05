@@ -838,6 +838,7 @@
       }
     }
   </style>
+  <script src="config.js"></script>
 </head>
 
 <body>
@@ -980,6 +981,17 @@
 </span>
           Settings
         </a>
+        <a href="index.html" class="nav-item" id="logoutLink">
+  <span class="nav-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10 17l5-5-5-5"></path>
+      <path d="M15 12H3"></path>
+      <path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"></path>
+    </svg>
+  </span>
+  Logout
+</a>
       </div>
     </nav>
   </aside>
@@ -1152,61 +1164,162 @@
               </form>
             </section>
 
-            <!-- Branding -->
             <section class="panel reveal-up delay-2" style="margin-top: 18px;">
-              <div class="panel-head">
-                <div>
-                  <div class="panel-title">Branding</div>
-                  <div class="panel-sub">Logo and brand colors</div>
-                </div>
-                <button class="btn btn-outline btn-sm" type="button" disabled title="Branding controls are not connected yet">Reset to default</button>
-              </div>
+  <div class="panel-head">
+    <div>
+      <div class="panel-title">Branding</div>
+      <div class="panel-sub">Logo and brand colors</div>
+    </div>
+    <button
+      class="btn btn-outline btn-sm"
+      id="resetBrandingButton"
+      type="button"
+    >
+      Reset to default
+    </button>
+  </div>
 
-              <div class="branding-row">
-                <div class="logo-preview">V</div>
-                <div style="flex:1;">
-                  <div style="font-weight:600; font-size:13px; color:var(--deep-navy); margin-bottom:6px;">
-                    Company logo
-                  </div>
-                  <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                    <button class="btn btn-outline btn-sm" type="button" disabled title="Logo upload is not connected yet">Upload logo</button>
-                    <button class="btn btn-outline btn-sm" type="button" disabled>Remove</button>
-                  </div>
-                </div>
-              </div>
+  <div class="branding-row">
+    <div class="logo-preview" id="companyLogoPreview">V</div>
+    <div style="flex:1;">
+      <div style="font-weight:600; font-size:13px; color:var(--deep-navy); margin-bottom:6px;">
+        Company logo
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button
+          class="btn btn-outline btn-sm"
+          id="uploadLogoButton"
+          type="button"
+        >
+          Upload logo
+        </button>
+        <input
+          type="file"
+          id="companyLogoInput"
+          accept="image/png,image/jpeg,image/webp"
+          hidden
+        />
+        <button
+          class="btn btn-outline btn-sm"
+          id="removeLogoButton"
+          type="button"
+        >
+          Remove
+        </button>
+      </div>
+    </div>
+  </div>
 
-              <div>
-                <div style="font-weight:600; font-size:13px; color:var(--deep-navy); margin-bottom:6px;">
-                  Brand colors
-                </div>
-                <div class="brand-colors">
-                  <div class="color-swatch" style="background:#2c83f8;"></div>
-                  <div class="color-swatch" style="background:#274cdc;"></div>
-                  <div class="color-swatch" style="background:#1c19b8;"></div>
-                  <div class="color-swatch" style="background:#050a30;"></div>
-                </div>
-                <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
-                  <button class="btn btn-outline btn-sm" type="button" disabled>Edit colors</button>
-                  <button class="btn btn-outline btn-sm" type="button" disabled>Use default theme</button>
-                </div>
-              </div>
+  <div>
+    <div style="font-weight:600; font-size:13px; color:var(--deep-navy); margin-bottom:6px;">
+      Brand colors
+    </div>
 
-              <!-- AI suggestion -->
-              <div class="ai-suggest"><div class="ai-icon">ℹ️</div><div class="ai-text"><strong>Profile fields</strong><span>Company name, email, website, size, industry, and location are saved to your account.</span></div></div>
-            </section>
+    <div class="brand-colors">
+      <div class="color-swatch" id="primaryColorSwatch" style="background:#2c83f8;"></div>
+      <div class="color-swatch" id="secondaryColorSwatch" style="background:#274cdc;"></div>
+      <div class="color-swatch" id="accentColorSwatch" style="background:#1c19b8;"></div>
+      <div class="color-swatch" id="darkColorSwatch" style="background:#050a30;"></div>
+    </div>
+
+    <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+      <button
+        class="btn btn-outline btn-sm"
+        id="editBrandColorsButton"
+        type="button"
+      >
+        Edit colors
+      </button>
+      <button
+        class="btn btn-outline btn-sm"
+        id="defaultThemeButton"
+        type="button"
+      >
+        Use default theme
+      </button>
+    </div>
+
+    <div
+      id="brandColorEditor"
+      hidden
+      style="margin-top:12px; padding:12px; border:1px solid var(--line); border-radius:14px;"
+    >
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <label class="form-label">
+          Primary
+          <input type="color" id="primaryColorInput" value="#2c83f8" />
+        </label>
+        <label class="form-label">
+          Secondary
+          <input type="color" id="secondaryColorInput" value="#274cdc" />
+        </label>
+        <label class="form-label">
+          Accent
+          <input type="color" id="accentColorInput" value="#1c19b8" />
+        </label>
+        <label class="form-label">
+          Dark
+          <input type="color" id="darkColorInput" value="#050a30" />
+        </label>
+      </div>
+
+      <div style="display:flex; gap:8px; margin-top:12px;">
+        <button
+          class="btn btn-primary btn-sm"
+          id="saveBrandColorsButton"
+          type="button"
+        >
+          Save colors
+        </button>
+        <button
+          class="btn btn-outline btn-sm"
+          id="cancelBrandColorsButton"
+          type="button"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ai-suggest">
+    <div class="ai-icon">ℹ️</div>
+    <div class="ai-text">
+      <strong>Profile fields</strong>
+      <span>Company name, email, website, size, industry, and location are saved to your account.</span>
+    </div>
+  </div>
+</section>
           </div>
 
           <!-- Right: Team members -->
           <div>
             <!-- Team -->
-            <section class="panel reveal-up delay-2">
-              <div class="panel-head">
-                <div>
-                  <div class="panel-title">Team members</div>
-                  <div class="panel-sub">People with access to this account</div>
-                </div>
-                <button class="btn btn-primary btn-sm" type="button" disabled title="Team invitations are not connected yet">➕ Invite member</button>
-              </div>
+            <div class="panel-head">
+  <div>
+    <div class="panel-title">Team members</div>
+    <div class="panel-sub">People with access to this account</div>
+  </div>
+
+  <div style="display:flex; gap:8px; flex-wrap:wrap;">
+    <button
+      class="btn btn-outline btn-sm"
+      id="acceptInvitationButton"
+      type="button"
+      hidden
+    >
+      Accept invitation
+    </button>
+
+    <button
+      class="btn btn-primary btn-sm"
+      id="inviteMemberButton"
+      type="button"
+    >
+      ➕ Invite member
+    </button>
+  </div>
+</div>
 
               <div class="table-wrap">
                 <table class="table">
@@ -1218,7 +1331,11 @@
                       <th></th>
                     </tr>
                   </thead>
-                  <tbody id="teamTableBody"><tr><td colspan="4" style="color:var(--muted);">Team member listing and invitations are not connected yet.</td></tr></tbody>
+                  <tbody id="teamTableBody">
+  <tr>
+    <td colspan="4" style="color:var(--muted);">Loading team members...</td>
+  </tr>
+</tbody>
                 </table>
               </div>
 
@@ -1270,7 +1387,7 @@
   </div>
 
   <script>
-    const API_BASE_URL = "http://localhost:5000/api";
+    const API_BASE_URL = window.APP_CONFIG.API_BASE_URL;
     const token = localStorage.getItem("ventrixcarrosToken");
     const companyForm = document.getElementById("companyForm");
     const saveButton = document.getElementById("saveCompanyButton");
@@ -1284,29 +1401,372 @@
     function showError(message) { alert(message); }
     function setCompanyField(id, value) { const field = document.getElementById(id); const text = value || ""; if (field.tagName === "SELECT" && text && ![...field.options].some((option) => option.value === text)) field.add(new Option(text, text)); field.value = text; }
     async function readJSON(response) { return response.json().catch(() => ({})); }
+    const DEFAULT_BRAND_COLORS = {
+  primary: "#2c83f8",
+  secondary: "#274cdc",
+  accent: "#1c19b8",
+  dark: "#050a30",
+};
 
-    async function loadCompany() {
-      if (!token) { window.location.href = "login.html"; return; }
-      try {
-        const response = await fetch(`${API_BASE_URL}/companies/mine`, { headers: { Authorization: `Bearer ${token}` } });
-        const data = await readJSON(response);
-        if (response.status === 401) return logout();
-        if (!response.ok) throw new Error(data.message || "Could not load company details.");
-        currentCompany = data.company;
-        if (!currentCompany) throw new Error("Your recruiter account is not linked to a company yet.");
-        setCompanyField("companyName", currentCompany.name);
-        setCompanyField("companyEmail", currentCompany.email);
-        setCompanyField("website", currentCompany.website);
-        setCompanyField("companySize", currentCompany.company_size);
-        setCompanyField("industry", currentCompany.industry);
-        setCompanyField("location", currentCompany.location);
-        const companyName = document.querySelector(".profile-header strong");
-        if (companyName) companyName.textContent = currentCompany.name;
-      } catch (error) {
-        console.error("Loading company profile failed:", error);
-        showError(error.message || "Could not load company profile. Make sure the backend is running, then refresh.");
-      }
+function renderBranding(company) {
+  const colors = {
+    ...DEFAULT_BRAND_COLORS,
+    ...(company.brand_colors || {}),
+  };
+
+  document.documentElement.style.setProperty("--electric-blue", colors.primary);
+  document.documentElement.style.setProperty("--royal-blue", colors.secondary);
+  document.documentElement.style.setProperty("--vivid-blue", colors.accent);
+  document.documentElement.style.setProperty("--deep-navy", colors.dark);
+
+  document.getElementById("primaryColorSwatch").style.backgroundColor = colors.primary;
+  document.getElementById("secondaryColorSwatch").style.backgroundColor = colors.secondary;
+  document.getElementById("accentColorSwatch").style.backgroundColor = colors.accent;
+  document.getElementById("darkColorSwatch").style.backgroundColor = colors.dark;
+
+  document.getElementById("primaryColorInput").value = colors.primary;
+  document.getElementById("secondaryColorInput").value = colors.secondary;
+  document.getElementById("accentColorInput").value = colors.accent;
+  document.getElementById("darkColorInput").value = colors.dark;
+
+  const preview = document.getElementById("companyLogoPreview");
+  preview.replaceChildren();
+
+  if (company.logo_data) {
+    const image = document.createElement("img");
+    image.src = company.logo_data;
+    image.alt = `${company.name || "Company"} logo`;
+    image.style.cssText = "width:100%;height:100%;object-fit:contain;border-radius:inherit;";
+    preview.appendChild(image);
+  } else {
+    preview.textContent = "V";
+  }
+}
+
+async function saveBranding(logoData, brandColors, button) {
+  if (!currentCompany) {
+    showError("Load your company profile before changing branding.");
+    return;
+  }
+
+  const oldButtonText = button.textContent;
+  button.disabled = true;
+  button.textContent = "Saving...";
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/companies/mine`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        name: currentCompany.name,
+        email: currentCompany.email,
+        website: currentCompany.website || "",
+        location: currentCompany.location || "",
+        industry: currentCompany.industry || "",
+        company_size: currentCompany.company_size || "",
+        logo_data: logoData,
+        brand_colors: brandColors,
+      }),
+    });
+
+    const data = await readJSON(response);
+
+    if (response.status === 401) return logout();
+    if (!response.ok) {
+      throw new Error(data.message || "Could not save company branding.");
     }
+
+    currentCompany = data.company;
+    renderBranding(currentCompany);
+    showError("Company branding saved.");
+  } catch (error) {
+    console.error("Saving company branding failed:", error);
+    showError(error.message || "Could not save company branding.");
+  } finally {
+    button.disabled = false;
+    button.textContent = oldButtonText;
+  }
+}
+
+document.getElementById("uploadLogoButton").addEventListener("click", () => {
+  document.getElementById("companyLogoInput").click();
+});
+
+document.getElementById("companyLogoInput").addEventListener("change", (event) => {
+  const file = event.target.files?.[0];
+  if (!file) return;
+
+  const allowedTypes = ["image/png", "image/jpeg", "image/webp"];
+
+  if (!allowedTypes.includes(file.type)) {
+    showError("Choose a PNG, JPG, or WebP logo image.");
+    event.target.value = "";
+    return;
+  }
+
+  if (file.size > 250 * 1024) {
+    showError("Choose a logo image smaller than 250 KB.");
+    event.target.value = "";
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = () => {
+    saveBranding(
+      String(reader.result),
+      currentCompany.brand_colors || DEFAULT_BRAND_COLORS,
+      document.getElementById("uploadLogoButton")
+    );
+    event.target.value = "";
+  };
+
+  reader.onerror = () => showError("Could not read that image file.");
+  reader.readAsDataURL(file);
+});
+
+document.getElementById("removeLogoButton").addEventListener("click", () => {
+  if (!currentCompany) return showError("Load your company profile first.");
+
+  saveBranding(
+    null,
+    currentCompany.brand_colors || DEFAULT_BRAND_COLORS,
+    document.getElementById("removeLogoButton")
+  );
+});
+
+document.getElementById("editBrandColorsButton").addEventListener("click", () => {
+  document.getElementById("brandColorEditor").hidden = false;
+});
+
+document.getElementById("cancelBrandColorsButton").addEventListener("click", () => {
+  document.getElementById("brandColorEditor").hidden = true;
+  if (currentCompany) renderBranding(currentCompany);
+});
+
+document.getElementById("saveBrandColorsButton").addEventListener("click", () => {
+  if (!currentCompany) return showError("Load your company profile first.");
+
+  const colors = {
+    primary: document.getElementById("primaryColorInput").value,
+    secondary: document.getElementById("secondaryColorInput").value,
+    accent: document.getElementById("accentColorInput").value,
+    dark: document.getElementById("darkColorInput").value,
+  };
+
+  saveBranding(
+    currentCompany.logo_data || null,
+    colors,
+    document.getElementById("saveBrandColorsButton")
+  ).then(() => {
+    document.getElementById("brandColorEditor").hidden = true;
+  });
+});
+
+document.getElementById("defaultThemeButton").addEventListener("click", () => {
+  if (!currentCompany) return showError("Load your company profile first.");
+
+  saveBranding(
+    currentCompany.logo_data || null,
+    { ...DEFAULT_BRAND_COLORS },
+    document.getElementById("defaultThemeButton")
+  );
+});
+
+document.getElementById("resetBrandingButton").addEventListener("click", () => {
+  if (!currentCompany) return showError("Load your company profile first.");
+
+  saveBranding(
+    null,
+    { ...DEFAULT_BRAND_COLORS },
+    document.getElementById("resetBrandingButton")
+  );
+});
+    function escapeTeamText(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (character) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;",
+  })[character]);
+}
+
+async function loadTeam(hasCompany) {
+  const tableBody = document.getElementById("teamTableBody");
+
+  if (!hasCompany) {
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="4" style="color:var(--muted);">
+          Accept a company invitation to see its team members.
+        </td>
+      </tr>`;
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/companies/team`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await readJSON(response);
+
+    if (response.status === 401) return logout();
+    if (!response.ok) {
+      throw new Error(data.message || "Could not load team members.");
+    }
+
+    const members = Array.isArray(data.members) ? data.members : [];
+
+    if (members.length === 0) {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="4" style="color:var(--muted);">No team members found.</td>
+        </tr>`;
+      return;
+    }
+
+    tableBody.innerHTML = members.map((member) => {
+      const initials = String(member.name || member.email || "?")
+        .split(/\s+/)
+        .slice(0, 2)
+        .map((part) => part[0] || "")
+        .join("")
+        .toUpperCase();
+
+      return `
+        <tr>
+          <td>
+            <div class="member-name">
+              <span class="member-avatar">${escapeTeamText(initials)}</span>
+              <span>
+                <strong>${escapeTeamText(member.name)}</strong><br>
+                <span class="panel-sub">${escapeTeamText(member.email)}</span>
+              </span>
+            </div>
+          </td>
+          <td>${escapeTeamText(member.role)}</td>
+          <td><span class="status-pill status-active">Active</span></td>
+          <td></td>
+        </tr>`;
+    }).join("");
+  } catch (error) {
+    console.error("Loading company team failed:", error);
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="4" style="color:#dc2626;">
+          ${escapeTeamText(error.message || "Could not load team members.")}
+        </td>
+      </tr>`;
+  }
+}
+
+async function inviteMember() {
+  const email = window.prompt("Enter the email of an existing recruiter account:");
+  if (!email) return;
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/companies/invite`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ email: email.trim() }),
+    });
+    const data = await readJSON(response);
+
+    if (response.status === 401) return logout();
+    if (!response.ok) {
+      throw new Error(data.message || "Could not send the invitation.");
+    }
+
+    alert(data.message || "Invitation sent.");
+  } catch (error) {
+    showError(error.message || "Could not send the invitation.");
+  }
+}
+
+async function acceptInvitation() {
+  const code = window.prompt("Enter the 6-digit invitation code from your email:");
+  if (!code) return;
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/companies/invite/accept`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ code: code.trim() }),
+    });
+    const data = await readJSON(response);
+
+    if (response.status === 401) return logout();
+    if (!response.ok) {
+      throw new Error(data.message || "Could not accept the invitation.");
+    }
+
+    alert(data.message || "Invitation accepted.");
+    await initializeCompanyProfile();
+  } catch (error) {
+    showError(error.message || "Could not accept the invitation.");
+  }
+}
+async function loadCompany() {
+  if (!token) {
+    window.location.href = "login.html";
+    return false;
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/companies/mine`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await readJSON(response);
+
+    if (response.status === 401) {
+      logout();
+      return false;
+    }
+
+    if (
+      response.status === 404 &&
+      data.message === "Your account is not linked to a company."
+    ) {
+      currentCompany = null;
+      return false;
+    }
+
+    if (!response.ok) {
+      throw new Error(data.message || "Could not load company details.");
+    }
+
+    currentCompany = data.company;
+
+    if (!currentCompany) return false;
+
+    setCompanyField("companyName", currentCompany.name);
+    setCompanyField("companyEmail", currentCompany.email);
+    setCompanyField("website", currentCompany.website);
+    setCompanyField("companySize", currentCompany.company_size);
+    setCompanyField("industry", currentCompany.industry);
+    setCompanyField("location", currentCompany.location);
+    renderBranding(currentCompany);
+
+    const companyName = document.querySelector(".profile-header strong");
+    if (companyName) companyName.textContent = currentCompany.name;
+
+    return true;
+  } catch (error) {
+    console.error("Loading company profile failed:", error);
+    showError(error.message || "Could not load company profile.");
+    return false;
+  }
+}
 
     saveButton.addEventListener("click", async () => {
       if (!companyForm.reportValidity()) return;
@@ -1352,7 +1812,23 @@
       alert("Public company profile preview is not connected yet.");
     });
     document.querySelectorAll(".profile-logout, .nav-item[href='index.html']").forEach((link) => link.addEventListener("click", (event) => { event.preventDefault(); logout(); }));
-    loadCompany();
+    document
+  .getElementById("inviteMemberButton")
+  .addEventListener("click", inviteMember);
+
+document
+  .getElementById("acceptInvitationButton")
+  .addEventListener("click", acceptInvitation);
+
+async function initializeCompanyProfile() {
+  const hasCompany = await loadCompany();
+
+  document.getElementById("inviteMemberButton").hidden = !hasCompany;
+  document.getElementById("acceptInvitationButton").hidden = hasCompany;
+
+  await loadTeam(hasCompany);
+}
+    initializeCompanyProfile();
   </script>
   <script src="notification.js"></script>
 <script src="profile.js"></script>

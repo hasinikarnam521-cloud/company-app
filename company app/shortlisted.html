@@ -749,6 +749,16 @@
       font-weight: 700;
     }
 
+    .score-low {
+  color: var(--red);
+  font-weight: 700;
+}
+
+.score-unknown {
+  color: var(--muted);
+  font-weight: 600;
+}
+
     .skills {
       display: flex;
       flex-wrap: wrap;
@@ -860,6 +870,7 @@
       }
     }
   </style>
+  <script src="config.js"></script>
 </head>
 
 <body>
@@ -1013,10 +1024,17 @@
           Settings
         </a>
 
-        <a href="index.html" class="nav-item">
-          <span class="nav-icon">🚪</span>
-          Logout
-        </a>
+        <a href="index.html" class="nav-item" id="logoutLink">
+  <span class="nav-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10 17l5-5-5-5"></path>
+      <path d="M15 12H3"></path>
+      <path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"></path>
+    </svg>
+  </span>
+  Logout
+</a>
       </div>
     </nav>
   </aside>
@@ -1110,6 +1128,8 @@
             <option value="">All AI scores</option>
             <option value="high">High match (85%+)</option>
             <option value="medium">Medium match (70–84%)</option>
+            <option value="low">Low match (under 70%)</option>
+<option value="unscored">Not scored</option>
           </select>
 
           <select id="statusFilter" class="filter-select"><option value="">All application statuses</option></select>
@@ -1127,7 +1147,7 @@
   </div>
 
   <script>
-    const API_BASE_URL = "http://localhost:5000/api";
+    const API_BASE_URL = window.APP_CONFIG.API_BASE_URL;
     const token = localStorage.getItem("ventrixcarrosToken");
     const candidateGrid = document.getElementById("candidateGrid");
     const emptyState = document.getElementById("emptyState");
@@ -1206,13 +1226,20 @@
       candidateGrid.innerHTML = visible.map((entry, index) => {
         const candidate = getCandidate(entry), job = getJob(entry), application = getApplication(entry), score = getScore(entry);
         const scoreLabel = score === null ? "Not scored" : `${Math.round(score)}%`;
-        const scoreClass = score === null ? "" : score >= 85 ? "score-high" : score >= 70 ? "score-medium" : "";
+        const scoreClass =
+  score === null
+    ? "score-unknown"
+    : score >= 85
+      ? "score-high"
+      : score >= 70
+        ? "score-medium"
+        : "score-low";
         const statusLabels = { submitted: "Submitted", reviewing: "Reviewing", shortlisted: "Shortlisted", rejected: "Rejected", hired: "Hired", withdrawn: "Withdrawn" };
         const statusLabel = application.status ? (statusLabels[application.status] || application.status) : "Not available";
         const skills = Array.isArray(candidate.skills) ? candidate.skills : [];
         const skillsHTML = skills.length ? skills.map((skill) => `<span class="skill-tag">${escapeHTML(typeof skill === "string" ? skill : skill.name || "Skill")}</span>`).join("") : '<span class="stat-note">No skills listed</span>';
         const candidateId = Number(entry.candidate_id || candidate.id), jobId = Number(entry.job_id || job.id);
-        return `<article class="candidate-card reveal-up" data-candidate-id="${candidateId}" data-job-id="${jobId}" style="animation-delay:${Math.min(index * 0.04, 0.4)}s">
+        return `<article class="candidate-card reveal-up" data-candidate-id="${candidateId}" data-application-id="${Number(application.id)}" data-job-id="${jobId}" style="animation-delay:${Math.min(index * 0.04, 0.4)}s">
           <span class="star-badge">★ Shortlisted</span><div class="candidate-top"><div class="candidate-avatar">${escapeHTML(getInitials(candidate.name))}</div><div><h3 class="candidate-name">${escapeHTML(candidate.name || "Candidate")}</h3><p class="candidate-role">${escapeHTML(candidate.current_role || (job.title ? `Applied for ${job.title}` : "Candidate profile"))}</p></div></div>
           <div class="candidate-meta"><div class="meta-row"><span>AI match</span><strong class="${scoreClass}">${escapeHTML(scoreLabel)}</strong></div><div class="meta-row"><span>Location</span><strong>${escapeHTML(candidate.location || "Not provided")}</strong></div><div class="meta-row"><span>Application</span><strong>${escapeHTML(statusLabel)}</strong></div><div class="meta-row"><span>Job</span><strong>${escapeHTML(job.title || "Not available")}</strong></div></div>
           <div class="skills">${skillsHTML}</div><div class="card-actions"><button type="button" class="btn btn-outline btn-sm view-button">View profile</button><button type="button" class="btn btn-primary btn-sm interview-button">Interview</button></div></article>`;
@@ -1247,15 +1274,68 @@
     candidateGrid.addEventListener("click", (event) => {
       const card = event.target.closest(".candidate-card"); if (!card) return;
       if (event.target.closest(".interview-button")) { window.location.href = "interviews.html"; return; }
-      const candidateId = card.dataset.candidateId;
-      if (candidateId && candidateId !== "NaN") window.location.href = `candidate-detail.html?id=${encodeURIComponent(candidateId)}`;
+      const applicationId = card.dataset.applicationId;
+
+if (applicationId && applicationId !== "NaN") {
+  window.location.href =
+    `candidate-detail.html?applicationId=${encodeURIComponent(applicationId)}`;
+}
     });
-    document.getElementById("exportButton").addEventListener("click", () => {
-      const rows = getVisibleEntries().map((entry) => { const candidate = getCandidate(entry), job = getJob(entry), application = getApplication(entry); return [candidate.name, candidate.email, candidate.current_role, candidate.location, job.title, getScore(entry) ?? "", application.status || ""]; });
-      if (!rows.length) return alert("There are no shortlisted candidates to export.");
-      const csv = [["Name", "Email", "Current role", "Location", "Job", "AI score", "Application status"], ...rows].map((row) => row.map((value) => `"${String(value ?? "").replace(/"/g, '""')}"`).join(",")).join("\r\n");
-      const link = document.createElement("a"); link.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" })); link.download = "ventrixcarros-shortlist.csv"; link.click(); URL.revokeObjectURL(link.href);
-    });
+    function csvCell(value) {
+  let text = String(value ?? "");
+
+  // Prevent spreadsheet formulas from running when the CSV is opened.
+  if (/^[\u0000-\u0020]*[=+\-@]/.test(text)) {
+    text = "'" + text;
+  }
+
+  return `"${text.replace(/"/g, '""')}"`;
+}
+
+document.getElementById("exportButton").addEventListener("click", () => {
+  const rows = getVisibleEntries().map((entry) => {
+    const candidate = getCandidate(entry);
+    const job = getJob(entry);
+    const application = getApplication(entry);
+
+    return [
+      candidate.name,
+      candidate.email,
+      candidate.current_role,
+      candidate.location,
+      job.title,
+      getScore(entry) ?? "",
+      application.status || "",
+    ];
+  });
+
+  if (!rows.length) {
+    alert("There are no shortlisted candidates to export.");
+    return;
+  }
+
+  const csvRows = [
+    ["Name", "Email", "Current role", "Location", "Job", "AI score", "Application status"],
+    ...rows,
+  ];
+
+  const csv =
+    "\uFEFF" +
+    csvRows.map((row) => row.map(csvCell).join(",")).join("\r\n");
+
+  const url = URL.createObjectURL(
+    new Blob([csv], { type: "text/csv;charset=utf-8" })
+  );
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "ventrixcarros-shortlist.csv";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
     document.querySelectorAll(".profile-logout, .nav-item[href='index.html']").forEach((link) => link.addEventListener("click", (event) => { event.preventDefault(); logOut(); }));
     loadShortlist();
   </script>

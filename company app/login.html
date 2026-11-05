@@ -495,6 +495,7 @@
       }
     }
   </style>
+  <script src="config.js"></script>
 </head>
 
 <body>
@@ -648,7 +649,7 @@
   </footer>
 
   <script>
-    const API_BASE_URL = "http://localhost:5000/api";
+    const API_BASE_URL = window.APP_CONFIG.API_BASE_URL;
     const loginForm = document.getElementById("loginForm");
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
@@ -708,18 +709,22 @@
         const onboardingStep = sessionStorage.getItem("ventrixcarrosOnboardingStep");
         const returnAfterLogin = sessionStorage.getItem("ventrixcarrosReturnAfterLogin");
 
-        if (onboardingStep === "profile") {
-          sessionStorage.removeItem("ventrixcarrosReturnAfterLogin");
-          window.location.href = "company-profile.html";
-        } else if (onboardingStep === "subscription") {
-          sessionStorage.removeItem("ventrixcarrosReturnAfterLogin");
-          window.location.href = "subscription.html#availablePlans";
-        } else if (returnAfterLogin === "payment.html") {
-          sessionStorage.removeItem("ventrixcarrosReturnAfterLogin");
-          window.location.href = "payment.html";
-        } else {
-          window.location.href = "dashboard.html";
-        }
+        if (data.user?.role === "admin") {
+  sessionStorage.removeItem("ventrixcarrosOnboardingStep");
+  sessionStorage.removeItem("ventrixcarrosReturnAfterLogin");
+  window.location.href = "admin-dashboard.html";
+} else if (onboardingStep === "profile") {
+  sessionStorage.removeItem("ventrixcarrosReturnAfterLogin");
+  window.location.href = "company-profile.html";
+} else if (onboardingStep === "subscription") {
+  sessionStorage.removeItem("ventrixcarrosReturnAfterLogin");
+  window.location.href = "subscription.html#availablePlans";
+} else if (returnAfterLogin === "payment.html") {
+  sessionStorage.removeItem("ventrixcarrosReturnAfterLogin");
+  window.location.href = "payment.html";
+} else {
+  window.location.href = "dashboard.html";
+}
       } catch (error) {
         showMessage(error.message || "Something went wrong. Please try again.");
         submitButton.disabled = false;

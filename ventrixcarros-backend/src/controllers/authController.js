@@ -1,4 +1,5 @@
 const authService = require("../services/authService");
+const accountExportService = require("../services/accountExportService");
 
 async function register(req, res, next) {
   try {
@@ -70,10 +71,24 @@ async function currentUser(req, res, next) {
   }
 }
 
+async function exportAccountData(req, res, next) {
+  try {
+    const data = await accountExportService.exportAccountData(req.user.id);
+
+    res.json({
+      success: true,
+      data,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   register,
   resendSignupOtp,
   login,
   verifyOtp,
   currentUser,
+  exportAccountData,
 };

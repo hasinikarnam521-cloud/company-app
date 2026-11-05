@@ -40,6 +40,14 @@ const Company = sequelize.define(
       type: DataTypes.STRING(50),
       allowNull: true,
     },
+    logo_data: {
+  type: DataTypes.TEXT("long"),
+  allowNull: true,
+},
+brand_colors: {
+  type: DataTypes.JSON,
+  allowNull: true,
+},
     status: {
       type: DataTypes.ENUM("active", "inactive", "pending"),
       allowNull: false,

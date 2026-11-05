@@ -5,6 +5,9 @@ const Job = require("../models/Job");
 const Payment = require("../models/Payment");
 const Plan = require("../models/Plan");
 const Subscription = require("../models/Subscription");
+const ActivityLog = require("../models/ActivityLog");
+const PlatformSetting = require("../models/PlatformSetting");
+const SupportTicket = require("../models/SupportTicket");
 
 function createError(message, status) {
   const error = new Error(message);
@@ -171,24 +174,33 @@ async function updateCompany(req, res, next) {
     }
 
     if (updates.email) {
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(updates.email)) {
-        throw createError("Enter a valid company email address.", 400);
-      }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(updates.email)) {
+    throw createError("Enter a valid company email address.", 400);
+  }
 
-      const [existingCompany, existingUser] = await Promise.all([
-        Company.findOne({
-          where: {
-            email: updates.email,
-            id: { [Op.ne]: companyId },
-          },
-        }),
-        User.findOne({ where: { email: updates.email } }),
-      ]);
+  const currentEmail = String(company.email).trim().toLowerCase();
+  const isChangingEmail = updates.email !== currentEmail;
 
-      if (existingCompany || existingUser) {
-        throw createError("That email address is already in use.", 409);
-      }
+  if (isChangingEmail) {
+    const [existingCompany, existingUser] = await Promise.all([
+      Company.findOne({
+        where: {
+          email: updates.email,
+          id: { [Op.ne]: companyId },
+        },
+      }),
+      User.findOne({ where: { email: updates.email } }),
+    ]);
+
+    const userBelongsToAnotherCompany =
+      existingUser &&
+      Number(existingUser.company_id) !== Number(company.id);
+
+    if (existingCompany || userBelongsToAnotherCompany) {
+      throw createError("That email address is already in use.", 409);
     }
+  }
+}
 
     if (Object.prototype.hasOwnProperty.call(req.body, "status")) {
       const allowedStatuses = ["active", "inactive", "pending"];
@@ -490,6 +502,299 @@ async function addPlan(req, res, next) {
     next(error);
   }
 }
+async function getLogs(req, res, next) {
+  try {
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+
+    const [logs, total, today, adminActions, securityAlerts] =
+      await Promise.all([
+        ActivityLog.findAll({
+          order: [["created_at", "DESC"]],
+          limit: 100,
+        }),
+        ActivityLog.count(),
+        ActivityLog.count({
+          where: { created_at: { [Op.gte]: todayStart } },
+        }),
+        ActivityLog.count({
+          where: { admin_id: { [Op.not]: null } },
+        }),
+        ActivityLog.count({
+          where: { status: { [Op.ne]: "success" } },
+        }),
+      ]);
+
+    res.json({
+      success: true,
+      logs,
+      stats: { total, today, adminActions, securityAlerts },
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+const DEFAULT_ADMIN_SETTINGS = {
+  platformName: "VentrixCarros",
+  defaultLanguage: "English",
+  timezone: "Asia/Kolkata",
+  notifications: {
+    newCompanyAlerts: true,
+    paymentAlerts: true,
+    supportAlerts: true,
+  },
+  security: {
+    twoFactorAuth: true,
+    loginAlerts: true,
+    sessionTimeoutMinutes: 30,
+  },
+  platform: {
+    aiRecruitmentEnabled: true,
+    allowNewRegistrations: true,
+    maintenanceMode: false,
+  },
+};
+
+async function getSettings(req, res, next) {
+  try {
+    let record = await PlatformSetting.findByPk(1);
+
+    if (!record) {
+      record = await PlatformSetting.create({
+        id: 1,
+        settings: DEFAULT_ADMIN_SETTINGS,
+      });
+    }
+
+    res.json({
+      success: true,
+      settings: record.settings,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+async function updateSettings(req, res, next) {
+  try {
+    const input = req.body?.settings ?? req.body;
+
+    if (!input || typeof input !== "object" || Array.isArray(input)) {
+      throw createError("Settings must be sent as an object.", 400);
+    }
+
+    let record = await PlatformSetting.findByPk(1);
+
+    if (!record) {
+      record = await PlatformSetting.create({
+        id: 1,
+        settings: DEFAULT_ADMIN_SETTINGS,
+      });
+    }
+
+    const current = record.settings || DEFAULT_ADMIN_SETTINGS;
+    const settings = {
+      ...DEFAULT_ADMIN_SETTINGS,
+      ...current,
+      notifications: {
+        ...DEFAULT_ADMIN_SETTINGS.notifications,
+        ...(current.notifications || {}),
+      },
+      security: {
+        ...DEFAULT_ADMIN_SETTINGS.security,
+        ...(current.security || {}),
+      },
+      platform: {
+        ...DEFAULT_ADMIN_SETTINGS.platform,
+        ...(current.platform || {}),
+      },
+    };
+
+    if (input.platformName !== undefined) {
+      const platformName = String(input.platformName).trim();
+      if (!platformName || platformName.length > 100) {
+        throw createError("Platform name must be 1 to 100 characters.", 400);
+      }
+      settings.platformName = platformName;
+    }
+
+    if (input.defaultLanguage !== undefined) {
+      if (!["English", "Hindi"].includes(input.defaultLanguage)) {
+        throw createError("Choose a supported language.", 400);
+      }
+      settings.defaultLanguage = input.defaultLanguage;
+    }
+
+    if (input.timezone !== undefined) {
+      if (!["Asia/Kolkata", "UTC"].includes(input.timezone)) {
+        throw createError("Choose a supported timezone.", 400);
+      }
+      settings.timezone = input.timezone;
+    }
+
+    const booleanFields = {
+      notifications: [
+        "newCompanyAlerts",
+        "paymentAlerts",
+        "supportAlerts",
+      ],
+      security: ["twoFactorAuth", "loginAlerts"],
+      platform: [
+        "aiRecruitmentEnabled",
+        "allowNewRegistrations",
+        "maintenanceMode",
+      ],
+    };
+
+    for (const [group, fields] of Object.entries(booleanFields)) {
+      if (input[group] === undefined) continue;
+
+      if (
+        !input[group] ||
+        typeof input[group] !== "object" ||
+        Array.isArray(input[group])
+      ) {
+        throw createError(`Invalid ${group} settings.`, 400);
+      }
+
+      for (const field of fields) {
+        if (input[group][field] === undefined) continue;
+        if (typeof input[group][field] !== "boolean") {
+          throw createError(`${field} must be true or false.`, 400);
+        }
+        settings[group][field] = input[group][field];
+      }
+    }
+
+    if (input.security?.sessionTimeoutMinutes !== undefined) {
+      const timeout = Number(input.security.sessionTimeoutMinutes);
+      if (![30, 60, 120].includes(timeout)) {
+        throw createError("Choose a valid session timeout.", 400);
+      }
+      settings.security.sessionTimeoutMinutes = timeout;
+    }
+
+    await record.update({
+      settings,
+      updated_by: req.user.id,
+    });
+
+    res.json({
+      success: true,
+      message: "Settings saved.",
+      settings: record.settings,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+async function getPayments(req, res, next) {
+  try {
+    const [payments, total, paidCount, paidAmount] = await Promise.all([
+      Payment.findAll({
+        include: [
+          {
+            model: Company,
+            as: "company",
+            attributes: ["id", "name", "email"],
+          },
+          {
+            model: Subscription,
+            as: "subscription",
+            attributes: ["id", "status"],
+            include: [
+              {
+                model: Plan,
+                as: "plan",
+                attributes: ["id", "name", "billing_cycle"],
+              },
+            ],
+          },
+        ],
+        order: [["created_at", "DESC"]],
+        limit: 100,
+      }),
+      Payment.count(),
+      Payment.count({ where: { status: "paid" } }),
+      Payment.sum("amount", { where: { status: "paid" } }),
+    ]);
+
+    res.json({
+      success: true,
+      payments,
+      stats: {
+        total,
+        paid: paidCount,
+        paidAmount: Number(paidAmount || 0),
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+async function getNotifications(req, res, next) {
+  try {
+    const [pendingCompanies, failedPayments, urgentTickets] =
+      await Promise.all([
+        Company.findAll({
+          where: { status: "pending" },
+          attributes: ["id", "name", "createdAt"],
+          order: [["created_at", "DESC"]],
+          limit: 5,
+        }),
+        Payment.findAll({
+          where: { status: "failed" },
+          attributes: ["id", "company_id", "createdAt"],
+          include: [
+            {
+              model: Company,
+              as: "company",
+              attributes: ["name"],
+            },
+          ],
+          order: [["created_at", "DESC"]],
+          limit: 5,
+        }),
+        SupportTicket.findAll({
+          where: { status: "open", priority: "high" },
+          attributes: ["id", "subject", "company_name", "createdAt"],
+          order: [["created_at", "DESC"]],
+          limit: 5,
+        }),
+      ]);
+
+    const notifications = [
+      ...pendingCompanies.map((company) => ({
+        type: "company",
+        message: `${company.name} is awaiting review.`,
+        createdAt: company.createdAt,
+      })),
+      ...failedPayments.map((payment) => ({
+        type: "payment",
+        message: `A payment for ${payment.company?.name || "a company"} failed.`,
+        createdAt: payment.createdAt,
+      })),
+      ...urgentTickets.map((ticket) => ({
+        type: "support",
+        message: `High-priority ticket: ${ticket.subject}`,
+        createdAt: ticket.createdAt,
+      })),
+    ]
+      .sort(
+        (first, second) =>
+          new Date(second.createdAt).getTime() -
+          new Date(first.createdAt).getTime()
+      )
+      .slice(0, 10);
+
+    res.json({
+      success: true,
+      count: notifications.length,
+      notifications,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
 module.exports = {
   getDashboard,
   getCompanies,
@@ -501,4 +806,9 @@ module.exports = {
   updateSubscription,
   getPlans,
   addPlan,
+  getLogs,
+  getSettings,
+  updateSettings,
+  getPayments,
+  getNotifications,
 };

@@ -58,11 +58,16 @@ router.post(
       .isIn(["candidate", "recruiter"])
       .withMessage("Role must be candidate or recruiter."),
     body("companyName")
-      .optional()
-      .isString()
-      .trim()
-      .isLength({ min: 1, max: 150 })
-      .withMessage("Company name must be between 1 and 150 characters."),
+  .optional({ checkFalsy: true })
+  .isString()
+  .trim()
+  .isLength({ min: 1, max: 150 })
+  .withMessage("Company name must be between 1 and 150 characters."),
+  body("inviteCode")
+  .optional({ checkFalsy: true })
+  .isString()
+  .matches(/^\d{6}$/)
+  .withMessage("Invitation code must be 6 digits."),
   ],
   rejectInvalidInput,
   authController.register
@@ -146,6 +151,7 @@ router.post(
   rejectInvalidInput,
   profileController.verifyEmailChange
 );
+router.get("/export", authenticateToken, authController.exportAccountData);
 router.get("/me", authenticateToken, authController.currentUser);
 
 module.exports = router;

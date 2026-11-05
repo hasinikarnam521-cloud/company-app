@@ -94,7 +94,10 @@ async function generateInterviewQuestions(userId, jobId, questionCount = 8) {
   const user = await getRecruiter(userId);
   const job = await getCompanyJob(user.company_id, jobId);
 
-  const count = Math.max(3, Math.min(12, Number(questionCount) || 8));
+  const requestedCount = Number.parseInt(questionCount, 10);
+const count = Number.isNaN(requestedCount)
+  ? 8
+  : Math.max(3, Math.min(12, requestedCount));
 
   const schema = {
     type: "object",
@@ -278,21 +281,20 @@ async function optimizeHiringWorkflow(userId) {
     where: { company_id: user.company_id },
     attributes: ["id", "title", "status", "created_at"],
     order: [["created_at", "DESC"]],
-    limit: 30,
   });
 
   const applications = await Application.findAll({
     where: { company_id: user.company_id },
     attributes: ["id", "job_id", "status", "created_at"],
     order: [["created_at", "DESC"]],
-    limit: 500,
+    
   });
 
   const interviews = await Interview.findAll({
     where: { company_id: user.company_id },
     attributes: ["application_id", "status", "created_at"],
     order: [["created_at", "DESC"]],
-    limit: 500,
+    
   });
 
   const applicationsByJob = new Map();

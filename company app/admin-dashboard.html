@@ -744,7 +744,44 @@
         grid-template-columns: 1fr;
       }
     }
+    .admin-profile {
+  position: relative;
+}
+
+.admin-profile-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 1000;
+  min-width: 150px;
+  padding: 12px;
+  background: white;
+  border: 1px solid #dbe2f0;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(20, 35, 80, 0.14);
+}
+
+.admin-profile-menu[hidden] {
+  display: none;
+}
+
+.admin-profile-menu button {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px;
+  border: 0;
+  border-radius: 8px;
+  background: #f2f5fb;
+  cursor: pointer;
+}
+.nav-icon svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
   </style>
+  <script src="config.js"></script>
 </head>
 
 <body>
@@ -762,46 +799,122 @@
 
     <nav class="nav-list">
       <a href="admin-dashboard.html" class="nav-item active">
-        <span class="nav-icon">🛡️</span>
+        <span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+    <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+    <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+    <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+  </svg>
+</span>
         Admin Dashboard
       </a>
       <a href="admin-companies.html" class="nav-item">
-        <span class="nav-icon">🏢</span>
+        <!-- Companies -->
+<span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"></path>
+    <path d="M2 21h20"></path>
+    <path d="M8 7h2"></path><path d="M8 11h2"></path><path d="M8 15h2"></path>
+    <path d="M16 9h2"></path><path d="M16 13h2"></path><path d="M16 17h2"></path>
+  </svg>
+</span>
         Companies
       </a>
       <a href="admin-users.html" class="nav-item">
-        <span class="nav-icon">👤</span>
+        <!-- Users -->
+<span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="9" cy="8" r="3"></circle>
+    <path d="M3 20v-2a6 6 0 0 1 12 0v2"></path>
+    <circle cx="17" cy="9" r="2.5"></circle>
+    <path d="M16 15a5 5 0 0 1 5 5"></path>
+  </svg>
+</span>
         Users
       </a>
       <a href="admin-subscriptions.html" class="nav-item">
-        <span class="nav-icon">💳</span>
+        <!-- Subscriptions -->
+<span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+    <path d="M3 10h18"></path>
+    <path d="M7 15h4"></path>
+  </svg>
+</span>
         Subscriptions
       </a>
       <a href="admin-jobs.html" class="nav-item">
-        <span class="nav-icon">💼</span>
+        <!-- Jobs -->
+<span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="7" width="18" height="13" rx="2"></rect>
+    <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+    <path d="M3 12h18"></path>
+    <path d="M10 12v2h4v-2"></path>
+  </svg>
+</span>
         Jobs
       </a>
       <a href="admin-support.html" class="nav-item">
-        <span class="nav-icon">🎧</span>
+        <!-- Support -->
+<span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 13v-2a8 8 0 0 1 16 0v2"></path>
+    <path d="M4 13H3v4h4v-4H4z"></path>
+    <path d="M20 13h1v4h-4v-4h3z"></path>
+    <path d="M17 19a5 5 0 0 1-5 2"></path>
+  </svg>
+</span>
         Support
       </a>
       <a href="admin-analytics.html" class="nav-item">
-        <span class="nav-icon">📊</span>
+        <!-- Platform Analytics -->
+<span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 19V5"></path>
+    <path d="M4 19h17"></path>
+    <path d="M7 15l4-4 3 2 5-6"></path>
+    <path d="M16 7h3v3"></path>
+  </svg>
+</span>
         Platform Analytics
       </a>
 
       <div class="nav-section">
         <div class="nav-section-title">System</div>
         <a href="admin-settings.html" class="nav-item">
-          <span class="nav-icon">⚙️</span>
+          <!-- Settings -->
+<span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="3"></circle>
+    <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.8 1.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-2.6v-.2a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1-1.8-1.8.1-.1A1.7 1.7 0 0 0 8 15a1.7 1.7 0 0 0-1.6-1H6v-2h.4A1.7 1.7 0 0 0 8 10a1.7 1.7 0 0 0-.3-1.9l-.1-.1 1.8-1.8.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.6v-.2H15V5a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1 1.8 1.8-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.4v2h-.4a1.7 1.7 0 0 0-1.6 1z"></path>
+  </svg>
+</span>
           Settings
         </a>
         <a href="admin-logs.html" class="nav-item">
-          <span class="nav-icon">🧾</span>
+          <!-- Activity Logs -->
+<span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 3h9l4 4v14H6z"></path>
+    <path d="M14 3v5h5"></path>
+    <path d="M9 12h7"></path>
+    <path d="M9 16h7"></path>
+  </svg>
+</span>
           Activity Logs
         </a>
         <a href="index.html" class="nav-item">
-          <span class="nav-icon">🚪</span>
+          <!-- Logout -->
+<span class="nav-icon">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 17l5-5-5-5"></path>
+    <path d="M15 12H3"></path>
+    <path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"></path>
+  </svg>
+</span>
           Logout
         </a>
       </div>
@@ -827,10 +940,25 @@
         </div>
 
         <div class="nav-right">
-          <button id="notificationButton" class="icon-btn" type="button">🔔</button>
-          <div class="avatar-btn">AD</div>
-        </div>
-      </div>
+  <button id="notificationButton" class="icon-btn" type="button">🔔</button>
+
+  <div class="admin-profile">
+    <button
+      id="adminProfileButton"
+      class="avatar-btn"
+      type="button"
+      aria-expanded="false"
+      aria-controls="adminProfileMenu"
+    >
+      AD
+    </button>
+
+    <div id="adminProfileMenu" class="admin-profile-menu" hidden>
+      <div id="adminProfileEmail">Admin account</div>
+      <button id="adminSignOutButton" type="button">Sign out</button>
+    </div>
+  </div>
+</div>
     </header>
 
     <main class="page-wrap">
@@ -878,52 +1006,63 @@
             <div class="kpi-note">Currently open jobs</div>
           </div>
         </section>
+<section class="main-grid">
+  <div class="panel reveal-up delay-2">
+    <div class="panel-head">
+      <div>
+        <h2 class="panel-title">Recent companies</h2>
+        <p class="panel-sub">
+          Latest organizations onboarded to VentrixCarros
+        </p>
+      </div>
+      <span class="badge badge-live">● Live</span>
+    </div>
 
-        <section class="main-grid">
-          <div class="panel reveal-up delay-2">
-            <div class="panel-head">
-              <div>
-                <h2 class="panel-title">Recent companies</h2>
-                <p class="panel-sub">
-                  Latest organizations onboarded to VentrixCarros
-                </p>
-              </div>
-              <span class="badge badge-live">● Live</span>
-            </div>
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Email</th>
+            <th>Users</th>
+            <th>Active jobs</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="companyRows">
+          <tr><td colspan="6">Loading companies...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-            <div class="table-wrap">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Company</th>
-                    <th>Email</th>
-                    <th>Users</th>
-                    <th>Active jobs</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="companyRows">
-                  <tr><td colspan="6">Loading companies...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+  <div class="panel reveal-up delay-3">
+    <div class="panel-head">
+      <div>
+        <h2 class="panel-title">Recent payments</h2>
+        <p class="panel-sub">Latest payment transactions</p>
+      </div>
+      <span class="badge badge-live">● Live</span>
+    </div>
 
-          <div class="panel reveal-up delay-3">
-            <div class="panel-head">
-              <div>
-                <h2 class="panel-title">System health</h2>
-                <p class="panel-sub">Platform service status</p>
-              </div>
-              <span class="badge badge-warning">Monitoring not connected</span>
-            </div>
-
-            <div class="health-list">
-              <p class="panel-sub">Live service-health monitoring is not connected yet.</p>
-            </div>
-          </div>
-        </section>
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="paymentRows">
+          <tr><td colspan="4">Loading payments...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
 
         <section class="main-grid">
           <div class="panel reveal-up delay-2">
@@ -939,9 +1078,9 @@
               </a>
             </div>
 
-            <div class="activity-list">
-              <p class="panel-sub">Live platform activity is not connected to backend logging yet.</p>
-            </div>
+            <div class="activity-list" id="recentActivityList">
+  <p class="panel-sub">Loading recent activity...</p>
+</div>
           </div>
 
           <div class="panel reveal-up delay-3">
@@ -955,9 +1094,9 @@
               </a>
             </div>
 
-            <div class="support-list">
-              <p class="panel-sub">Support tickets are not connected to the backend yet.</p>
-            </div>
+            <div class="support-list" id="supportList">
+  <p class="panel-sub">Loading support tickets...</p>
+</div>
           </div>
         </section>
       </div>
@@ -965,10 +1104,32 @@
   </div>
 
   <script>
-    const API_BASE_URL = "http://localhost:5000/api";
+    const API_BASE_URL = window.APP_CONFIG.API_BASE_URL;
     const token = localStorage.getItem("ventrixcarrosToken");
+    const adminProfileButton = document.getElementById("adminProfileButton");
+const adminProfileMenu = document.getElementById("adminProfileMenu");
+const adminSignOutButton = document.getElementById("adminSignOutButton");
+
+adminProfileButton.addEventListener("click", () => {
+  const isOpen = !adminProfileMenu.hidden;
+  adminProfileMenu.hidden = isOpen;
+  adminProfileButton.setAttribute("aria-expanded", String(!isOpen));
+});
+
+adminSignOutButton.addEventListener("click", () => {
+  localStorage.removeItem("ventrixcarrosToken");
+  window.location.href = "login.html";
+});
+
+document.addEventListener("click", (event) => {
+  if (!event.target.closest(".admin-profile")) {
+    adminProfileMenu.hidden = true;
+    adminProfileButton.setAttribute("aria-expanded", "false");
+  }
+});
     const adminSearch = document.getElementById("adminSearch");
     const companyRows = document.getElementById("companyRows");
+    const paymentRows = document.getElementById("paymentRows");
     let dashboardData = null;
 
     function escapeHTML(value) {
@@ -1080,6 +1241,181 @@
       }
     }
 
+    async function loadRecentPayments() {
+  if (!token) {
+    paymentRows.innerHTML =
+      '<tr><td colspan="4">Please sign in with an admin account.</td></tr>';
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/admin/payments`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data.message || "Could not load recent payments.");
+    }
+
+    const payments = Array.isArray(data.payments) ? data.payments.slice(0, 5) : [];
+
+    if (payments.length === 0) {
+      paymentRows.innerHTML =
+        '<tr><td colspan="4">No payment records yet.</td></tr>';
+      return;
+    }
+
+    paymentRows.innerHTML = payments
+      .map((payment) => {
+        const status = String(payment.status || "pending").toLowerCase();
+        const statusClass =
+          status === "paid"
+            ? "pill-active"
+            : status === "pending"
+              ? "pill-pending"
+              : "pill-suspended";
+
+        const currency = payment.currency || "INR";
+        const amount = new Intl.NumberFormat("en-IN", {
+          style: "currency",
+          currency,
+          maximumFractionDigits: 0,
+        }).format(Number(payment.amount) || 0);
+
+        const paymentDate = payment.createdAt || payment.created_at;
+        const date = paymentDate
+          ? new Date(paymentDate).toLocaleDateString()
+          : "—";
+
+        return `
+          <tr>
+            <td>${escapeHTML(payment.company?.name || "—")}</td>
+            <td>${escapeHTML(amount)}</td>
+            <td>
+              <span class="pill ${statusClass}">${escapeHTML(status)}</span>
+            </td>
+            <td>${escapeHTML(date)}</td>
+          </tr>
+        `;
+      })
+      .join("");
+  } catch (error) {
+    paymentRows.innerHTML =
+      `<tr><td colspan="4">${escapeHTML(error.message)}</td></tr>`;
+  }
+}
+async function loadRecentActivity() {
+  if (!token) {
+    recentActivityList.innerHTML =
+      '<p class="panel-sub">Please sign in with an admin account.</p>';
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/admin/logs`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data.message || "Could not load recent activity.");
+    }
+
+    const logs = Array.isArray(data.logs) ? data.logs.slice(0, 5) : [];
+
+    if (logs.length === 0) {
+      recentActivityList.innerHTML =
+        '<p class="panel-sub">No activity has been recorded yet.</p>';
+      return;
+    }
+
+    recentActivityList.innerHTML = logs
+      .map((log) => {
+        const timestamp = log.created_at || log.createdAt;
+        const date = timestamp ? new Date(timestamp).toLocaleString() : "—";
+
+        return `
+          <div class="activity-item">
+            <div class="activity-icon">🧾</div>
+            <div class="activity-copy">
+              <strong>${escapeHTML(log.action || "Admin action")}</strong>
+              <span>${escapeHTML(log.admin_name || "Admin")} · ${escapeHTML(log.target || "Platform")} · ${escapeHTML(date)} · ${escapeHTML(log.status || "success")}</span>
+            </div>
+          </div>
+        `;
+      })
+      .join("");
+  } catch (error) {
+    recentActivityList.innerHTML =
+      `<p class="panel-sub">${escapeHTML(error.message)}</p>`;
+  }
+}
+async function loadSupportQueue() {
+  if (!token) {
+    supportList.innerHTML =
+      '<p class="panel-sub">Please sign in with an admin account.</p>';
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/admin/support`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data.message || "Could not load support tickets.");
+    }
+
+    const tickets = Array.isArray(data.tickets)
+      ? data.tickets.slice(0, 5)
+      : [];
+
+    if (tickets.length === 0) {
+      supportList.innerHTML =
+        '<p class="panel-sub">No support tickets yet.</p>';
+      return;
+    }
+
+    supportList.innerHTML = tickets
+      .map((ticket) => {
+        const status = String(ticket.status || "open").toLowerCase();
+        const statusClass =
+          status === "resolved"
+            ? "pill-active"
+            : status === "in_progress"
+              ? "pill-trial"
+              : "pill-pending";
+
+        return `
+          <div class="support-item">
+            <div class="support-copy">
+              <strong>${escapeHTML(ticket.subject || "Support ticket")}</strong>
+              <span>${escapeHTML(ticket.company_name || "Company not provided")} · ${escapeHTML(ticket.priority || "medium")} priority</span>
+            </div>
+            <span class="pill ${statusClass}">
+              ${escapeHTML(status.replaceAll("_", " "))}
+            </span>
+          </div>
+        `;
+      })
+      .join("");
+  } catch (error) {
+    supportList.innerHTML =
+      `<p class="panel-sub">${escapeHTML(error.message)}</p>`;
+  }
+}
+
     adminSearch.addEventListener("input", () => {
       if (dashboardData) {
         renderCompanies(dashboardData.recentCompanies || []);
@@ -1122,12 +1458,51 @@
       link.remove();
       URL.revokeObjectURL(url);
     });
+    
 
-    document.getElementById("notificationButton").addEventListener("click", () => {
-      alert("Admin notifications are not connected yet.");
+    async function showNotifications() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/admin/notifications`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data.message || "Could not load notifications.");
+    }
+
+    const notifications = Array.isArray(data.notifications)
+      ? data.notifications
+      : [];
+
+    if (notifications.length === 0) {
+      alert("No new admin notifications.");
+      return;
+    }
+
+    alert(
+      notifications
+        .map((notification, index) => `${index + 1}. ${notification.message}`)
+        .join("\n")
+    );
+  } catch (error) {
+    alert(error.message || "Could not load notifications.");
+  }
+}
+
+document
+  .getElementById("notificationButton")
+  .addEventListener("click", showNotifications);
+
     loadAdminDashboard();
+    loadRecentPayments();
+    loadRecentActivity();
+    loadSupportQueue();
+    const recentActivityList = document.getElementById("recentActivityList");
+    const supportList = document.getElementById("supportList");
   </script>
 </body>
 </html>

@@ -66,7 +66,18 @@ async function listCompanyApplications(userId) {
       {
         model: Candidate,
         as: "candidate",
-        attributes: ["id", "name", "email", "phone", "location", "skills"],
+        attributes: [
+  "id",
+  "name",
+  "email",
+  "phone",
+  "location",
+  "experience",
+  "current_role",
+  "expected_salary",
+  "resume_url",
+  "skills",
+],
       },
       {
         model: Job,

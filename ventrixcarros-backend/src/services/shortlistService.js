@@ -2,6 +2,7 @@ const Candidate = require("../models/Candidate");
 const Job = require("../models/Job");
 const Shortlist = require("../models/Shortlist");
 const User = require("../models/User");
+const Application = require("../models/Application");
 
 async function addToShortlist(userId, jobId, candidateId) {
   const user = await User.findByPk(userId);
@@ -29,6 +30,19 @@ async function addToShortlist(userId, jobId, candidateId) {
     error.status = 404;
     throw error;
   }
+  const application = await Application.findOne({
+  where: {
+    job_id: job.id,
+    candidate_id: candidate.id,
+    company_id: user.company_id,
+  },
+});
+
+if (!application) {
+  const error = new Error("This candidate has not applied to this job.");
+  error.status = 404;
+  throw error;
+}
 
   const existing = await Shortlist.findOne({
     where: {

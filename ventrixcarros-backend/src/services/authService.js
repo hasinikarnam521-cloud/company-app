@@ -8,18 +8,93 @@ const Company = require("../models/Company");
 const LoginOtp = require("../models/LoginOtp");
 const SignupOtp = require("../models/SignupOtp");
 const emailService = require("./emailService");
-
-async function register({ name, email, password, role, companyName }) {
+const { Op } = require("sequelize");
+const CompanyInvitation = require("../models/CompanyInvitation");
+async function register({
+  name,
+  email,
+  password,
+  role,
+  companyName,
+  inviteCode,
+}) {
   const normalizedEmail = email.trim().toLowerCase();
   const normalizedName = name.trim();
   const normalizedCompanyName = companyName?.trim();
-
+  const cleanInviteCode = String(inviteCode || "").trim();
   const isRecruiter = role === "recruiter";
 
-  if (isRecruiter && !normalizedCompanyName) {
-    const error = new Error("Company name is required.");
+  if (cleanInviteCode && !isRecruiter) {
+    const error = new Error("Only recruiter accounts can use an invitation code.");
     error.status = 400;
     throw error;
+  }
+
+  if (isRecruiter && !cleanInviteCode && !normalizedCompanyName) {
+    const error = new Error(
+      "Enter your company name or use an invitation code."
+    );
+    error.status = 400;
+    throw error;
+  }
+
+  let invitation = null;
+
+  if (cleanInviteCode) {
+    if (!/^\d{6}$/.test(cleanInviteCode)) {
+      const error = new Error("Enter the 6-digit invitation code.");
+      error.status = 400;
+      throw error;
+    }
+
+    invitation = await CompanyInvitation.findOne({
+      where: {
+        invited_email: normalizedEmail,
+        used_at: null,
+      },
+      order: [["created_at", "DESC"]],
+    });
+
+    if (!invitation) {
+      const error = new Error(
+        "No active invitation was found for this email address."
+      );
+      error.status = 404;
+      throw error;
+    }
+
+    if (invitation.expires_at <= new Date()) {
+      await invitation.update({ used_at: new Date() });
+      const error = new Error("The invitation code has expired.");
+      error.status = 400;
+      throw error;
+    }
+
+    if (invitation.attempts >= 5) {
+      await invitation.update({ used_at: new Date() });
+      const error = new Error(
+        "Too many incorrect attempts. Ask the company to send a new invitation."
+      );
+      error.status = 429;
+      throw error;
+    }
+
+    const codeMatches = await bcrypt.compare(
+      cleanInviteCode,
+      invitation.code_hash
+    );
+
+    if (!codeMatches) {
+      const attempts = invitation.attempts + 1;
+      await invitation.update({
+        attempts,
+        ...(attempts >= 5 ? { used_at: new Date() } : {}),
+      });
+
+      const error = new Error("The invitation code is incorrect.");
+      error.status = attempts >= 5 ? 429 : 400;
+      throw error;
+    }
   }
 
   const existingUser = await User.findOne({
@@ -32,13 +107,15 @@ async function register({ name, email, password, role, companyName }) {
     throw error;
   }
 
-  if (isRecruiter) {
+  if (isRecruiter && !invitation) {
     const existingCompany = await Company.findOne({
       where: { email: normalizedEmail },
     });
 
     if (existingCompany) {
-      const error = new Error("A company account with this email already exists.");
+      const error = new Error(
+        "A company account with this email already exists."
+      );
       error.status = 409;
       throw error;
     }
@@ -48,6 +125,80 @@ async function register({ name, email, password, role, companyName }) {
 
   const user = await sequelize.transaction(async (transaction) => {
     let company = null;
+
+    if (invitation) {
+      const lockedInvitation = await CompanyInvitation.findByPk(
+        invitation.id,
+        {
+          transaction,
+          lock: transaction.LOCK.UPDATE,
+        }
+      );
+
+      if (
+        !lockedInvitation ||
+        lockedInvitation.used_at ||
+        lockedInvitation.expires_at <= new Date()
+      ) {
+        const error = new Error(
+          "This invitation is no longer active. Ask the company to send a new one."
+        );
+        error.status = 400;
+        throw error;
+      }
+
+      const codeStillMatches = await bcrypt.compare(
+        cleanInviteCode,
+        lockedInvitation.code_hash
+      );
+
+      if (!codeStillMatches) {
+        const error = new Error("The invitation code is incorrect.");
+        error.status = 400;
+        throw error;
+      }
+
+      company = await Company.findByPk(lockedInvitation.company_id, {
+        transaction,
+      });
+
+      if (!company) {
+        const error = new Error("The inviting company was not found.");
+        error.status = 404;
+        throw error;
+      }
+
+      const invitedUser = await User.create(
+        {
+          name: normalizedName,
+          email: normalizedEmail,
+          password_hash: passwordHash,
+          role: "recruiter",
+          company_id: company.id,
+        },
+        { transaction }
+      );
+
+      await lockedInvitation.update(
+        { used_at: new Date() },
+        { transaction }
+      );
+
+      return invitedUser;
+    }
+    let invitedSignup = false;
+
+if (isSignupOtp && user.role === "recruiter" && user.company_id) {
+  const usedInvitation = await CompanyInvitation.findOne({
+    where: {
+      invited_email: normalizedEmail,
+      company_id: user.company_id,
+      used_at: { [Op.not]: null },
+    },
+  });
+
+  invitedSignup = Boolean(usedInvitation);
+}
 
     if (isRecruiter) {
       company = await Company.create(
@@ -202,6 +353,8 @@ async function verifyLoginOtp({ email, code }) {
     where: { user_id: user.id, used_at: null },
     order: [["created_at", "DESC"]],
   });
+    
+
 
   const isSignupOtp = Boolean(otpRecord);
 
@@ -249,9 +402,21 @@ async function verifyLoginOtp({ email, code }) {
     used_at: new Date(),
     ...(isSignupOtp ? { verified_at: new Date() } : {}),
   });
+  let invitedSignup = false;
 
+if (isSignupOtp && user.role === "recruiter" && user.company_id) {
+  const usedInvitation = await CompanyInvitation.findOne({
+    where: {
+      invited_email: normalizedEmail,
+      company_id: user.company_id,
+      used_at: { [Op.not]: null },
+    },
+  });
+
+  invitedSignup = Boolean(usedInvitation);
+}
   return {
-    ...(!isSignupOtp
+    ...(!isSignupOtp || invitedSignup
       ? {
           token: jwt.sign(
             { sub: user.id, role: user.role },
@@ -266,7 +431,7 @@ async function verifyLoginOtp({ email, code }) {
       email: user.email,
       role: user.role,
     },
-    ...(isSignupOtp
+    ...(isSignupOtp && !invitedSignup
       ? {
           paymentToken: jwt.sign(
             { sub: user.id, role: user.role, purpose: "signup_payment" },

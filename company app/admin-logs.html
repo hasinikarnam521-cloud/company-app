@@ -693,7 +693,7 @@
         </div>
 
         <div class="nav-right">
-          <button class="icon-btn" onclick="showNotification()">🔔</button>
+          <button class="icon-btn" id="notificationButton" type="button" title="Notifications">🔔</button>
           <div class="avatar-btn">AD</div>
         </div>
 
@@ -980,13 +980,10 @@ clearFiltersButton.addEventListener("click", () => {
   }, 1200);
 });
 
-  function showNotification() {
-    alert("You have 6 platform notifications.");
-  }
-
   logSearch.addEventListener("input", renderLogs);
   loadLogs();
 </script>
 
-</body>
+<script src="admin-notifications.js"></script>
+  </body>
 </html>

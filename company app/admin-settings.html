@@ -637,7 +637,7 @@
         </div>
 
         <div class="nav-right">
-          <button class="icon-btn" onclick="showNotification()">🔔</button>
+          <button class="icon-btn" id="notificationButton" type="button" title="Notifications">🔔</button>
           <div class="avatar-btn">AD</div>
         </div>
 
@@ -805,12 +805,10 @@
 
             <div class="setting-row">
               <div class="setting-copy">
-                <strong>Reset platform cache</strong>
-                <span>Clear cached platform data.</span>
+                <strong>Refresh platform settings</strong>
+                <span>Reload the latest saved settings from the backend.</span>
               </div>
-              <button class="btn btn-outline" onclick="resetCache()">
-                Reset cache
-              </button>
+              <button class="btn btn-outline" onclick="refreshSettings()">Reload settings</button>
             </div>
 
           </div>
@@ -976,8 +974,10 @@ function applySettingsLanguage(language) {
         }
       });
       applySettingsLanguage(settings.defaultLanguage || "English");
+      return true;
     } catch (error) {
       alert(error.message);
+      return false;
     }
   }
 
@@ -1024,13 +1024,10 @@ function applySettingsLanguage(language) {
       toggle.classList.toggle("active");
     });
   });
-
-  function resetCache() {
-    alert("Cache reset is not connected to the backend yet.");
-  }
-
-  function showNotification() {
-    alert("You have 6 platform notifications.");
+  async function refreshSettings() {
+    if (!window.confirm("Reload saved platform settings? Unsaved changes will be discarded.")) return;
+    const refreshed = await loadSettings();
+    if (refreshed) alert("Settings reloaded from the backend.");
   }
 
   document
@@ -1042,5 +1039,6 @@ function applySettingsLanguage(language) {
 loadSettings();
 </script>
 
-</body>
+<script src="admin-notifications.js"></script>
+  </body>
 </html>

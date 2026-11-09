@@ -104,6 +104,12 @@
       );
       box-shadow: 0 10px 28px rgba(44, 131, 248, 0.3);
     }
+    .brand-mark img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
 
     .brand small {
       display: block;
@@ -476,7 +482,9 @@
   <header class="navbar">
     <div class="container navbar-inner">
       <div class="brand">
-        <div class="brand-mark">V</div>
+        <div class="brand-mark">
+  <img src="./ventrix-logo-mark.png" alt="VentrixCarros logo" />
+</div>
 
         <div>
           VENTRIXCARROS
@@ -1092,48 +1100,48 @@
       }
 
       const options = {
-        key: order.keyId,
-        amount: order.amount,
-        currency: order.currency,
-        name: "VentrixCarros",
-        description: order.planName + " monthly subscription",
-        order_id: order.orderId,
-        prefill: {
-          name: getInput("contactName"),
-          email: getInput("email"),
-          contact: getInput("phone"),
-        },
-        config: paymentMethodConfig(getSelectedPaymentMethod()),
-        theme: { color: "#2c83f8" },
-        handler: function (checkoutResponse) {
-          pendingVerification = checkoutResponse;
-          sessionStorage.setItem(
-            "ventrixcarrosPendingPaymentVerification",
-            JSON.stringify(checkoutResponse)
-          );
-          verifyPayment(token, checkoutResponse).catch((error) => {
-            showStatus(
-              error.message ||
-                "Payment was made, but verification failed. Contact support before paying again.",
-              "error"
-            );
-            setBusy(false, "Retry payment verification");
-          });
-        },
-        modal: {
-          ondismiss: function () {
-            if (!isProcessing) {
-              setBusy(
-                false,
-                "Pay " +
-                  formatMoney(activePlan.price, activePlan.currency) +
-                  " securely"
-              );
-            }
-          },
-        },
-      };
-
+  key: order.keyId,
+  amount: order.amount,
+  currency: order.currency,
+  name: "VentrixCarros",
+  image: new URL("./ventrix-logo-mark.png", window.location.href).href,
+  description: order.planName + " monthly subscription",
+  order_id: order.orderId,
+  prefill: {
+    name: getInput("contactName"),
+    email: getInput("email"),
+    contact: getInput("phone"),
+  },
+  config: paymentMethodConfig(getSelectedPaymentMethod()),
+  theme: { color: "#2c83f8" },
+  handler: function (checkoutResponse) {
+    pendingVerification = checkoutResponse;
+    sessionStorage.setItem(
+      "ventrixcarrosPendingPaymentVerification",
+      JSON.stringify(checkoutResponse)
+    );
+    verifyPayment(token, checkoutResponse).catch((error) => {
+      showStatus(
+        error.message ||
+          "Payment was made, but verification failed. Contact support before paying again.",
+        "error"
+      );
+      setBusy(false, "Retry payment verification");
+    });
+  },
+  modal: {
+    ondismiss: function () {
+      if (!isProcessing) {
+        setBusy(
+          false,
+          "Pay " +
+            formatMoney(activePlan.price, activePlan.currency) +
+            " securely"
+        );
+      }
+    },
+  },
+};
       const checkout = new window.Razorpay(options);
 
       checkout.on("payment.failed", function (event) {

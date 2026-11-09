@@ -4,3 +4,6 @@ node_modules/
 .env.*
 !.env.example
 *.log
+**/Internship Code Next Steps.html
+**/Internship Code Next Steps_files/
+**/Internship Code Next Steps.html.backup

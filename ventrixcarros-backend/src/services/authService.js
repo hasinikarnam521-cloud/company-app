@@ -186,19 +186,6 @@ async function register({
 
       return invitedUser;
     }
-    let invitedSignup = false;
-
-if (isSignupOtp && user.role === "recruiter" && user.company_id) {
-  const usedInvitation = await CompanyInvitation.findOne({
-    where: {
-      invited_email: normalizedEmail,
-      company_id: user.company_id,
-      used_at: { [Op.not]: null },
-    },
-  });
-
-  invitedSignup = Boolean(usedInvitation);
-}
 
     if (isRecruiter) {
       company = await Company.create(
@@ -402,19 +389,19 @@ async function verifyLoginOtp({ email, code }) {
     used_at: new Date(),
     ...(isSignupOtp ? { verified_at: new Date() } : {}),
   });
+
   let invitedSignup = false;
+  if (isSignupOtp && user.role === "recruiter" && user.company_id) {
+    const usedInvitation = await CompanyInvitation.findOne({
+      where: {
+        invited_email: normalizedEmail,
+        company_id: user.company_id,
+        used_at: { [Op.not]: null },
+      },
+    });
+    invitedSignup = Boolean(usedInvitation);
+  }
 
-if (isSignupOtp && user.role === "recruiter" && user.company_id) {
-  const usedInvitation = await CompanyInvitation.findOne({
-    where: {
-      invited_email: normalizedEmail,
-      company_id: user.company_id,
-      used_at: { [Op.not]: null },
-    },
-  });
-
-  invitedSignup = Boolean(usedInvitation);
-}
   return {
     ...(!isSignupOtp || invitedSignup
       ? {

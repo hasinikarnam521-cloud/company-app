@@ -1807,10 +1807,101 @@ async function loadCompany() {
         saveButton.textContent = "💾 Save changes";
       }
     });
+    function openCompanyProfilePreview() {
+      if (!currentCompany) {
+        showError("Save or load your company profile before previewing it.");
+        return;
+      }
 
-    document.getElementById("previewProfileButton").addEventListener("click", () => {
-      alert("Public company profile preview is not connected yet.");
-    });
+      document.getElementById("companyProfilePreview")?.remove();
+      const company = currentCompany;
+      const overlay = document.createElement("div");
+      overlay.id = "companyProfilePreview";
+      overlay.setAttribute("role", "presentation");
+      overlay.style.cssText = "position:fixed;inset:0;z-index:3000;background:rgba(10,20,50,.55);display:grid;place-items:center;padding:20px;";
+
+      const dialog = document.createElement("section");
+      dialog.setAttribute("role", "dialog");
+      dialog.setAttribute("aria-modal", "true");
+      dialog.setAttribute("aria-label", "Public company profile preview");
+      dialog.style.cssText = "width:min(760px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:20px;padding:28px;box-shadow:0 24px 70px rgba(0,0,0,.25);color:#10183f;";
+      const savedBrandColor = company.brand_colors?.primary;
+      if (/^#[0-9a-f]{6}$/i.test(savedBrandColor || "")) dialog.style.borderTop = "5px solid " + savedBrandColor;
+
+      const close = document.createElement("button");
+      close.type = "button";
+      close.textContent = "Close preview";
+      close.style.cssText = "float:right;border:1px solid #dbe2f0;background:#fff;border-radius:999px;padding:9px 15px;cursor:pointer;";
+      close.addEventListener("click", () => overlay.remove());
+
+      const brand = document.createElement("div");
+      brand.style.cssText = "display:flex;align-items:center;gap:16px;margin:20px 0 24px;";
+      const logoData = company.logo_data || "";
+      if (/^data:image\/(?:png|jpeg|webp);base64,[a-z0-9+/=]+$/i.test(logoData)) {
+        const logo = document.createElement("img");
+        logo.src = logoData;
+        logo.alt = (company.name || "Company") + " logo";
+        logo.style.cssText = "width:72px;height:72px;object-fit:contain;border-radius:16px;";
+        brand.appendChild(logo);
+      } else {
+        const fallback = document.createElement("div");
+        fallback.textContent = (company.name || "V").slice(0, 1).toUpperCase();
+        fallback.style.cssText = "width:72px;height:72px;display:grid;place-items:center;border-radius:16px;background:#edf3ff;color:#2c83f8;font-size:28px;font-weight:800;";
+        brand.appendChild(fallback);
+      }
+
+      const title = document.createElement("h2");
+      title.textContent = company.name || "Company profile";
+      title.style.cssText = "margin:0;font-size:28px;";
+      brand.appendChild(title);
+      const intro = document.createElement("p");
+      intro.textContent = company.industry || "Company";
+      intro.style.cssText = "margin:6px 0;color:#64748b;";
+
+      const details = document.createElement("div");
+      details.style.cssText = "display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:24px 0;";
+      for (const [label, value] of [["Location", company.location], ["Industry", company.industry], ["Company size", company.company_size]]) {
+        const item = document.createElement("div");
+        item.style.cssText = "padding:15px;background:#f6f8fd;border-radius:12px;";
+        const caption = document.createElement("small");
+        caption.textContent = label;
+        caption.style.cssText = "display:block;color:#64748b;margin-bottom:5px;";
+        const text = document.createElement("strong");
+        text.textContent = value || "Not provided";
+        item.append(caption, text);
+        details.appendChild(item);
+      }
+
+      const website = document.createElement("a");
+      website.textContent = "Visit company website";
+      website.target = "_blank";
+      website.rel = "noopener noreferrer";
+      try {
+        const parsed = new URL(company.website);
+        if (["http:", "https:"].includes(parsed.protocol)) website.href = parsed.href;
+      } catch {}
+      if (!website.href) website.hidden = true;
+
+      const note = document.createElement("p");
+      note.textContent = "Preview only. This shows the company details saved to your account.";
+      note.style.cssText = "margin-top:24px;color:#64748b;font-size:13px;";
+
+      dialog.append(close, brand, intro, details, website, note);
+      overlay.appendChild(dialog);
+      overlay.addEventListener("click", (event) => {
+        if (event.target === overlay) overlay.remove();
+      });
+      document.addEventListener("keydown", function closeOnEscape(event) {
+        if (event.key === "Escape") {
+          overlay.remove();
+          document.removeEventListener("keydown", closeOnEscape);
+        }
+      }, { once: true });
+      document.body.appendChild(overlay);
+      close.focus();
+    }
+
+    document.getElementById("previewProfileButton").addEventListener("click", openCompanyProfilePreview);
     document.querySelectorAll(".profile-logout, .nav-item[href='index.html']").forEach((link) => link.addEventListener("click", (event) => { event.preventDefault(); logout(); }));
     document
   .getElementById("inviteMemberButton")
